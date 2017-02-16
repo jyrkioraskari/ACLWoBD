@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security_project</artifactId>
-	<name>Authentication2</name>
+	<name>drumbeat_security_project</name>
 	<repositories>
 	</repositories>
 
@@ -17,6 +17,7 @@
 		<groupId>fi.ni.drumbeat</groupId>
 		<artifactId>drumbeat_security</artifactId>
 		<version>1.0</version>
+		<relativePath>../drumbeat_security</relativePath>
 	</parent>
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>

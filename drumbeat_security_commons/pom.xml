@@ -18,5 +18,6 @@
 		<groupId>fi.ni.drumbeat</groupId>
 		<artifactId>drumbeat_security</artifactId>
 		<version>1.0</version>
+		<relativePath>../drumbeat_security</relativePath>
 	</parent>
 </project>

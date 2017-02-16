@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security_organization</artifactId>
-	<name>Authentication2</name>
+	<name>drumbeat_security_organization</name>
 	<repositories>
 		<repository>
 			<id>maven2</id>
@@ -11,16 +11,16 @@
 	</repositories>
 
 	<build>
-		<finalName>drumbeat-security-organization</finalName>
-		<directory>target</directory>
-		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-		<outputDirectory>target/classes</outputDirectory>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
+	<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			</plugins>
 	</build>
 
 
@@ -69,6 +69,7 @@
 		<groupId>fi.ni.drumbeat</groupId>
 		<artifactId>drumbeat_security</artifactId>
 		<version>1.0</version>
+		<relativePath>../drumbeat_security</relativePath>
 	</parent>
 
 	<properties>
