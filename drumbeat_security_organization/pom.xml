@@ -4,7 +4,25 @@
 	<artifactId>drumbeat_security_organization</artifactId>
 	<name>Authentication2</name>
 	<repositories>
+		<repository>
+			<id>maven2</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
 	</repositories>
+
+	<build>
+		<finalName>drumbeat-security-organization</finalName>
+		<directory>target</directory>
+		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+		<outputDirectory>target/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+	</build>
+
 
 	<dependencies>
 		<dependency>
@@ -12,7 +30,41 @@
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-bundle</artifactId>
+			<version>1.19.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-xc</artifactId>
+			<version>1.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
+
+
 	<parent>
 		<groupId>fi.ni.drumbeat</groupId>
 		<artifactId>drumbeat_security</artifactId>
@@ -23,4 +75,5 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
+	<packaging>war</packaging>
 </project>

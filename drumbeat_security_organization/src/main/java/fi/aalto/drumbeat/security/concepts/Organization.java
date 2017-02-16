@@ -1,4 +1,4 @@
-package fi.ni.concepts;
+package fi.aalto.drumbeat.security.concepts;
 
 import java.net.URI;
 import java.net.URISyntaxException;

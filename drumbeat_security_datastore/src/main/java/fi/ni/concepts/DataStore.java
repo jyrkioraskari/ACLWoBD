@@ -11,6 +11,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
+import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.ni.Fetchable;
 import fi.ni.Internet;
 import fi.ni.RDFDataStore;

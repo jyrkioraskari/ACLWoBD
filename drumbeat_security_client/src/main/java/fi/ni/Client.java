@@ -1,7 +1,7 @@
 package fi.ni;
 
+import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.ni.concepts.DataStore;
-import fi.ni.concepts.Organization;
 import fi.ni.webid.WebIDCertificate;
 
 public class Client {

@@ -4,8 +4,8 @@ import java.net.URI;
 
 import org.junit.Test;
 
+import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.ni.concepts.DataStore;
-import fi.ni.concepts.Organization;
 import fi.ni.webid.WebIDCertificate;
 import junit.framework.TestCase;
 
