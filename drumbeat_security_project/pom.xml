@@ -12,25 +12,6 @@
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-rdf-api</artifactId>
-			<version>0.2.0-incubating</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.22</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<type>pom</type>
-			<version>3.2.0</version>
-		</dependency>
 	</dependencies>
 	<parent>
 		<groupId>fi.ni.drumbeat</groupId>
