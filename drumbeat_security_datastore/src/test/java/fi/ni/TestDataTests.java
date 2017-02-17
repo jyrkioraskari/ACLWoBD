@@ -37,7 +37,7 @@ public class TestDataTests extends TestCase {
 			DataSet dset=ds.addDataSet("20151125");
 			dset.addRule("rule32");
 			
-			model.write(System.out,"TURTLE");
+			//model.write(System.out,"TURTLE");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
