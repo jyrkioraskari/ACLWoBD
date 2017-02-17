@@ -9,10 +9,10 @@ import java.util.Map;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.RDFNode;
 
-import fi.ni.Fetchable;
-import fi.ni.RDFDataStore;
-import fi.ni.webid.WebIDCertificate;
-import fi.ni.webid.WebIDProfile;
+import fi.aalto.drumbeat.Fetchable;
+import fi.aalto.drumbeat.RDFDataStore;
+import fi.aalto.drumbeat.webid.WebIDCertificate;
+import fi.aalto.drumbeat.webid.WebIDProfile;
 
 public class Organization extends Fetchable {
 	private URI rootURI;

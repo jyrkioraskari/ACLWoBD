@@ -7,9 +7,9 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Test;
 
-import fi.ni.data_store_test_data.Collection;
-import fi.ni.data_store_test_data.DataSet;
-import fi.ni.data_store_test_data.DataSource;
+import fi.aalto.drumbeat.data_store_test_data.Collection;
+import fi.aalto.drumbeat.data_store_test_data.DataSet;
+import fi.aalto.drumbeat.data_store_test_data.DataSource;
 import junit.framework.TestCase;
 
 public class TestDataTests extends TestCase {
