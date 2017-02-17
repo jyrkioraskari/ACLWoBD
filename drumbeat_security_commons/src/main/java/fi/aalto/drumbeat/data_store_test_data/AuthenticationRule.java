@@ -12,9 +12,6 @@ import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
 import fi.aalto.drumbeat.data_store_test_data.Permission.Right;
-import fi.ni.data_store_test_data.AbstractData;
-import fi.ni.data_store_test_data.Permission;
-import fi.ni.data_store_test_data.RulePath;
 
 public class AuthenticationRule extends AbstractData {
 	

@@ -6,9 +6,6 @@ import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
 
-import fi.ni.data_store_test_data.AbstractData;
-import fi.ni.data_store_test_data.Permission;
-
 public class Permission extends AbstractData {
 	public enum Right{
 		CREATE,READ,UPDATE,DELETE

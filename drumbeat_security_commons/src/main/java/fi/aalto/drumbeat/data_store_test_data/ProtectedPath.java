@@ -7,9 +7,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
-import fi.ni.data_store_test_data.AbstractData;
-import fi.ni.data_store_test_data.AuthenticationRule;
-import fi.ni.data_store_test_data.Project;
 
 abstract class ProtectedPath extends AbstractData {
 	private Project  project;

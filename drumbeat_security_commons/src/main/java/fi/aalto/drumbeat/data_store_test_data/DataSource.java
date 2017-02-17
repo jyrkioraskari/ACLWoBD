@@ -9,8 +9,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
-import fi.ni.data_store_test_data.DataSet;
-import fi.ni.data_store_test_data.ProtectedPath;
 
 public class DataSource extends ProtectedPath {
 	private Map<String,DataSet>  datasets=new HashMap<String,DataSet>();
