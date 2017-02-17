@@ -6,6 +6,19 @@
 	<repositories>
 	</repositories>
 
+	<build>
+	<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
@@ -19,4 +32,5 @@
 		<version>1.0</version>
 		<relativePath>../drumbeat_security</relativePath>
 	</parent>
+	<packaging>war</packaging>
 </project>
