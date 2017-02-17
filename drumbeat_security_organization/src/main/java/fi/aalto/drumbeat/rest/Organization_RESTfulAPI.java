@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  
 
 @Path("security")
-public class RESTfulAPI{
+public class Organization_RESTfulAPI  extends RESTfulAPI{
 	
 	@GET
 	@Path("/hello")
@@ -21,7 +21,7 @@ public class RESTfulAPI{
 	@GET
 	@Path("/check_user/{path}.{webID}.{timestamp}")
     public Response check_user(@PathParam("path") String path,@PathParam("webID") String webID,@PathParam("timestamp") String timestamp) {
-		return Response.status(200).entity("Just OK now").build();
+		return Response.status(200).entity(getJSON_LDContent()).build();
     }
 	
 
