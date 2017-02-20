@@ -2,11 +2,16 @@ package fi.aalto.drumbeat.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 public class RESTfulAPI {
+	URI base_url;
 
 	protected Model parseInput(String msg) {
 		final Model json_input_model = ModelFactory.createDefaultModel();
@@ -20,4 +25,11 @@ public class RESTfulAPI {
 		return writer.toString();
 	}
 
+	public void setBaseURI(UriInfo uriInfo) {		
+		try {
+			base_url=new URI(uriInfo.getBaseUri().toString());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
 }

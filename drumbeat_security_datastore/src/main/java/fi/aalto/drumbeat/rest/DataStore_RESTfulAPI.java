@@ -21,7 +21,7 @@ public class DataStore_RESTfulAPI extends RESTfulAPI{
 	@GET
 	@Path("/check_user/{path}.{webID}.{timestamp}")
     public Response check_user(@PathParam("path") String path,@PathParam("webID") String webID,@PathParam("timestamp") String timestamp) {
-		return Response.status(200).entity(getJSON_LDContent()).build();
+		return Response.status(200).entity("").build();
     }
 	
 

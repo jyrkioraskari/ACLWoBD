@@ -1,7 +1,5 @@
 package fi.aalto.drumbeat;
 
-import fi.aalto.drumbeat.Internet;
-import fi.aalto.drumbeat.concepts.DataStore;
 import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 

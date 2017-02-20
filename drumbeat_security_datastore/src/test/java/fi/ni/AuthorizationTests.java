@@ -1,12 +1,5 @@
 package fi.ni;
 
-import java.net.URI;
-
-import org.junit.Test;
-
-import fi.aalto.drumbeat.concepts.DataStore;
-import fi.aalto.drumbeat.security.concepts.Organization;
-import fi.aalto.drumbeat.webid.WebIDCertificate;
 import junit.framework.TestCase;
 
 public class AuthorizationTests extends TestCase {
