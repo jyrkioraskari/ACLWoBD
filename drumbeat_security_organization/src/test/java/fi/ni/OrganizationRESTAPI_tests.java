@@ -99,7 +99,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			model.write(writer, "JSON-LD");
 	        writer.flush();
 
-			Response response = target("/security/get_webid").request()
+			Response response = target("/security/getWebID").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
@@ -112,5 +112,42 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		;
 
 	}
+	
+	
+	@Test
+	public void test_getWebIDProfile() {
+		Model model =  ModelFactory.createDefaultModel();
+		try {
+			
+			RDFConstants rdf=new RDFConstants(model);			
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] =   RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);	
+			Resource query =model.createResource();	
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, rdf.query());
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource("webid.....s"));
+			
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+	        writer.flush();
+
+			Response response = target("/security/getWebIDProfile").request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+
+			String response_string = response.readEntity(String.class);
+			System.out.println("Vastaus webid oli: " + response_string);
+			// assertEquals("OK!", response_string);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		;
+
+	}
+
 
 }

@@ -56,11 +56,13 @@ public class Organization extends RESTfulAPI {
 	}
 
 	@POST
-	@Path("/check_webid")
+	@Path("/getWebIDProfile")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response checkWebID(@Context UriInfo uriInfo,String msg) {
+	public Response getWebIDProfile(@Context UriInfo uriInfo,String msg) {
 		setBaseURI(uriInfo);
+		if(!this.organization.isPresent())
+			return Response.status(500).entity("Initialization errors").build();
 		Model input_model = parseInput(msg);
 		Resource query=getQuery(input_model);
 		if(query==null)
@@ -71,16 +73,21 @@ public class Organization extends RESTfulAPI {
 		
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+		RDFNode webid_url=query.getProperty(RDFConstants.property_hasWebID).getObject();
+		WebIDProfile  wp=organization.get().getWebIDProfile(webid_url.toString());
+		
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, rdf.Response());
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
+		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 	
 	
 	@POST
-	@Path("/get_webid")
+	@Path("/getWebID")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response getWebID(@Context UriInfo uriInfo,String msg) {

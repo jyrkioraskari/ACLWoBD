@@ -27,7 +27,7 @@ public class OrganizationManager extends Fetchable {
 		rdf_datastore.readRDFData();
 	}
 
-	public WebIDProfile get(String webid_uri) {
+	public WebIDProfile getWebIDProfile(String webid_uri) {
 		return webid_profiles.get(webid_uri);
 	}
 
@@ -39,7 +39,7 @@ public class OrganizationManager extends Fetchable {
 		try {
 			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid" + id+"#i").build();
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
-			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), public_key));
+			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();
 			return wc;
 
