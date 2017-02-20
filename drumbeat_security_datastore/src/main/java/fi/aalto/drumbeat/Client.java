@@ -1,13 +1,12 @@
 package fi.aalto.drumbeat;
 
-import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 
 public class Client {
 	
 	public Client()
 	{
-		try {
+		/*try {
 			Organization o = (Organization) Internet.get("http://company1/");
 			WebIDCertificate wc=o.getWebID("mats");
 			System.out.println("wc uri on:"+wc.getWebid_uri().toString());
@@ -18,7 +17,7 @@ public class Client {
 		} catch (Exception e) {
 			System.out.println("Result:" +Internet.get("http://company1/"));
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 

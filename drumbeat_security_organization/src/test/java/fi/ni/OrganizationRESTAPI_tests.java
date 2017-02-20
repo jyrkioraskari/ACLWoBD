@@ -66,7 +66,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus oli: " + response_string);
+			//System.out.println("Vastaus oli: " + response_string);
 			// assertEquals("OK!", response_string);
 			response.close();
 		} catch (Exception e) {
@@ -92,6 +92,8 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, rdf.query());
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
+			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
 			
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -101,7 +103,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus oli: " + response_string);
+			System.out.println("Vastaus webid oli: " + response_string);
 			// assertEquals("OK!", response_string);
 			response.close();
 		} catch (Exception e) {

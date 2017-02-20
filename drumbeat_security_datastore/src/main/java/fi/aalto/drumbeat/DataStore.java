@@ -11,10 +11,6 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.Fetchable;
-import fi.aalto.drumbeat.Internet;
-import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.security.concepts.Organization;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 import fi.aalto.drumbeat.webid.WebIDProfile;
 
@@ -32,7 +28,7 @@ public class DataStore extends Fetchable {
 			e.printStackTrace();
 		}
 
-		rdf_datastore = new RDFDataStore(uri);
+		rdf_datastore = new RDFDataStore(uri,"datastore");
 		rdf_datastore.readRDFData(); // TODO read security data
 		rdf_datastore.saveRDFData();
 	}
@@ -44,10 +40,10 @@ public class DataStore extends Fetchable {
 		System.out.println("canonized uri oli:" + canonizted_requestURI);
 
 		//TODO korvaa REST-kutsulla
-		Organization o = (Organization) Internet.get(wc.getWebid_uri().toString());
-		if (o == null)
-			return false;
-		WebIDProfile wp = (WebIDProfile) o.get(wc.getWebid_uri().getPath());
+		//Organization o = (Organization) Internet.get(wc.getWebid_uri().toString());
+		//if (o == null)
+		//	return false;
+		WebIDProfile wp = null;//(WebIDProfile) o.get(wc.getWebid_uri().getPath());
 		if (wc.getPublic_key().equals(wp.getPublic_key())) {
 			List<RDFNode> matched_paths = rdf_datastore.match(canonizted_requestURI.toString());
 			for (RDFNode r : matched_paths) {

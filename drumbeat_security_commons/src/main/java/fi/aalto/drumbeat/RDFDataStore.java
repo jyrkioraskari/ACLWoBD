@@ -38,10 +38,10 @@ public class RDFDataStore {
 	final private Model model=ModelFactory.createDefaultModel();
 	RDFProperties property=new RDFProperties();
 
-	public RDFDataStore(URI rootURI) {
+	public RDFDataStore(URI rootURI,String type) {
 		super();
 		this.rootURI=rootURI;
-		rdf_filename=Constants.RDF_filePath + rootURI.getHost()+"_securitydata.ttl"; 
+		rdf_filename=Constants.RDF_filePath + rootURI.getHost()+"_"+type+"_securitydata.ttl"; 
 	}
 
 	private Resource getRoot() {
