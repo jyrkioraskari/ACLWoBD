@@ -26,7 +26,12 @@ public class RDFConstants {
 			.createProperty(Constants.security_ontology_base + "#hasRulePath");
 	static public Property property_hasTimeStamp = ResourceFactory
 			.createProperty(Constants.security_ontology_base + "#hasTimeStamp");
+
 	static public Property property_hasWebID = ResourceFactory
 			.createProperty(Constants.security_ontology_base + "#hasWebID");
+	static public Property property_hasName = ResourceFactory
+			.createProperty(Constants.security_ontology_base + "#hasName");
+	static public Property property_hasPublicKey = ResourceFactory
+			.createProperty(Constants.security_ontology_base + "#hasPublicKey");
 
 }

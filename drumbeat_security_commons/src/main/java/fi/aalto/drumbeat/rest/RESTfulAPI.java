@@ -38,7 +38,7 @@ public class RESTfulAPI {
 		return writer.toString();
 	}
 
-	public void setBaseURI(UriInfo uriInfo) {		
+	protected void setBaseURI(UriInfo uriInfo) {		
 		try {
 			base_url=new URI(uriInfo.getBaseUri().toString());
 		} catch (URISyntaxException e) {

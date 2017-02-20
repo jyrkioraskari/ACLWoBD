@@ -12,14 +12,14 @@ import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 import fi.aalto.drumbeat.webid.WebIDProfile;
 
-public class Organization extends Fetchable {
+public class OrganizationManager extends Fetchable {
 	private URI rootURI;
 
 	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
 	private RDFDataStore rdf_datastore = null;
 
-	public Organization(URI uri) {
+	public OrganizationManager(URI uri) {
 		super();
 			rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI);
@@ -33,8 +33,7 @@ public class Organization extends Fetchable {
 
 	
 
-	public WebIDCertificate getWebID(String name) {
-		String public_key = "1234";
+	public WebIDCertificate getWebID(String name,String public_key) {
 		URI webid_uri;
 		try {
 			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/" + name).build();

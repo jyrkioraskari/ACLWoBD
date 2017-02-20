@@ -1,19 +1,15 @@
 package fi.aalto.drumbeat.rest;
 
 
-import java.io.StringWriter;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.apache.jena.rdf.model.Model;
-
  
 
 @Path("security")
-public class Project_RESTfulAPI extends RESTfulAPI
+public class Project extends RESTfulAPI
 {
 	
 	
