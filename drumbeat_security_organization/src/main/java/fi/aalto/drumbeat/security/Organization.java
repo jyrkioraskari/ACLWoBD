@@ -19,14 +19,9 @@ public class Organization extends Fetchable {
 
 	private RDFDataStore rdf_datastore = null;
 
-	public Organization(String uri_str) {
+	public Organization(URI uri) {
 		super();
-		try {
-			rootURI = new URI(uri_str);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+			rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI);
 		rdf_datastore.readRDFData();
 		rdf_datastore.saveRDFData();

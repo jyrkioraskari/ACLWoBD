@@ -38,19 +38,18 @@ public class Organization_RESTfulAPI extends RESTfulAPI {
 	public Response checkUser(@Context UriInfo uriInfo,String msg) {	
 		setBaseURI(uriInfo);
 		Model input_model = parseInput(msg);
+		Resource query=getQuery(input_model);
+		if(query==null)
+			return Response.status(500).entity("no queries").build();
+		
 		Model output_model = ModelFactory.createDefaultModel();
 		RDFConstants rdf = new RDFConstants(output_model);
 		
-		ResIterator iter = input_model.listSubjectsWithProperty(rdf.property.hasTimeStamp());
-		Resource query = null;
-		if (iter.hasNext())
-			query = iter.next();
-		else
-			return Response.status(500).entity("no queries").build();
-		RDFNode ts=query.getProperty(rdf.property.hasTimeStamp()).getObject();
+
+		RDFNode ts=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, rdf.Response());
-		response.addLiteral(rdf.property.hasTimeStamp(), ts);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, ts);
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
@@ -86,11 +85,11 @@ public class Organization_RESTfulAPI extends RESTfulAPI {
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 	
-	Optional<Organization> organization=null;
+	Optional<Organization> organization=  Optional.empty();
 	
 	@Override
 	public void setBaseURI(UriInfo uriInfo) {		
 		super.setBaseURI(uriInfo);
-		
+		this.organization = Optional.of(new Organization(this.getBase_url()));
 	}
 }

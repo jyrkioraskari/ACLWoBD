@@ -9,9 +9,13 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+
+import fi.aalto.drumbeat.RDFConstants;
 
 public class RESTfulAPI {
-	URI base_url;
+	private URI base_url;
 
 	protected Model parseInput(String msg) {
 		final Model json_input_model = ModelFactory.createDefaultModel();
@@ -19,6 +23,15 @@ public class RESTfulAPI {
 		return json_input_model;
 	}
 
+	
+	protected Resource getQuery(Model model) {
+		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+		Resource query = null;
+		if (iter.hasNext())
+			query = iter.next();
+		return query;
+	}
+	
 	protected String writeModel(Model model) {
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
@@ -32,4 +45,13 @@ public class RESTfulAPI {
 			e.printStackTrace();
 		}
 	}
+	public URI getBase_url() {
+		return base_url;
+	}
+
+	public void setBase_url(URI base_url) {
+		this.base_url = base_url;
+	}
+	
+	
 }
