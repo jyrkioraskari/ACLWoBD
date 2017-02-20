@@ -11,8 +11,8 @@
 	</repositories>
 
 	<build>
-	<plugins>
-		<plugin>
+		<plugins>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
@@ -20,11 +20,17 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-			</plugins>
+		</plugins>
 	</build>
 
 
 	<dependencies>
+		<dependency>
+			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+			<artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+			<version>2.13</version>
+		</dependency>
+
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_commons</artifactId>
@@ -39,6 +45,6 @@
 		<relativePath>../drumbeat_security</relativePath>
 	</parent>
 
-	
+
 	<packaging>war</packaging>
 </project>
