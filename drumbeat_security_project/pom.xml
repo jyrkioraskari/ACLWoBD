@@ -37,5 +37,4 @@
 		<version>1.0</version>
 		<relativePath>../drumbeat_security</relativePath>
 	</parent>
-	<packaging>war</packaging>
 </project>
