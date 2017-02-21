@@ -12,8 +12,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
@@ -52,14 +54,15 @@ public class Organization extends RESTfulAPI {
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode webid_url=query.getProperty(RDFConstants.property_hasWebID).getObject();
-		WebIDProfile  wp=organization.get().getWebIDProfile(webid_url.toString());
+		RDFNode path = query.getProperty(RDFConstants.property_hasRulePath).getObject();
+		boolean  result=organization.get().checkRDFPath(webid_url.toString(),path.asResource());
 		
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
-		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
-		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
+		Literal result_code = output_model.createTypedLiteral(new Boolean(result));			
+		response.addLiteral(RDFConstants.property_status, result_code);
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}

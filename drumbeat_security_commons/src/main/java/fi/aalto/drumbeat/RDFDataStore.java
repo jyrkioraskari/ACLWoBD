@@ -35,7 +35,7 @@ public class RDFDataStore {
 	private final URI rootURI;
 	private final String rdf_filename;
 
-	final private Model model=ModelFactory.createDefaultModel();
+	final private Model model= ModelFactory.createOntologyModel();
 
 	public RDFDataStore(URI rootURI,String type) {
 		super();
@@ -162,8 +162,13 @@ public class RDFDataStore {
 	}
 
 	public LinkedList<Resource> getRulePath(String uri) {
-		LinkedList<Resource> ret = new LinkedList<Resource>();
 		Resource node = model.getResource(uri);
+		return getRulePath(node);
+	}
+
+	
+	public LinkedList<Resource> getRulePath(Resource node) {
+		LinkedList<Resource> ret = new LinkedList<Resource>();
 		Resource rule=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
 		if(rule==null)
 			return ret;

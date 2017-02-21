@@ -56,5 +56,8 @@ public class RDFConstants {
 			.createProperty(Constants.security_ontology_base + "#hasContractor");
 	static public Property property_knowsPerson = ResourceFactory
 			.createProperty(Constants.security_ontology_base + "#knowsPerson");
+	
+	static public Property property_status = ResourceFactory
+			.createProperty(Constants.security_ontology_base + "#status");
 
 }

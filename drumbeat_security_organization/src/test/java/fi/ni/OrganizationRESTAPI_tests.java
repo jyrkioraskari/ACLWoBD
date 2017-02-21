@@ -66,7 +66,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			//System.out.println("Vastaus oli: " + response_string);
+			System.out.println("Vastaus simple oli: " + response_string);
 			// assertEquals("OK!", response_string);
 			response.close();
 		} catch (Exception e) {
