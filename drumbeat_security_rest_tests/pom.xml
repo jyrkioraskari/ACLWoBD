@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security_tests</artifactId>
-	<name>drumbeat_security_organization</name>
+	<name>drumbeat_security_tests</name>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
