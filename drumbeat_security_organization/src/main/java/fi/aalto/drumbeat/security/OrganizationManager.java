@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFList;
 
 import fi.aalto.drumbeat.Fetchable;
 import fi.aalto.drumbeat.RDFDataStore;
@@ -31,6 +32,10 @@ public class OrganizationManager extends Fetchable {
 		
 		
 		
+	}
+	
+	public boolean checkRDFPath(String webid_uri,RDFList path) {
+		return true;
 	}
 
 	public WebIDProfile getWebIDProfile(String webid_uri) {

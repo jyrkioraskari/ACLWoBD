@@ -2,6 +2,7 @@ package fi.aalto.drumbeat.rest;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,6 +21,7 @@ import org.apache.jena.vocabulary.RDF;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
+import fi.aalto.drumbeat.webid.WebIDProfile;
 
 @Path("/security")
 public class Organization extends RESTfulAPI {
@@ -32,26 +34,34 @@ public class Organization extends RESTfulAPI {
 	
 	
 	@POST
-	@Path("/check_user")
+	@Path("/checkPath")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response checkUser(@Context UriInfo uriInfo,String msg) {	
+	public Response checkPath(@Context UriInfo uriInfo,String msg) {	
 		setBaseURI(uriInfo);
+		if(!this.organization.isPresent())
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors").build();
 		Model input_model = parseInput(msg);
 		Resource query=getQuery(input_model);
 		if(query==null)
-			return Response.status(500).entity("No queries").build();
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		
 		Model output_model = ModelFactory.createDefaultModel();
 		RDFConstants rdf = new RDFConstants(output_model);
 		
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+		RDFNode webid_url=query.getProperty(RDFConstants.property_hasWebID).getObject();
+		WebIDProfile  wp=organization.get().getWebIDProfile(webid_url.toString());
+		
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
+		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
 		return Response.status(200).entity(writeModel(output_model)).build();
+
 	}
 
 	@POST
@@ -61,27 +71,29 @@ public class Organization extends RESTfulAPI {
 	public Response getWebIDProfile(@Context UriInfo uriInfo,String msg) {
 		setBaseURI(uriInfo);
 		if(!this.organization.isPresent())
-			return Response.status(500).entity("Initialization errors").build();
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors").build();
 		Model input_model = parseInput(msg);
 		Resource query=getQuery(input_model);
 		if(query==null)
-			return Response.status(500).entity("No queries").build();
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		
 		Model output_model = ModelFactory.createDefaultModel();
 		RDFConstants rdf = new RDFConstants(output_model);
 		
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode name=query.getProperty(RDFConstants.property_hasName).getObject();
-		RDFNode public_key=query.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		
+		RDFNode webid_url=query.getProperty(RDFConstants.property_hasWebID).getObject();
+		WebIDProfile  wp=organization.get().getWebIDProfile(webid_url.toString());
+		if(wp==null)
+			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
+		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
-		//response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.getWebid_uri().toString()));
-		
 		return Response.status(200).entity(writeModel(output_model)).build();
+	
 	}
 	
 	
@@ -92,11 +104,11 @@ public class Organization extends RESTfulAPI {
 	public Response getWebID(@Context UriInfo uriInfo,String msg) {
 		setBaseURI(uriInfo);
 		if(!this.organization.isPresent())
-			return Response.status(500).entity("Initialization errors").build();
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors").build();
 		Model input_model = parseInput(msg);
 		Resource query=getQuery(input_model);
 		if(query==null)
-			return Response.status(500).entity("No queries").build();
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		
 		Model output_model = ModelFactory.createDefaultModel();
 		RDFConstants rdf = new RDFConstants(output_model);

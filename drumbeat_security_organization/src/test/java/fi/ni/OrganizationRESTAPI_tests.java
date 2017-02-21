@@ -62,7 +62,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			model.write(writer, "JSON-LD");
 	        writer.flush();
 
-			Response response = target("/security/check_user").request()
+			Response response = target("/security/checkPath").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
@@ -103,7 +103,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus webid oli: " + response_string);
+			System.out.println("Vastaus webid oli: " + response);
 			// assertEquals("OK!", response_string);
 			response.close();
 		} catch (Exception e) {
@@ -129,7 +129,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.property_hasWebID, model.getResource("webid.....s"));
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource("http://koe.null/"));
 			
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -139,7 +139,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus webid oli: " + response_string);
+			System.out.println("Vastaus webid profiili oli: " + response);
 			// assertEquals("OK!", response_string);
 			response.close();
 		} catch (Exception e) {
