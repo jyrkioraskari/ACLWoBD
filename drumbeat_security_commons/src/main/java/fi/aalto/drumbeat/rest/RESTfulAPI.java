@@ -3,9 +3,6 @@ package fi.aalto.drumbeat.rest;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
-
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -23,7 +20,6 @@ public class RESTfulAPI {
 		return json_input_model;
 	}
 
-	
 	protected Resource getQuery(Model model) {
 		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
 		Resource query = null;
@@ -31,20 +27,19 @@ public class RESTfulAPI {
 			query = iter.next();
 		return query;
 	}
-	
+
 	protected String writeModel(Model model) {
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
 		return writer.toString();
 	}
 
-	protected void setBaseURI(UriInfo uriInfo) {		
-		try {
-			base_url=new URI(uriInfo.getBaseUri().toString());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+	protected void setBaseURI(URI uri) {
+
+		base_url = uri;
+
 	}
+
 	public URI getBase_url() {
 		return base_url;
 	}
@@ -52,6 +47,5 @@ public class RESTfulAPI {
 	public void setBase_url(URI base_url) {
 		this.base_url = base_url;
 	}
-	
-	
+
 }

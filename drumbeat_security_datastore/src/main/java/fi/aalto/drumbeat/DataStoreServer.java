@@ -14,13 +14,13 @@ import org.apache.jena.rdf.model.Resource;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 import fi.aalto.drumbeat.webid.WebIDProfile;
 
-public class DataStore extends Fetchable {
+public class DataStoreServer extends Fetchable {
 	private String host_name;
 	private URI uri;
 	// at the time
 	private RDFDataStore rdf_datastore = null;
 
-	public DataStore(String host_uri) {
+	public DataStoreServer(String host_uri) {
 		try {
 			uri = new URI(host_uri);
 

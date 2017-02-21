@@ -1,29 +1,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>drumbeat_security_project</artifactId>
-	<name>drumbeat_security_project</name>
-	<repositories>
-	</repositories>
+	<artifactId>drumbeat_security_tests</artifactId>
+	<name>drumbeat_security_organization</name>
 
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+
 		<plugins>
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.4</version>
 				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
 		</plugins>
+
 	</build>
 
 	<dependencies>
 		<dependency>
+			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+			<artifactId>jersey-test-framework-provider-jetty</artifactId>
+			<version>2.25.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
 			<version>1.9</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>fi.ni.drumbeat</groupId>
+			<artifactId>drumbeat_security_organization</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
@@ -31,11 +55,12 @@
 			<version>1.0</version>
 		</dependency>
 	</dependencies>
+
 	<parent>
 		<groupId>fi.ni.drumbeat</groupId>
 		<artifactId>drumbeat_security</artifactId>
 		<version>1.0</version>
 		<relativePath>../drumbeat_security</relativePath>
 	</parent>
-	<packaging>war</packaging>
+
 </project>

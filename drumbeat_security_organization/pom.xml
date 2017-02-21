@@ -3,32 +3,39 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security_organization</artifactId>
 	<name>drumbeat_security_organization</name>
-	<repositories>
-		<repository>
-			<id>maven2</id>
-			<url>http://repo1.maven.org/maven2/</url>
-		</repository>
-	</repositories>
 
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+
 		<plugins>
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.4</version>
 				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
 
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
-			<artifactId>jersey-test-framework-provider-grizzly2</artifactId>
-			<version>2.13</version>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.9</version>
 		</dependency>
 
 		<dependency>
@@ -44,7 +51,6 @@
 		<version>1.0</version>
 		<relativePath>../drumbeat_security</relativePath>
 	</parent>
-
 
 	<packaging>war</packaging>
 </project>
