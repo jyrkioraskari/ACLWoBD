@@ -64,6 +64,6 @@
 		<module>../drumbeat_security_project</module>
 
 		
-		<module>../drumbeat_security_rest_tests</module>
+		
 	</modules>
 </project>
