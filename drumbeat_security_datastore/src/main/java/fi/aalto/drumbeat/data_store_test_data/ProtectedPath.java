@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
+import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.data_store_test_data.AbstractData;
 import fi.aalto.drumbeat.data_store_test_data.AuthenticationRule;
 import fi.aalto.drumbeat.data_store_test_data.Project;
@@ -22,7 +23,7 @@ abstract class ProtectedPath extends AbstractData {
 
 	
 	public Project addProject(String name) throws URISyntaxException {
-		Property hasProject = model.getProperty(Constants.security_ontology_base + "#hasProject");
+		Property hasProject = RDFConstants.property_hasProject;
 
 		this.project = new Project(new URI(self.getURI()), name, model);
 		self.addProperty(hasProject, this.project.self);
@@ -31,7 +32,7 @@ abstract class ProtectedPath extends AbstractData {
 
 
 	public AuthenticationRule addRule(String name) throws URISyntaxException {
-		Property hasAuthorizationRule = model.getProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
+		Property hasAuthorizationRule = RDFConstants.property_hasAuthorizationRule;
 
 		this.rule = new AuthenticationRule(new URI(self.getURI()), name, model);
 		self.addProperty(hasAuthorizationRule, this.rule.self);

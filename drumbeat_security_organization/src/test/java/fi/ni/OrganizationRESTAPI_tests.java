@@ -54,7 +54,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, rdf.query());
+			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
 			
@@ -90,7 +90,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, rdf.query());
+			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
 			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
@@ -127,7 +127,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, rdf.query());
+			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource("webid.....s"));
 			

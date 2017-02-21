@@ -83,7 +83,7 @@ public class JenaTests extends TestCase {
 		RDFNode ts=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		System.out.println(ts);
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, rdf.Response());
+		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, ts);
 
 		System.out.println(writeModel(output_model));
@@ -102,7 +102,7 @@ public class JenaTests extends TestCase {
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, rdf.query());
+			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
 

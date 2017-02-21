@@ -36,7 +36,6 @@ public class RDFDataStore {
 	private final String rdf_filename;
 
 	final private Model model=ModelFactory.createDefaultModel();
-	RDFProperties property=new RDFProperties();
 
 	public RDFDataStore(URI rootURI,String type) {
 		super();
@@ -117,20 +116,7 @@ public class RDFDataStore {
 	}
 	
 	private class RDFProperties {
-		public Property hasCollection = model.getProperty(Constants.security_ontology_base + "#hasCollection");
-		public Property hasDataSource = model.getProperty(Constants.security_ontology_base + "#hasDataSource");
-		public Property hasDataSet = model.getProperty(Constants.security_ontology_base + "#hasDataSet");
-
-		public Property hasAuthorizationRule = model
-				.getProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
-		public Property hasPermission = model.getProperty(Constants.security_ontology_base + "#hasPermission");
-		public Property hasRulePath = model.getProperty(Constants.security_ontology_base + "#hasRulePath");
-		public Property hasPath = model.getProperty(Constants.security_ontology_base + "#hasPath");
-		
-		public Property hasProject = model.getProperty(Constants.security_ontology_base + "#hasProject");
-		public Property hasMainContractor = model.getProperty(Constants.security_ontology_base + "#hasMainContractor");
-		public Property hasContractor = model.getProperty(Constants.security_ontology_base + "#hasContractor");
-		public Property knowsPerson = model.getProperty(Constants.security_ontology_base + "#knowsPerson");
+	
 	}
 	
 	public List<RDFNode> match(String request_url)
@@ -138,7 +124,7 @@ public class RDFDataStore {
 		List<RDFNode> ret= new ArrayList<RDFNode>();
 		StringBuilder sb=new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <"+property.hasAuthorizationRule.getURI()+"> ?x");
+		sb.append(" ?path  <"+RDFConstants.property_hasAuthorizationRule.getURI()+"> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString()) ;
 		  try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -159,8 +145,8 @@ public class RDFDataStore {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + property.hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + property.hasPermission.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x .");
+		sb.append(" ?x  <" + RDFConstants.property_hasPermission.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -178,13 +164,13 @@ public class RDFDataStore {
 	public LinkedList<Resource> getRulePath(String uri) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
 		Resource node = model.getResource(uri);
-		Resource rule=node.getPropertyResourceValue(property.hasAuthorizationRule);
+		Resource rule=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
 		if(rule==null)
 			return ret;
-		Resource rule_path=rule.getPropertyResourceValue(property.hasRulePath);
+		Resource rule_path=rule.getPropertyResourceValue(RDFConstants.property_hasRulePath);
 		if(rule_path==null)
 			return ret;
-		Resource path=rule_path.getPropertyResourceValue(property.hasPath);
+		Resource path=rule_path.getPropertyResourceValue(RDFConstants.property_hasPath);
 		if(path==null)
 			return ret;
 		

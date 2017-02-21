@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import fi.aalto.drumbeat.Fetchable;
 import fi.aalto.drumbeat.RDFDataStore;
@@ -15,6 +17,7 @@ import fi.aalto.drumbeat.webid.WebIDProfile;
 
 public class OrganizationManager extends Fetchable {
 	private URI rootURI;
+	Model organization_datamodel = ModelFactory.createOntologyModel();
 
 	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
@@ -25,6 +28,9 @@ public class OrganizationManager extends Fetchable {
 			rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI,"organization");
 		rdf_datastore.readRDFData();
+		
+		
+		
 	}
 
 	public WebIDProfile getWebIDProfile(String webid_uri) {

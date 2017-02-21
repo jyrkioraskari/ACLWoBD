@@ -13,13 +13,12 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 
-import fi.aalto.drumbeat.Constants;
+import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.data_store_test_data.Collection;
 import fi.aalto.drumbeat.data_store_test_data.DataSet;
 import fi.aalto.drumbeat.data_store_test_data.DataSource;
@@ -28,7 +27,6 @@ import junit.framework.TestCase;
 public class JenaTests extends TestCase {
 
 	final private Model model = ModelFactory.createDefaultModel();
-	RDFProperties property = new RDFProperties();
 
 	public JenaTests() {
 		super();
@@ -53,28 +51,13 @@ public class JenaTests extends TestCase {
 		}
 	}
 
-	private class RDFProperties {
-		public Property hasCollection = model.getProperty(Constants.security_ontology_base + "#hasCollection");
-		public Property hasDataSource = model.getProperty(Constants.security_ontology_base + "#hasDataSource");
-		public Property hasDataSet = model.getProperty(Constants.security_ontology_base + "#hasDataSet");
-
-		public Property hasAuthorizationRule = model
-				.getProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
-		public Property hasPermission = model.getProperty(Constants.security_ontology_base + "#hasPermission");
-		public Property hasRulePath = model.getProperty(Constants.security_ontology_base + "#hasRulePath");
-		public Property hasPath = model.getProperty(Constants.security_ontology_base + "#hasPath");
-		
-		public Property hasProject = model.getProperty(Constants.security_ontology_base + "#hasProject");
-		public Property hasMainContractor = model.getProperty(Constants.security_ontology_base + "#hasMainContractor");
-		public Property hasContractor = model.getProperty(Constants.security_ontology_base + "#hasContractor");
-		public Property knowsPerson = model.getProperty(Constants.security_ontology_base + "#knowsPerson");
-	}
+	
 
 	@Test
 	public void test_JenaListPaths() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + property.hasAuthorizationRule.getURI() + "> ?x");
+		sb.append(" ?path  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -93,7 +76,7 @@ public class JenaTests extends TestCase {
 		Resource root = model.getResource("https://architectural.drb.cs.hut.fi/security");
 		Resource collection = model.getResource(root.toString() + "/turva");
 		assertNotNull(collection);
-		RDFNode projekti = collection.getProperty(property.hasProject).getObject();
+		RDFNode projekti = collection.getProperty(RDFConstants.property_hasProject).getObject();
 		assertEquals(projekti.asResource().getProperty(RDF.type).getObject().toString(),
 				"https://drumbeat.cs.hut.fi/owl/security.ttl#Project");
 	}
@@ -108,7 +91,7 @@ public class JenaTests extends TestCase {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + property.hasAuthorizationRule.getURI() + "> ?x");
+		sb.append(" ?path  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -134,8 +117,8 @@ public class JenaTests extends TestCase {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + property.hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + property.hasPermission.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x .");
+		sb.append(" ?x  <" + RDFConstants.property_hasPermission.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -161,13 +144,13 @@ public class JenaTests extends TestCase {
 	public List<Resource> getAssocatedPath(String uri) {
 		List<Resource> ret = new ArrayList<Resource>();
 		Resource node = model.getResource(uri);
-		Resource rule=node.getPropertyResourceValue(property.hasAuthorizationRule);
+		Resource rule=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
 		if(rule==null)
 			return ret;
-		Resource rule_path=rule.getPropertyResourceValue(property.hasRulePath);
+		Resource rule_path=rule.getPropertyResourceValue(RDFConstants.property_hasRulePath);
 		if(rule_path==null)
 			return ret;
-		Resource path=rule_path.getPropertyResourceValue(property.hasPath);
+		Resource path=rule_path.getPropertyResourceValue(RDFConstants.property_hasPath);
 		if(path==null)
 			return ret;
 		

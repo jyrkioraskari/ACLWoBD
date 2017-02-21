@@ -20,7 +20,6 @@ import org.apache.jena.vocabulary.RDF;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
-import fi.aalto.drumbeat.webid.WebIDProfile;
 
 @Path("/security")
 public class Organization extends RESTfulAPI {
@@ -49,7 +48,7 @@ public class Organization extends RESTfulAPI {
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, rdf.Response());
+		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
 
 		return Response.status(200).entity(writeModel(output_model)).build();
@@ -73,15 +72,15 @@ public class Organization extends RESTfulAPI {
 		
 
 		RDFNode time_stamp=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode webid_url=query.getProperty(RDFConstants.property_hasWebID).getObject();
-		WebIDProfile  wp=organization.get().getWebIDProfile(webid_url.toString());
+		RDFNode name=query.getProperty(RDFConstants.property_hasName).getObject();
+		RDFNode public_key=query.getProperty(RDFConstants.property_hasPublicKey).getObject();
 		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, rdf.Response());
+		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
-		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
-		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
+		//response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.getWebid_uri().toString()));
+		
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 	
@@ -109,7 +108,7 @@ public class Organization extends RESTfulAPI {
 		WebIDCertificate wc=organization.get().getWebID(name.asLiteral().getLexicalForm(),public_key.asLiteral().getLexicalForm());
 		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, rdf.Response());
+		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
 
 		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.getWebid_uri().toString()));
