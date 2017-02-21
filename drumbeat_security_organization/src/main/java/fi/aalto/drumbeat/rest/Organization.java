@@ -26,6 +26,7 @@ import fi.aalto.drumbeat.security.OrganizationManager;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 import fi.aalto.drumbeat.webid.WebIDProfile;
 
+@Path("/organization")
 public class Organization extends RESTfulAPI {
 
 	@Path("/hello")
