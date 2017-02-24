@@ -31,7 +31,7 @@ import fi.ni.test_categories.IntegrationTest;
 @Category(IntegrationTest.class)
 
 public class IntegrationTests {
-
+/*
 	@Test
 	public void testHelloGET_HTTP_architect_local_org() {
 		try {
@@ -52,9 +52,6 @@ public class IntegrationTests {
 		}
 	}
 
-	/*
-	 * Test the basic JSON-LD connection to the server REST Interface
-	 */
 	private String createEmptyQueryString() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
@@ -225,6 +222,6 @@ public class IntegrationTests {
 			e.printStackTrace();
 		}
 	}
-
+*/
 
 }
