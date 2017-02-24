@@ -46,7 +46,7 @@ public class OrganizationManagerTests extends TestCase {
 	
 
 	@Test
-	public void testCresteAndTestPath() {
+	public void testCreateAndTestPath() {
 		Model model = ModelFactory.createDefaultModel();
 		WebIDCertificate wc = organization.get().registerWebID("Etu Sukunimi","1234");
 		
@@ -60,5 +60,14 @@ public class OrganizationManagerTests extends TestCase {
 		boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());
 		assertEquals(false, result_false);
 
+	}
+	
+	@Test
+	public void testCreateAndTestWebID() {
+		Model model = ModelFactory.createDefaultModel();
+		WebIDCertificate wc = organization.get().registerWebID("Etu Sukunimi","1234");
+		
+		Model response=organization.get().getWebID(wc.getWebid_uri().toString());
+		response.write(System.out,"TTL");
 	}
 }

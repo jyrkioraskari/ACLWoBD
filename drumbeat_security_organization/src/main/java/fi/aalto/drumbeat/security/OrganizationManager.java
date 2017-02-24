@@ -10,9 +10,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
@@ -26,19 +28,38 @@ public class OrganizationManager extends Fetchable {
 	private URI rootURI;
 	private final Model datamodel;
 	private final Resource root;
-	
+
 	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
-	private static OrganizationManager singleton=null;
-	
-	public static OrganizationManager getOrganizationManager(URI uri)
-	{
-		if(singleton==null)
-			singleton=new OrganizationManager(uri);
+	private static OrganizationManager singleton = null;
+
+	public static OrganizationManager getOrganizationManager(URI uri) {
+		if (singleton == null)
+			singleton = new OrganizationManager(uri);
 		return singleton;
-		
+
 	}
 	
+	
+	
+    //TODO FIX THIS
+	public Model getWebID(String webid) {
+		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
+		// @formatter:off
+		String queryString =	 "CONSTRUCT { \n" +
+								"	?webid ?p ?o \n" + 
+								"} WHERE { \n" + 
+								"     ?webid ?p ?o . \n" + 
+								"} \n";
+		// @formatter:on
+		ParameterizedSparqlString ps = new ParameterizedSparqlString(queryString);
+		
+		ps.setIri("webid", webid);
+		Query query=ps.asQuery();
+		Model result = QueryExecutionFactory.create(query, datamodel).execConstruct();
+		return result;
+	}
+
 	private RDFDataStore rdf_datastore = null;
 
 	private OrganizationManager(URI uri) {
@@ -46,8 +67,8 @@ public class OrganizationManager extends Fetchable {
 		rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI, "organization");
 		datamodel = rdf_datastore.getModel();
-		//rdf_datastore.readRDFData();
-		root=datamodel.getResource(rootURI.toString());
+		// rdf_datastore.readRDFData();
+		root = datamodel.getResource(rootURI.toString());
 
 	}
 
@@ -85,13 +106,15 @@ public class OrganizationManager extends Fetchable {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {
-			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id ).build();
+			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id).build();
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
 			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();
-			
-			root.addProperty(RDFConstants.property_knowsPerson, datamodel.getResource(webid_uri.toString()));
-			
+
+			Resource widr=datamodel.getResource(webid_uri.toString());
+			root.addProperty(RDFConstants.property_knowsPerson, widr);
+			widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+
 			return wc;
 
 		} catch (URISyntaxException e) {
@@ -100,20 +123,16 @@ public class OrganizationManager extends Fetchable {
 		return null;
 	}
 
-	
-
 	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
-		
-		
-		Resource current=node;
-		while(current!=null && current.asResource().hasProperty(RDF.rest))
-		{
-			if(current.hasProperty(RDF.first))
-					ret.add(current.getPropertyResourceValue(RDF.first));
-			current=current.getPropertyResourceValue(RDF.rest);
+
+		Resource current = node;
+		while (current != null && current.asResource().hasProperty(RDF.rest)) {
+			if (current.hasProperty(RDF.first))
+				ret.add(current.getPropertyResourceValue(RDF.first));
+			current = current.getPropertyResourceValue(RDF.rest);
 		}
-		
+
 		return ret;
 	}
 }

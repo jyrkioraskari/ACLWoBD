@@ -1,7 +1,6 @@
 package fi.aalto.drumbeat.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.StringWriter;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -32,7 +32,23 @@ public class Organization extends RESTfulAPI {
 	@Path("/hello")
 	@GET
 	public String getHello() {
+		
 		return "Hello OK!";
+	}
+	
+	
+	@Path("/profile/{Id}")
+	@GET
+	@Produces("text/turtle")
+	public Response getprofile(@Context UriInfo uriInfo, @PathParam("Id") String id) {
+		if (!this.organization.isPresent())
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
+					.build();
+		Model output_model = organization.get().getWebID(id);
+		StringWriter writer = new StringWriter();
+		output_model.write(writer, "JSON-LD");
+		writer.flush();
+		return Response.status(200).entity(writer.toString()).build();
 	}
 
 	@POST
@@ -132,7 +148,7 @@ public class Organization extends RESTfulAPI {
 	@Path("/registerWebID")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response registerWebID(@Context UriInfo uriInfo, String msg) {
+	public Response registerNewWebID(@Context UriInfo uriInfo, String msg) {
 		setBaseURI(uriInfo);
 
 		if (!this.organization.isPresent())
