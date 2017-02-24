@@ -32,9 +32,42 @@ public class Organization extends RESTfulAPI {
 	@Path("/hello")
 	@GET
 	public String getHello() {
-		return "OK!";
+		return "Hello OK!";
 	}
 
+	@POST
+	@Path("/hello")
+	@Consumes("application/ld+json")
+	@Produces("application/ld+json")
+	public Response postHello(@Context UriInfo uriInfo, String msg) {
+		try {
+			setBaseURI(new URI(uriInfo.toString()));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		if (!this.organization.isPresent())
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
+					.build();
+		Model input_model = parseInput(msg);
+		Resource query = getQuery(input_model);
+		if (query == null)
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
+
+		Model output_model = ModelFactory.createDefaultModel();
+		RDFConstants rdf = new RDFConstants(output_model);
+
+		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+
+		Resource response = output_model.createResource();
+		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+
+		response.addLiteral(RDFConstants.property_status, "HELLO");
+		return Response.status(200).entity(writeModel(output_model)).build();
+	}
+
+	
+	
 	@POST
 	@Path("/checkPath")
 	@Consumes("application/ld+json")

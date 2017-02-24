@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security</artifactId>
 	<version>1.0</version>
-	<name>drumbeat_security_commons</name>
+	<name>drumbeat_security</name>
 	<repositories>
 	</repositories>
 
@@ -13,8 +13,12 @@
 			<artifactId>jersey-server</artifactId>
 			<version>1.9</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.8</version>
+		</dependency>
 
-	
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -63,7 +67,7 @@
 		<module>../drumbeat_security_organization</module>
 		<module>../drumbeat_security_project</module>
 
-		
-		
+
+
 	</modules>
 </project>
