@@ -2,6 +2,7 @@ package fi.ni;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 
 import javax.ws.rs.client.Entity;
@@ -109,38 +110,54 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	}
 	
 	
-	@Test
-	public void test_registerWebID() {
+	private String registerWebID()
+	{
 		Model model =  ModelFactory.createDefaultModel();
 		try {
 			
-			RDFConstants rdf=new RDFConstants(model);			
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] =   RDFConstants.property_knowsPerson;
-			RDFList rulepath = model.createList(rulepath_list);	
-			Resource query =model.createResource();	
-			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+		RDFConstants rdf=new RDFConstants(model);			
+		RDFNode[] rulepath_list = new RDFNode[1];
+		rulepath_list[0] =   RDFConstants.property_knowsPerson;
+		RDFList rulepath = model.createList(rulepath_list);	
+		Resource query =model.createResource();	
+		query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
-			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
-			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
-			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
-			
-			StringWriter writer = new StringWriter();
-			model.write(writer, "JSON-LD");
-	        writer.flush();
+		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+		query.addProperty(RDF.type, RDFConstants.Query);
+		query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+		query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
+		query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
+		
+		StringWriter writer = new StringWriter();
+		model.write(writer, "JSON-LD");
+        writer.flush();
 
-			Response response = target("/organization/registerWebID").request()
-					.post(Entity.entity(writer.toString(), "application/ld+json"));
+		Response response = target("/organization/registerWebID").request()
+				.post(Entity.entity(writer.toString(), "application/ld+json"));
 
-			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus webid oli: " + response);
-			// assertEquals("OK!", response_string);
-			response.close();
+		String response_string = response.readEntity(String.class);
+		System.out.println("Vastaus webid oli: " + response);
+		response.close();
+		return response_string;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "";
+	}
+	private Model parseInput(String msg) {
+		final Model json_input_model = ModelFactory.createDefaultModel();
+		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
+		return json_input_model;
+	}
+	
+	@Test
+	public void test_registerWebID() {
+		
+			String reply=registerWebID();
+			System.out.println(" ... reg reply was: "+reply);
+			Model model=parseInput(reply);
+			// assertEquals("OK!", response_string);
+		
 	}
 	
 	

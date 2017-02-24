@@ -60,7 +60,7 @@ public class Organization extends RESTfulAPI {
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
 		response.addLiteral(RDFConstants.property_status, "HELLO");
 		return Response.status(200).entity(writeModel(output_model)).build();
@@ -96,7 +96,7 @@ public class Organization extends RESTfulAPI {
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
 		Literal result_code = output_model.createTypedLiteral(new Boolean(result));
 		response.addLiteral(RDFConstants.property_status, result_code);
@@ -132,7 +132,7 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
 		response.addLiteral(RDFConstants.property_hasName, wp.getName());
 
@@ -169,7 +169,7 @@ public class Organization extends RESTfulAPI {
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
 		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.getWebid_uri().toString()));
 

@@ -70,7 +70,7 @@ public class OrganizationManager extends Fetchable {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {
-			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id + "#i").build();
+			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id ).build();
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
 			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();
