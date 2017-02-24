@@ -40,11 +40,7 @@ public class Organization extends RESTfulAPI {
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response postHello(@Context UriInfo uriInfo, String msg) {
-		try {
-			setBaseURI(new URI(uriInfo.toString()));
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
@@ -61,6 +57,7 @@ public class Organization extends RESTfulAPI {
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(RDFConstants.property_information, "base was: " + getBase_url());
 
 		response.addLiteral(RDFConstants.property_status, "HELLO");
 		return Response.status(200).entity(writeModel(output_model)).build();
@@ -71,11 +68,7 @@ public class Organization extends RESTfulAPI {
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response checkPath(@Context UriInfo uriInfo, String msg) {
-		try {
-			setBaseURI(new URI(uriInfo.toString()));
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
@@ -107,11 +100,8 @@ public class Organization extends RESTfulAPI {
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response getWebIDProfile(@Context UriInfo uriInfo, String msg) {
-		try {
-			setBaseURI(new URI(uriInfo.toString()));
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		setBaseURI(uriInfo);
+
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
@@ -143,11 +133,8 @@ public class Organization extends RESTfulAPI {
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response registerWebID(@Context UriInfo uriInfo, String msg) {
-		try {
-			setBaseURI(new URI(uriInfo.toString()));
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		setBaseURI(uriInfo);
+
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
@@ -177,9 +164,9 @@ public class Organization extends RESTfulAPI {
 	Optional<OrganizationManager> organization = Optional.empty();
 
 	@Override
-	protected void setBaseURI(URI uriInfo) {
+	public void setBaseURI(UriInfo uriInfo) {
 		super.setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
-			this.organization = Optional.of(OrganizationManager.getOrganizationManager(uriInfo));
+			this.organization = Optional.of(OrganizationManager.getOrganizationManager(getBase_url()));
 	}
 }

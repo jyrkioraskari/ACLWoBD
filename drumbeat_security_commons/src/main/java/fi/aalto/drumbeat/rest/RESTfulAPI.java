@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
 
+import javax.ws.rs.core.UriInfo;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
@@ -34,16 +36,15 @@ public class RESTfulAPI {
 		return writer.toString();
 	}
 
-	protected void setBaseURI(URI uri) {
-		base_url = uri;
-	}
-
+	
 	public URI getBase_url() {
 		return base_url;
 	}
 
-	public void setBase_url(URI base_url) {
-		this.base_url = base_url;
+
+	public void setBaseURI(UriInfo uriInfo) {
+		this.base_url = uriInfo.getBaseUri();
+		
 	}
 
 }

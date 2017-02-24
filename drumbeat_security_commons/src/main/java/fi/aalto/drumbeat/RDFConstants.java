@@ -60,4 +60,7 @@ public class RDFConstants {
 	static public Property property_status = ResourceFactory
 			.createProperty(Constants.security_ontology_base + "#status");
 
+	
+	static public Property property_information = ResourceFactory
+			.createProperty(Constants.security_ontology_base + "#information");
 }
