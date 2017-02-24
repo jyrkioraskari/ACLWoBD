@@ -29,16 +29,14 @@ public class OrganizationManager extends Fetchable {
 
 	public OrganizationManager(URI uri) {
 		super();
-			rootURI = uri;
-		rdf_datastore = new RDFDataStore(rootURI,"organization");
-		organization_datamodel =rdf_datastore.getModel();
+		rootURI = uri;
+		rdf_datastore = new RDFDataStore(rootURI, "organization");
+		organization_datamodel = rdf_datastore.getModel();
 		rdf_datastore.readRDFData();
-		
-		
-		
+
 	}
-	
-	public boolean checkRDFPath(String webid_uri,Resource path) {
+
+	public boolean checkRDFPath(String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = rdf_datastore.getRulePath(path);
 		Resource current_node = rdf_datastore.getModel().getResource(rootURI.toString());
 		ListIterator<Resource> iterator = rulepath.listIterator();
@@ -46,38 +44,33 @@ public class OrganizationManager extends Fetchable {
 			Resource step = iterator.next();
 			Property p = rdf_datastore.getModel().getProperty(step.getURI());
 			Resource node = current_node.getPropertyResourceValue(p);
-			if (node != null)
-			{
+			if (node != null) {
 				System.out.println("from local store:" + node);
 				current_node = node;
-			}
-			else
-			{
-				System.out.println("located somewhere else. current node was: "+current_node);
-				
-				List<Resource> new_path=rulepath.subList(rulepath.indexOf(step),rulepath.size());
+			} else {
+				System.out.println("located somewhere else. current node was: " + current_node);
+
+				List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
 				System.out.println("Path for the rest is:" + new_path);
 
 				break;
 			}
 		}
-		if(current_node.toString().equals(webid_uri))
-		   return true;
-		else 
-		   return false;
+		if (current_node.toString().equals(webid_uri))
+			return true;
+		else
+			return false;
 	}
 
 	public WebIDProfile getWebIDProfile(String webid_uri) {
 		return webid_profiles.get(webid_uri);
 	}
 
-	
-
 	public WebIDCertificate getWebID(String name, String public_key) {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {
-			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid" + id+"#i").build();
+			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id + "#i").build();
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
 			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();

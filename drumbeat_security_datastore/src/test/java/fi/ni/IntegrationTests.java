@@ -80,17 +80,9 @@ public class IntegrationTests {
 
 			WebResource webResource = client
 			   .resource("http://architect.local.org:8080/security/rest/organization/hello");
-
-
 			System.out.println(createEmptyQueryString());
 			ClientResponse response = webResource.type("application/ld+json")
 			   .post(ClientResponse.class, createEmptyQueryString());
-
-			/*if (response.getStatus() != 201) {
-				throw new RuntimeException("Failed : HTTP error code : "
-				     + response.getStatus());
-			}*/
-
 			System.out.println("Output from Server .... \n");
 			String output = response.getEntity(String.class);
 			System.out.println(output);
@@ -100,6 +92,48 @@ public class IntegrationTests {
 			e.printStackTrace();
 
 		  }
+
+	}
+
+	
+	@Test
+	public void test_getWebID() {
+		Model model =  ModelFactory.createDefaultModel();
+		try {
+			
+			RDFConstants rdf=new RDFConstants(model);			
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] =   RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);	
+			Resource query =model.createResource();	
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
+			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
+			
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+	        writer.flush();
+
+			Client client = Client.create();
+
+			WebResource webResource = client
+			   .resource("http://architect.local.org:8080/security/rest/organization/getWebID");
+			System.out.println(createEmptyQueryString());
+			ClientResponse response = webResource.type("application/ld+json")
+			   .post(ClientResponse.class, writer.toString());
+
+			System.out.println("Vastaus webid oli: " + response);
+			String output = response.getEntity(String.class);
+			System.out.println(output);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		;
 
 	}
 

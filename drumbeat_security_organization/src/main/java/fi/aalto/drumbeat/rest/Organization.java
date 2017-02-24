@@ -181,6 +181,6 @@ public class Organization extends RESTfulAPI {
 	@Override
 	protected void setBaseURI(URI uriInfo) {
 		super.setBaseURI(uriInfo);
-		this.organization = Optional.of(new OrganizationManager(this.getBase_url()));
+		this.organization = Optional.of(new OrganizationManager(uriInfo));
 	}
 }
