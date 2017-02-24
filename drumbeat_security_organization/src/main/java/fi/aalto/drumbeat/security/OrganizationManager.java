@@ -66,7 +66,7 @@ public class OrganizationManager extends Fetchable {
 		return webid_profiles.get(webid_uri);
 	}
 
-	public WebIDCertificate getWebID(String name, String public_key) {
+	public WebIDCertificate registerWebID(String name, String public_key) {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {

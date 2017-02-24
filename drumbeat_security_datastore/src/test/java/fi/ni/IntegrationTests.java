@@ -80,10 +80,10 @@ public class IntegrationTests {
 
 			WebResource webResource = client
 			   .resource("http://architect.local.org:8080/security/rest/organization/hello");
-			System.out.println(createEmptyQueryString());
+			System.out.println("QUERY (POST Hello ) "+createEmptyQueryString());
 			ClientResponse response = webResource.type("application/ld+json")
 			   .post(ClientResponse.class, createEmptyQueryString());
-			System.out.println("Output from Server .... \n");
+			System.out.println("RESPONSE (POST Hello ) from Server .... \n");
 			String output = response.getEntity(String.class);
 			System.out.println(output);
 
@@ -96,8 +96,9 @@ public class IntegrationTests {
 	}
 
 	
+	
 	@Test
-	public void test_getWebID() {
+	public void test_() {
 		Model model =  ModelFactory.createDefaultModel();
 		try {
 			
@@ -117,18 +118,17 @@ public class IntegrationTests {
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
 	        writer.flush();
+	        System.out.println("QUERY (WebID registration) "+writer.toString());
 
 			Client client = Client.create();
 
 			WebResource webResource = client
-			   .resource("http://architect.local.org:8080/security/rest/organization/getWebID");
-			System.out.println(createEmptyQueryString());
+			   .resource("http://architect.local.org:8080/security/rest/organization/registerWebID");
 			ClientResponse response = webResource.type("application/ld+json")
 			   .post(ClientResponse.class, writer.toString());
 
-			System.out.println("Vastaus webid oli: " + response);
 			String output = response.getEntity(String.class);
-			System.out.println(output);
+			System.out.println("RESPONSE (WebID registration) "+output);
 			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -141,10 +141,10 @@ public class Organization extends RESTfulAPI {
 	}
 
 	@POST
-	@Path("/getWebID")
+	@Path("/registerWebID")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response getWebID(@Context UriInfo uriInfo, String msg) {
+	public Response registerWebID(@Context UriInfo uriInfo, String msg) {
 		try {
 			setBaseURI(new URI(uriInfo.toString()));
 		} catch (URISyntaxException e) {
@@ -164,7 +164,7 @@ public class Organization extends RESTfulAPI {
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode name = query.getProperty(RDFConstants.property_hasName).getObject();
 		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		WebIDCertificate wc = organization.get().getWebID(name.asLiteral().getLexicalForm(),
+		WebIDCertificate wc = organization.get().registerWebID(name.asLiteral().getLexicalForm(),
 				public_key.asLiteral().getLexicalForm());
 
 		Resource response = output_model.createResource();

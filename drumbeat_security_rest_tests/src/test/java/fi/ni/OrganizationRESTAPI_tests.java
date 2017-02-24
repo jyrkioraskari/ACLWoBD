@@ -112,7 +112,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	
 	
 	@Test
-	public void test_getWebID() {
+	public void test_registerWebID() {
 		Model model =  ModelFactory.createDefaultModel();
 		try {
 			
@@ -133,7 +133,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			model.write(writer, "JSON-LD");
 	        writer.flush();
 
-			Response response = target("/organization/getWebID").request()
+			Response response = target("/organization/registerWebID").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
