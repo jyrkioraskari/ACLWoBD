@@ -1,0 +1,35 @@
+{
+	"id": "a92eba48-9bf4-1561-592f-336573e66b1b",
+	"name": "Drumbeat Secutity API",
+	"description": "",
+	"order": [
+		"63eb3431-c964-ed90-225c-d6e145658e53"
+	],
+	"folders": [],
+	"timestamp": 1487936785986,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "63eb3431-c964-ed90-225c-d6e145658e53",
+			"headers": "Content-Type: application/ld+json\n",
+			"url": "http://architect.local.org:8080/security/rest/organization/hello",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "a92eba48-9bf4-1561-592f-336573e66b1b",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://architect.local.org:8080/security/rest/organization/hello",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1487936803478,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\r\n  \"@id\" : \"_:b0\",\r\n  \"@type\" : \"https://drumbeat.cs.hut.fi/owl/security.ttl#Query\",\r\n  \"hasTimeStamp\" : \"1487936123707\",\r\n  \"@context\" : {\r\n    \"hasTimeStamp\" : {\r\n      \"@id\" : \"https://drumbeat.cs.hut.fi/owl/security.ttl#hasTimeStamp\",\r\n      \"@type\" : \"http://www.w3.org/2001/XMLSchema#long\"\r\n    }\r\n  }\r\n}\r\n"
+		}
+	]
+}

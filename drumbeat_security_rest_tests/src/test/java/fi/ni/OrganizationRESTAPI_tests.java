@@ -34,7 +34,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	public void test_getHello() {
 		Response response = target("/organization/hello").request().get();
 		String hello = response.readEntity(String.class);
-		assertEquals("OK!", hello);
+		assertEquals("Hello OK!", hello);
 		response.close();
 	}
 	
