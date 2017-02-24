@@ -49,10 +49,10 @@ public class DataServer extends Fetchable {
 			for (RDFNode r : matched_paths) {
 				System.out.println("match: " + r.toString());
 				System.out.println("permissions: " + rdf_datastore.getPermissions(r.toString()));
-				System.out.println("rule pahth is: " + rdf_datastore.getRulePath(r.toString()));
+				System.out.println("rule pahth is: " + rdf_datastore.parseRulePath(r.asResource()));
 
 				Resource current_node = rdf_datastore.getModel().getResource(r.toString());
-				LinkedList<Resource> rulepath = rdf_datastore.getRulePath(r.toString());
+				LinkedList<Resource> rulepath = rdf_datastore.parseRulePath(r.asResource());
 				ListIterator<Resource> iterator = rulepath.listIterator();
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();

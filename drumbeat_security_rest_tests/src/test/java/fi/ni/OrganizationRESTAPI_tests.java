@@ -234,13 +234,18 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			model.write(writer, "JSON-LD");
 			writer.flush();
 
-			Response response = target("/organization/checkPath").request()
+			Response http_response = target("/organization/checkPath").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
-
-			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus C&Fe oli: " + response_string);
-			// assertEquals("OK!", response_string);
-			response.close();
+			String response_string = http_response.readEntity(String.class);
+			http_response.close();
+			Model response_model = parseInput(response_string);
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+			Resource response = null;
+			if (iter.hasNext())
+				response = iter.next();
+			boolean status=response.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
+			assertEquals(true, status);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -14,6 +14,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.drumbeat.Fetchable;
 import fi.aalto.drumbeat.RDFConstants;
@@ -45,13 +46,13 @@ public class OrganizationManager extends Fetchable {
 		rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI, "organization");
 		datamodel = rdf_datastore.getModel();
-		rdf_datastore.readRDFData();
+		//rdf_datastore.readRDFData();
 		root=datamodel.getResource(rootURI.toString());
 
 	}
 
 	public boolean checkRDFPath(String webid_uri, Resource path) {
-		LinkedList<Resource> rulepath = rdf_datastore.getRulePath(path);
+		LinkedList<Resource> rulepath = parseRulePath(path);
 		Resource current_node = root;
 		ListIterator<Resource> iterator = rulepath.listIterator();
 		while (iterator.hasNext()) {
@@ -99,4 +100,20 @@ public class OrganizationManager extends Fetchable {
 		return null;
 	}
 
+	
+
+	public LinkedList<Resource> parseRulePath(Resource node) {
+		LinkedList<Resource> ret = new LinkedList<Resource>();
+		
+		
+		Resource current=node;
+		while(current!=null && current.asResource().hasProperty(RDF.rest))
+		{
+			if(current.hasProperty(RDF.first))
+					ret.add(current.getPropertyResourceValue(RDF.first));
+			current=current.getPropertyResourceValue(RDF.rest);
+		}
+		
+		return ret;
+	}
 }

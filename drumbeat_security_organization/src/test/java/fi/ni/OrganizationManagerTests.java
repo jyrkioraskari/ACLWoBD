@@ -6,9 +6,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
 import org.junit.Test;
 
+import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
+import fi.aalto.drumbeat.webid.WebIDCertificate;
+import fi.aalto.drumbeat.webid.WebIDProfile;
 import junit.framework.TestCase;
 
 public class OrganizationManagerTests extends TestCase {
@@ -27,13 +34,31 @@ public class OrganizationManagerTests extends TestCase {
 	   }
 	
 
-	public void testSometing() {
-		System.out.println(organization.isPresent());
+	public void testSimpleWCRegistration() {
+		WebIDCertificate wc = organization.get().registerWebID("Etu Sukunimi","1234");
+		
+		assertNotNull(wc);
+		
+		WebIDProfile wp = organization.get().getWebIDProfile(wc.getWebid_uri().toString());
+
+		assertNotNull(wp);
 	}
 	
 
 	@Test
-	public void testSometing2() {
-		System.out.println(organization.isPresent());
+	public void testCresteAndTestPath() {
+		Model model = ModelFactory.createDefaultModel();
+		WebIDCertificate wc = organization.get().registerWebID("Etu Sukunimi","1234");
+		
+		RDFNode[] rulepath_list = new RDFNode[1];
+		rulepath_list[0] = RDFConstants.property_knowsPerson;
+		RDFList rulepath = model.createList(rulepath_list);
+		
+		boolean result_true = organization.get().checkRDFPath(wc.getWebid_uri().toString(), rulepath.asResource());
+		assertEquals(true, result_true);
+		
+		boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());
+		assertEquals(false, result_false);
+
 	}
 }

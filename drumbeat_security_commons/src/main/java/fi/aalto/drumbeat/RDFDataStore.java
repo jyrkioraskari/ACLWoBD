@@ -161,25 +161,12 @@ public class RDFDataStore {
 
 	}
 
-	public LinkedList<Resource> getRulePath(String uri) {
-		Resource node = model.getResource(uri);
-		return getRulePath(node);
-	}
 
-	
-	public LinkedList<Resource> getRulePath(Resource node) {
+	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
-		Resource rule=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
-		if(rule==null)
-			return ret;
-		Resource rule_path=rule.getPropertyResourceValue(RDFConstants.property_hasRulePath);
-		if(rule_path==null)
-			return ret;
-		Resource path=rule_path.getPropertyResourceValue(RDFConstants.property_hasPath);
-		if(path==null)
-			return ret;
 		
-		Resource current=path;
+		
+		Resource current=node;
 		while(current!=null && current.asResource().hasProperty(RDF.rest))
 		{
 			if(current.hasProperty(RDF.first))
