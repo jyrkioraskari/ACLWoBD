@@ -2,7 +2,11 @@ package fi.ni;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 import javax.ws.rs.core.Response;
 
@@ -11,6 +15,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
@@ -25,10 +30,8 @@ import fi.ni.test_categories.IntegrationTest;
 
 @Category(IntegrationTest.class)
 
-
 public class IntegrationTests {
 
-	
 	@Test
 	public void testHelloGET_HTTP_architect_local_org() {
 		try {
@@ -45,35 +48,33 @@ public class IntegrationTests {
 			assertEquals("Hello OK!", output);
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 
-	
 	/*
-	 * Test the basic JSON-LD connection to the server REST Interface 
+	 * Test the basic JSON-LD connection to the server REST Interface
 	 */
 	private String createEmptyQueryString() {
-			Model model =  ModelFactory.createDefaultModel();
-			try {
-				
-				RDFConstants rdf=new RDFConstants(model);			
-				Resource query =model.createResource();	
-				Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-				query.addProperty(RDF.type, RDFConstants.Query);
-				query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-				
-				StringWriter writer = new StringWriter();
-				model.write(writer, "JSON-LD");
-		        writer.flush();
-		        return writer.toString();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return "";
+		Model model = ModelFactory.createDefaultModel();
+		try {
+
+			RDFConstants rdf = new RDFConstants(model);
+			Resource query = model.createResource();
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+			writer.flush();
+			return writer.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
-	
-	
-	
+
 	@Test
 	public void testHelloPOST_HTTP_architect_local_org() {
 		try {
@@ -81,34 +82,55 @@ public class IntegrationTests {
 			Client client = Client.create();
 
 			WebResource webResource = client
-			   .resource("http://architect.local.org:8080/security/rest/organization/hello");
-			System.out.println("QUERY (POST Hello ) "+createEmptyQueryString());
-			ClientResponse response = webResource.type("application/ld+json")
-			   .post(ClientResponse.class, createEmptyQueryString());
+					.resource("http://architect.local.org:8080/security/rest/organization/hello");
+			System.out.println("QUERY (POST Hello ) " + createEmptyQueryString());
+			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
+					createEmptyQueryString());
 			System.out.println("RESPONSE (POST Hello ) from Server .... \n");
 			String output = response.getEntity(String.class);
 			System.out.println(output);
 
-		  } catch (Exception e) {
-
+		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 
-		  }
+		}
 
 	}
 
-	
-	
 	@Test
 	public void testRegisterWebID_HTTP_architect_local_org() {
-		Model model =  ModelFactory.createDefaultModel();
+		assertNotNull(registerWebID());
+	}
+	
+	private String registerWebID() {
+		String reply = call_registerWebID();
+		if(reply==null)
+			return reply;
+		Model model = parseInput(reply);
+		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+		Resource response = null;
+		if (iter.hasNext())
+			response = iter.next();
+		RDFNode webid_url = response.getProperty(RDFConstants.property_hasWebID).getObject();
+		return webid_url.toString();
+	}
+	
+	private Model parseInput(String msg) {
+		final Model json_input_model = ModelFactory.createDefaultModel();
+		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
+		return json_input_model;
+	}
+
+	private String call_registerWebID() {
+		Model model = ModelFactory.createDefaultModel();
 		try {
-			
-			RDFConstants rdf=new RDFConstants(model);			
+
+			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] =   RDFConstants.property_knowsPerson;
-			RDFList rulepath = model.createList(rulepath_list);	
-			Resource query =model.createResource();	
+			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);
+			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -116,69 +138,97 @@ public class IntegrationTests {
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
 			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
-			
+
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
-	        writer.flush();
-	        System.out.println("QUERY (WebID registration) "+writer.toString());
+			writer.flush();
+			System.out.println("QUERY (WebID registration) " + writer.toString());
 
 			Client client = Client.create();
 
 			WebResource webResource = client
-			   .resource("http://architect.local.org:8080/security/rest/organization/registerWebID");
-			ClientResponse response = webResource.type("application/ld+json")
-			   .post(ClientResponse.class, writer.toString());
+					.resource("http://architect.local.org:8080/security/rest/organization/registerWebID");
+			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
+					writer.toString());
+			response.close();
 
 			String output = response.getEntity(String.class);
-			System.out.println("RESPONSE (WebID registration) "+output);
-			response.close();
+			return output;
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
-
+		return null;
 	}
 
-	
 	@Test
 	public void testCheckPath_HTTP_architect_local_org() {
-		Model model =  ModelFactory.createDefaultModel();
-        String webid="http://user.com/user#me";
+		Model model = ModelFactory.createDefaultModel();
+		String webid = "http://user.com/user#me";
 
 		try {
-			
-			RDFConstants rdf=new RDFConstants(model);			
+
+			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] =   RDFConstants.property_knowsPerson;
-			RDFList rulepath = model.createList(rulepath_list);	
-			Resource query =model.createResource();	
+			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);
+			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
-			
+
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
-	        writer.flush();
-	        System.out.println("QUERY (Check RulePath) "+writer.toString());
+			writer.flush();
+			System.out.println("QUERY (Check RulePath) " + writer.toString());
 
 			Client client = Client.create();
 
 			WebResource webResource = client
-			   .resource("http://architect.local.org:8080/security/rest/organization/checkPath");
-			ClientResponse response = webResource.type("application/ld+json")
-			   .post(ClientResponse.class, writer.toString());
+					.resource("http://architect.local.org:8080/security/rest/organization/checkPath");
+			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
+					writer.toString());
 
 			String output = response.getEntity(String.class);
-			System.out.println("RESPONSE (Check RulePath) "+output);
+			System.out.println("RESPONSE (Check RulePath) " + output);
 			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void test_webIDProfileTTLTest() {
+		try {
+			URI webid_url = new URI(registerWebID());
+			
+			Client client = Client.create();
+			WebResource webResource = client
+					.resource(webid_url.toString());
+			
+			ClientResponse response = webResource.accept("text/turtle").get(ClientResponse.class);
+			if (response.getStatus() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			}
+		    response.close();
+			String result_string = response.getEntity(String.class);
+			
+			Model input_model = ModelFactory.createDefaultModel();
+			input_model.read(new ByteArrayInputStream(result_string.getBytes()), null, "TTL");
+			Resource rwebid= input_model.getResource(webid_url.toString());
+			String pk=rwebid.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
+			
+			assertNotNull(pk);
+
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 
-	
-	
 
 }

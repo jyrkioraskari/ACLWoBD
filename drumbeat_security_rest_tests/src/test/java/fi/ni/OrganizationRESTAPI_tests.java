@@ -228,6 +228,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			assertEquals(true, status);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
@@ -251,6 +252,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			assertNotNull(pk);
 
 		} catch (URISyntaxException e) {
+			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}

@@ -44,6 +44,9 @@ public class DataServer extends Fetchable {
 		//if (o == null)
 		//	return false;
 		WebIDProfile wp = null;//(WebIDProfile) o.get(wc.getWebid_uri().getPath());
+		
+		
+		
 		if (wc.getPublic_key().equals(wp.getPublic_key())) {
 			List<RDFNode> matched_paths = rdf_datastore.match(canonizted_requestURI.toString());
 			for (RDFNode r : matched_paths) {
