@@ -23,7 +23,6 @@ public class TestDataTests extends TestCase {
 	}
 	
 
-	@Test
 	public void test_JenaFromBean() {
 		try {
 			Collection c= new Collection(new URI("https://architectural.drb.cs.hut.fi/security/"), "turva", model);

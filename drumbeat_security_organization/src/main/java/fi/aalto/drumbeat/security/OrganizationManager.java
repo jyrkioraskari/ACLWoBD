@@ -12,19 +12,20 @@ import java.util.UUID;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 import fi.aalto.drumbeat.Fetchable;
+import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.webid.WebIDCertificate;
 import fi.aalto.drumbeat.webid.WebIDProfile;
 
 public class OrganizationManager extends Fetchable {
 	private URI rootURI;
-	private final Model organization_datamodel;
+	private final Model datamodel;
+	private final Resource root;
 	
-	
-
 	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
 	private static OrganizationManager singleton=null;
@@ -43,14 +44,15 @@ public class OrganizationManager extends Fetchable {
 		super();
 		rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI, "organization");
-		organization_datamodel = rdf_datastore.getModel();
+		datamodel = rdf_datastore.getModel();
 		rdf_datastore.readRDFData();
+		root=datamodel.getResource(rootURI.toString());
 
 	}
 
 	public boolean checkRDFPath(String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = rdf_datastore.getRulePath(path);
-		Resource current_node = rdf_datastore.getModel().getResource(rootURI.toString());
+		Resource current_node = root;
 		ListIterator<Resource> iterator = rulepath.listIterator();
 		while (iterator.hasNext()) {
 			Resource step = iterator.next();
@@ -86,6 +88,9 @@ public class OrganizationManager extends Fetchable {
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
 			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();
+			
+			root.addProperty(RDFConstants.property_knowsPerson, datamodel.getResource(webid_uri.toString()));
+			
 			return wc;
 
 		} catch (URISyntaxException e) {

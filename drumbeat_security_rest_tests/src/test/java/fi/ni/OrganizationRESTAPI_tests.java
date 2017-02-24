@@ -75,40 +75,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 
 	}
 
-	@Test
-	public void test_checkPath_Simple() {
-		Model model = ModelFactory.createDefaultModel();
-		String webid = "http://user.com/user#me";
-		try {
-
-			RDFConstants rdf = new RDFConstants(model);
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
-			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
-
-			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
-			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
-
-			StringWriter writer = new StringWriter();
-			model.write(writer, "JSON-LD");
-			writer.flush();
-
-			Response response = target("/organization/checkPath").request()
-					.post(Entity.entity(writer.toString(), "application/ld+json"));
-
-			String response_string = response.readEntity(String.class);
-			System.out.println("Vastaus simple oli: " + response_string);
-			// assertEquals("OK!", response_string);
-			response.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private String call_registerWebID() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
@@ -209,5 +175,76 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		}
 
 	}
+
+	
+	@Test
+	public void test_CheckPath_Simple() {
+		Model model = ModelFactory.createDefaultModel();
+		String webid = "http://user.com/user#me";
+		try {
+
+			RDFConstants rdf = new RDFConstants(model);
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);
+			Resource query = model.createResource();
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
+
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+			writer.flush();
+
+			Response response = target("/organization/checkPath").request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+
+			String response_string = response.readEntity(String.class);
+			System.out.println("Vastaus simple oli: " + response_string);
+			// assertEquals("OK!", response_string);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void test_CheckPath_CreateAndFind() {
+		String webid_url = registerWebID();
+		Model model = ModelFactory.createDefaultModel();
+	
+		try {
+
+			RDFConstants rdf = new RDFConstants(model);
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);
+			Resource query = model.createResource();
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid_url));
+
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+			writer.flush();
+
+			Response response = target("/organization/checkPath").request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+
+			String response_string = response.readEntity(String.class);
+			System.out.println("Vastaus C&Fe oli: " + response_string);
+			// assertEquals("OK!", response_string);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 }

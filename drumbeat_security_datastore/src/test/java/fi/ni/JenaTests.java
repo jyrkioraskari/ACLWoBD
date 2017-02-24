@@ -52,8 +52,6 @@ public class JenaTests extends TestCase {
 	}
 
 	
-
-	@Test
 	public void test_JenaListPaths() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
@@ -71,7 +69,6 @@ public class JenaTests extends TestCase {
 		}
 	}
 
-	@Test
 	public void test_FetchByURI() {
 		Resource root = model.getResource("https://architectural.drb.cs.hut.fi/security");
 		Resource collection = model.getResource(root.toString() + "/turva");
@@ -106,7 +103,6 @@ public class JenaTests extends TestCase {
 		return ret;
 	}
 
-	@Test
 	public void test_urlMatch() {
 		String test_url = "https://architectural.drb.cs.hut.fi/security/smc2/architectural/3A248E14-4504-4891-902B-5E9216C64AB9";
 		System.out.println(match(test_url));
@@ -133,7 +129,7 @@ public class JenaTests extends TestCase {
 
 	}
 
-	@Test
+	
 	public void test_getAssocatedPermissions() {
 		String test_url = "https://architectural.drb.cs.hut.fi/security/smc2/architectural";
 		assertTrue(!getAssocatedPermissions(test_url).isEmpty());
@@ -166,7 +162,6 @@ public class JenaTests extends TestCase {
 	}
 
 
-	@Test
 	public void test_getAssocateRulePath() {
 		String test_url = "https://architectural.drb.cs.hut.fi/security/smc2/architectural";
 		assertEquals(getAssocatedPath(test_url).toString(),"[https://drumbeat.cs.hut.fi/owl/security.ttl#hasProject, https://drumbeat.cs.hut.fi/owl/security.ttl#hasContractor, https://drumbeat.cs.hut.fi/owl/security.ttl#knowsPerson]");

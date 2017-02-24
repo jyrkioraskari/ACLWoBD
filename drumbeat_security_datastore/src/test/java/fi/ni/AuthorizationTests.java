@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 
 public class AuthorizationTests extends TestCase {
 /*
-	@Test
 	public void test_basicConnection() {
 		Exception ex = null;
 		try {
@@ -22,7 +21,6 @@ public class AuthorizationTests extends TestCase {
 		assertEquals(null, ex);
 	}
 	
-	@Test
 	public void test_unknownUser() {
 		Exception ex = null;
 		try {

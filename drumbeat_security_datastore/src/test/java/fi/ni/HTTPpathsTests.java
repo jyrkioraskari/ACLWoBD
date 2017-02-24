@@ -22,7 +22,6 @@ public class HTTPpathsTests extends TestCase {
 	}
 	
 	
-	@Test
 	public void test_URLCanonization() {
 		 try {
 			System.out.println(kanonisointi("http://architectural.drb.cs.hut.fi/drumbeat/objects/smc2/architectural/3A248E14-4504-4891-902B-5E9216C64AB9")) ;
