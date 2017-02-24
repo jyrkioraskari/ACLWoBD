@@ -75,7 +75,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	
 	
 	@Test
-	public void test_checkUser_simple() {
+	public void test_checkPath_Simple() {
 		Model model =  ModelFactory.createDefaultModel();
         String webid="http://user.com/user#me";
 		try {
@@ -106,8 +106,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		;
-
 	}
 	
 	
@@ -143,8 +141,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		;
-
 	}
 	
 	
@@ -179,7 +175,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		;
 
 	}
 

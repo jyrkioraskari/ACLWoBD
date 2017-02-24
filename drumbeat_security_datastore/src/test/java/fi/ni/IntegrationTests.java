@@ -98,7 +98,7 @@ public class IntegrationTests {
 	
 	
 	@Test
-	public void test_() {
+	public void testRegisterWebID_HTTP_architect_local_org() {
 		Model model =  ModelFactory.createDefaultModel();
 		try {
 			
@@ -133,8 +133,50 @@ public class IntegrationTests {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		;
 
 	}
+
+	
+	@Test
+	public void testCheckPath_HTTP_architect_local_org() {
+		Model model =  ModelFactory.createDefaultModel();
+        String webid="http://user.com/user#me";
+
+		try {
+			
+			RDFConstants rdf=new RDFConstants(model);			
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] =   RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);	
+			Resource query =model.createResource();	
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
+			
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+	        writer.flush();
+	        System.out.println("QUERY (Check RulePath) "+writer.toString());
+
+			Client client = Client.create();
+
+			WebResource webResource = client
+			   .resource("http://architect.local.org:8080/security/rest/organization/checkPath");
+			ClientResponse response = webResource.type("application/ld+json")
+			   .post(ClientResponse.class, writer.toString());
+
+			String output = response.getEntity(String.class);
+			System.out.println("RESPONSE (Check RulePath) "+output);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	
 
 }
