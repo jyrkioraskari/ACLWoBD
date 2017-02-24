@@ -35,9 +35,7 @@ public class RESTfulAPI {
 	}
 
 	protected void setBaseURI(URI uri) {
-
 		base_url = uri;
-
 	}
 
 	public URI getBase_url() {

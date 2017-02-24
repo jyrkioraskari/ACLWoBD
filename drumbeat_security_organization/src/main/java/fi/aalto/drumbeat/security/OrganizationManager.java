@@ -22,12 +22,24 @@ import fi.aalto.drumbeat.webid.WebIDProfile;
 public class OrganizationManager extends Fetchable {
 	private URI rootURI;
 	private final Model organization_datamodel;
+	
+	
 
 	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
+	private static OrganizationManager singleton=null;
+	
+	public static OrganizationManager getOrganizationManager(URI uri)
+	{
+		if(singleton==null)
+			singleton=new OrganizationManager(uri);
+		return singleton;
+		
+	}
+	
 	private RDFDataStore rdf_datastore = null;
 
-	public OrganizationManager(URI uri) {
+	private OrganizationManager(URI uri) {
 		super();
 		rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI, "organization");

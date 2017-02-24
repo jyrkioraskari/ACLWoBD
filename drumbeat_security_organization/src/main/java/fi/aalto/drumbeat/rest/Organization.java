@@ -66,8 +66,6 @@ public class Organization extends RESTfulAPI {
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 
-	
-	
 	@POST
 	@Path("/checkPath")
 	@Consumes("application/ld+json")
@@ -181,6 +179,7 @@ public class Organization extends RESTfulAPI {
 	@Override
 	protected void setBaseURI(URI uriInfo) {
 		super.setBaseURI(uriInfo);
-		this.organization = Optional.of(new OrganizationManager(uriInfo));
+		if (!this.organization.isPresent())
+			this.organization = Optional.of(OrganizationManager.getOrganizationManager(uriInfo));
 	}
 }
