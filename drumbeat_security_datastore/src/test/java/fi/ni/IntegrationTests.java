@@ -92,7 +92,6 @@ public class IntegrationTests {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail(e.getMessage());
 
 		}
 
@@ -156,7 +155,6 @@ public class IntegrationTests {
 			return output;
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail(e.getMessage());
 		}
 		return null;
 	}
@@ -197,7 +195,6 @@ public class IntegrationTests {
 			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail(e.getMessage());
 		}
 	}
 	
@@ -226,7 +223,6 @@ public class IntegrationTests {
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			fail(e.getMessage());
 		}
 	}
 
