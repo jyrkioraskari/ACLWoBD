@@ -1,6 +1,8 @@
 package fi.aalto.drumbeat.rest;
 
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -40,13 +43,23 @@ public class Organization extends RESTfulAPI {
 	@Path("/profile/{Id}")
 	@GET
 	@Produces("text/turtle")
-	public Response getprofile(@Context UriInfo uriInfo, @PathParam("Id") String id) {
+	public Response getStandardWebIDProfile(@Context UriInfo uriInfo, @PathParam("Id") String id) {
+		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		Model output_model = organization.get().getWebID(id);
+		String root_path=getBase_url().getPath();
+		root_path=root_path.substring(0, root_path.substring(1).indexOf("/")+1);  //TODO lis‰‰ testej‰
+		Model output_model = ModelFactory.createDefaultModel();
+		try {
+			URI webid_uri = new URIBuilder(getBase_url()).setScheme("https").setPath(root_path+"/profile/" + id).build();
+			 output_model = organization.get().getWebID(webid_uri.toString());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 		StringWriter writer = new StringWriter();
-		output_model.write(writer, "JSON-LD");
+		output_model.write(writer, "TTL");
 		writer.flush();
 		return Response.status(200).entity(writer.toString()).build();
 	}

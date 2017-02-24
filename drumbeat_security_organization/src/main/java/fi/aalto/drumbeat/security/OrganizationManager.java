@@ -41,8 +41,6 @@ public class OrganizationManager extends Fetchable {
 	}
 	
 	
-	
-    //TODO FIX THIS
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
 		// @formatter:off
@@ -106,7 +104,9 @@ public class OrganizationManager extends Fetchable {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {
-			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath("/webid/" + id).build();
+			String root_path=rootURI.getPath();
+			root_path=root_path.substring(0, root_path.substring(1).indexOf("/")+1);  //TODO lis‰‰ testej‰
+			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath(root_path+"/profile/" + id).build();
 			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
 			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
 			rdf_datastore.saveRDFData();

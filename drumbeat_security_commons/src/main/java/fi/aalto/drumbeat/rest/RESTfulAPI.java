@@ -43,7 +43,7 @@ public class RESTfulAPI {
 
 
 	public void setBaseURI(UriInfo uriInfo) {
-		this.base_url = uriInfo.getBaseUri();
+		this.base_url = uriInfo.getRequestUri();
 		
 	}
 

@@ -32,7 +32,12 @@
 	</build>
 
 	<dependencies>
-			<dependency>
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-runtime</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
