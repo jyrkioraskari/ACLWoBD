@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="449.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.aalto.cs.drumbeat.WebIDController">
+  <children>
+    <MenuBar fx:id="myMenuBar" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#closeApplicationAction" text="Quit">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#aboutAction" text="About Drumbeat WebID Creator 2016" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="455.0" prefWidth="530.0" VBox.vgrow="ALWAYS">
+         <children>
+            <TabPane layoutX="14.0" layoutY="14.0" prefHeight="404.0" prefWidth="495.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Certification Authority">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="495.0">
+                                               <children>
+                              <TitledPane animated="false" collapsible="false" layoutX="4.0" layoutY="5.0" prefHeight="126.0" prefWidth="495.0" text="Files">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                        <AnchorPane layoutX="0" layoutY="0" minHeight="0.0" minWidth="0.0" prefHeight="108.0" prefWidth="486.0">
+                                             <children>
+                                                <Label layoutX="5.0" layoutY="1.0" prefHeight="25.0" prefWidth="212.0" text="Certification Authority keystore file:" />
+                                                <TextField fx:id="ca_keystore_file" layoutX="5.0" layoutY="25.0" prefHeight="25.0" prefWidth="220.0" />
+                                                <Label layoutX="4.0" layoutY="50.0" prefHeight="25.0" prefWidth="212.0" text="Password:" />
+                                                <PasswordField fx:id="ca_keystore_password" layoutX="5.0" layoutY="72.0" prefHeight="25.0" prefWidth="218.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" collapsible="false" layoutX="4.0" layoutY="131.0" prefHeight="150.0" prefWidth="488.0" text="Certificate content">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="124.0" prefWidth="502.0">
+                                       <children>
+                                          <Label layoutX="10.0" layoutY="0" prefHeight="25.0" prefWidth="104.0" text="Common Name:" />
+                                          <Label layoutX="10.0" layoutY="31.0" prefHeight="25.0" prefWidth="104.0" text="Organization:" />
+                                          <Label layoutX="10.0" layoutY="63.0" prefHeight="25.0" prefWidth="53.0" text="City: " />
+                                       
+                                          <TextField fx:id="ca_common_name_field" layoutX="150.0" layoutY="3.0" prefHeight="25.0" prefWidth="331.0" />
+                                          <TextField fx:id="ca_organization_field" layoutX="150.0" layoutY="34.0" prefHeight="25.0" prefWidth="331.0" />
+                                          <TextField fx:id="ca_city_field" layoutX="150.0" layoutY="64.0" prefHeight="25.0" prefWidth="331.0" />
+                                          
+                                          <Label layoutX="11.0" layoutY="92.0" prefHeight="25.0" prefWidth="53.0" text="Country:" />
+                                          <ComboBox fx:id="ca_country_field" layoutX="150.0" layoutY="96.0" prefWidth="150.0" />
+                                          
+                                       </children></AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <Button layoutX="284.0" layoutY="349.0" mnemonicParsing="false" onAction="#createCACertificate" prefHeight="25.0" prefWidth="209.0" text="Create CA Certificate" />
+                           </children></AnchorPane>
+                    
+                  </content>
+                </Tab>
+                <Tab fx:id="client_tab" disable="true" text="User Certificate">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="495.0">
+                                               <children>
+                                                                             <TitledPane animated="false" collapsible="false" layoutX="4.0" layoutY="5.0" prefHeight="126.0" prefWidth="495.0" text="Files">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                        <AnchorPane layoutX="0" layoutY="0" minHeight="0.0" minWidth="0.0" prefHeight="108.0" prefWidth="486.0">
+                                             <children>
+                                                <Label layoutX="5.0" layoutY="1.0" prefHeight="25.0" prefWidth="212.0" text="Certificate keystore file:" />
+                                                <TextField fx:id="client_keystore_file" layoutX="5.0" layoutY="25.0" prefHeight="25.0" prefWidth="220.0" />
+                                                <Label layoutX="4.0" layoutY="50.0" prefHeight="25.0" prefWidth="212.0" text="Password:" />
+                                                <PasswordField fx:id="client_keystore_password" layoutX="5.0" layoutY="72.0" prefHeight="25.0" prefWidth="218.0" />                                                
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" collapsible="false" layoutX="4.0" layoutY="131.0" prefHeight="210.0" prefWidth="488.0" text="Certificate content">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="124.0" prefWidth="502.0">
+                                       <children>
+                                          <Label layoutX="10.0" layoutY="0" prefHeight="25.0" prefWidth="104.0" text="Full Name" />
+                                          <Label layoutX="10.0" layoutY="31.0" prefHeight="25.0" prefWidth="104.0" text="Organization:" />
+                                          <Label layoutX="10.0" layoutY="63.0" prefHeight="25.0" prefWidth="53.0" text="City: " />
+                                       
+                                          <TextField fx:id="client_common_name_field" layoutX="150.0" layoutY="3.0" prefHeight="25.0" prefWidth="331.0" />
+                                          <TextField fx:id="client_organization_field" layoutX="150.0" layoutY="34.0" prefHeight="25.0" prefWidth="331.0" />
+                                          <TextField fx:id="client_city_field" layoutX="150.0" layoutY="64.0" prefHeight="25.0" prefWidth="331.0" />
+                                          
+                                          <Label layoutX="11.0" layoutY="92.0" prefHeight="25.0" prefWidth="53.0" text="Country:" />
+                                          <ComboBox fx:id="client_country_field" layoutX="150.0" layoutY="96.0" prefWidth="150.0" />
+                                       
+                                          <TextField fx:id="client_subject_alt_name_uri" layoutX="5.0" layoutY="155.0" prefHeight="25.0" prefWidth="466.0" />
+                                          <Label layoutX="5.0" layoutY="126.0" prefHeight="25.0" prefWidth="464.0" text="Subject Alternate Name URI (WebID profile URL):" />
+                                       </children></AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <Button layoutX="283.0" layoutY="349.0" mnemonicParsing="false" onAction="#createClientCertificate" prefHeight="25.0" prefWidth="209.0" text="Create Client Certificate" />
+                                               
+                           </children></AnchorPane>
+                    
+                  </content>
+                </Tab>
+                
+                <Tab fx:id="web_tab" disable="true" text="FOAF Web Code">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="495.0">
+                    <children>
+                              <ScrollPane layoutX="14.0" layoutY="29.0" prefHeight="232.0" prefWidth="475.0">
+                                 <content>
+                                    <TextArea fx:id="textarea_foaf" prefHeight="230.0" prefWidth="458.0" />
+                                 </content>
+                              </ScrollPane>
+                              <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="172.0" text="foaf.rdf content" />                    
+                    </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+                    
+              </tabs>
+            </TabPane>
+         </children>
+        
+         </AnchorPane>
+    
+    
+  </children>
+   <effect>
+      <SepiaTone level="0.21" />
+   </effect>
+</VBox>
