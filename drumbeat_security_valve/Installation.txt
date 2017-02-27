@@ -1,0 +1,65 @@
+	These instructions are written for Tomcat version 9.	
+
+	1. Set Tomcat server to use SSH always:
+	   Exaple server.xml addition:
+	   
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig 
+                       truststoreFile="c:\my_own_location\keystore.jks"
+                       truststorePass="tomcat"
+                       certificateVerification="optional">
+            <Certificate certificateKeystoreFile="c:\my_own_location\keystore.jks"
+                          certificateKeystorePassword="my_own_password"
+                          certificateKeyAlias="ALIAS"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+	   
+	
+
+	2. To make Tomcat to recognize the new authentication method, the method has to be registered. It is done by adding a new line:
+	DRUMBEAT=fi.aalto.CertificateAuthenticator
+
+	to Authenticators.properties th. The file is contained in: 
+	Tomcat:/lib/catalina.jar/org/apache/catalina/startup
+
+    3. drumbeat_security_valve-1.0.jar	 needs to be copied to: Tomcat:/lib/
+
+	4. The web applications needs to define on its web.xml:
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>/protected/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+	<login-config>
+		<auth-method>DRUMBEAT</auth-method>
+	</login-config>
+	<session-config>
+		<session-timeout>525600</session-timeout>
+		<cookie-config>
+			<max-age>31536000</max-age>
+		</cookie-config>
+	</session-config>		
+		
+	5. The javax.ws.rs Jersey RESTful API implementation can use tags like: @PermitAll and @RolesAllowed("role1") 
+	
+	6. The following code segments can be used in the application:
+	
+	public String isSecure2(@Context SecurityContext sc) {
+		return "{\"name\":\"" + sc.getUserPrincipal().getName() + " \"}";
+	}
+	
+	public String isSecure3(@Context SecurityContext sc) {
+
+		if (sc.isUserInRole("tomcat")) {
+			return "{\"role\":\"Tomcat\"}";
+		} else {
+			return "{\"role\":\"not Tomcat\"}";
+		}
+
+	}
+	
+		
