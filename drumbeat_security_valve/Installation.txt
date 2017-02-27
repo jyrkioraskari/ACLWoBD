@@ -21,8 +21,8 @@
 	2. To make Tomcat to recognize the new authentication method, the method has to be registered. It is done by adding a new line:
 	DRUMBEAT_AUTHENTICATION=fi.aalto.CertificateAuthenticator
 
-	to Authenticators.properties th. The file is contained in: 
-	Tomcat:/lib/catalina.jar/org/apache/catalina/startup
+	to:
+	Tomcat:/lib/catalina.jar/org/apache/catalina/startup/Authenticators.properties
 
     3. drumbeat_security_valve-1.0.jar	 needs to be copied to: Tomcat:/lib/
 
