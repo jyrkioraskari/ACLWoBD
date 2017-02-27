@@ -13,7 +13,7 @@
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.26.0">
-      <projectUrl>https://github.com/jyrkio/LinkedDataAuthorization/</projectUrl>
+      <projectUrl>https://github.com/jyrkio/SecuredLinkedData/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
@@ -21,7 +21,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/jyrkio/LinkedDataAuthorization.git</url>
+        <url>https://github.com/jyrkio/SecuredLinkedData.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>

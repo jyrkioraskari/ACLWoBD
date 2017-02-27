@@ -13,7 +13,7 @@
       </strategy>
     </jenkins.model.BuildDiscarderProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.26.0">
-      <projectUrl>https://github.com/jyrkio/LinkedDataAuthorization/</projectUrl>
+      <projectUrl>https://github.com/jyrkio/SecuredLinkedData/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
@@ -21,7 +21,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/jyrkio/LinkedDataAuthorization.git</url>
+        <url>https://github.com/jyrkio/SecuredLinkedData.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -68,13 +68,18 @@
     <hudson.plugins.deploy.DeployPublisher plugin="deploy@1.10">
       <adapters>
         <hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
-          <userName>deployer</userName>
-          <passwordScrambled>YTEyMzQ=</passwordScrambled>
-          <url>http://localhost:8080/</url>
+          <userName>admin</userName>
+          <passwordScrambled>MTk5MTY2MW5uc3N1dTk=</passwordScrambled>
+          <url>http://architect.local.org:8080/</url>
+        </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
+        <hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
+          <userName>admin</userName>
+          <passwordScrambled>MTk5MTY2MW5uc3N1dTk=</passwordScrambled>
+          <url>http://fabricator.local.org:8080/</url>
         </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
       </adapters>
       <contextPath>security</contextPath>
-      <war>**/*.war</war>
+      <war>**/drumbeat_security_organization-1.0.war</war>
       <onFailure>false</onFailure>
     </hudson.plugins.deploy.DeployPublisher>
   </publishers>
