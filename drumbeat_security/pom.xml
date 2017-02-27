@@ -81,5 +81,6 @@
 		<module>../drumbeat_security_valve</module>
 		<module>../drumbeat_security_webid_creator</module>
 		<module>../drumbeat_security_organization_protected_ui</module>
+		<module>../drumbeat_security_datastore</module>
 	</modules>
 </project>

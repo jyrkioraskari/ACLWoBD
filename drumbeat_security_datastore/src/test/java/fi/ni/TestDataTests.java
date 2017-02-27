@@ -26,7 +26,6 @@ public class TestDataTests extends TestCase {
 	
 
 	public void test_JenaFromBean() {
-		DOMConfigurator.configure("/src/test/resources/log4j.xml"); 
 		BasicConfigurator.configure();
 		Logger l=Logger.getLogger("org.apache");
 		l.setLevel(Level.INFO);

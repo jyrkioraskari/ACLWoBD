@@ -62,12 +62,7 @@
 			<artifactId>sesame-model</artifactId>
 			<version>4.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>fi.ni.drumbeat</groupId>
-			<artifactId>drumbeat_security_commons</artifactId>
-			<version>1.0</version>
-		</dependency>
-
+		
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_datastore</artifactId>
@@ -94,9 +89,9 @@
 	</dependencies>
 	<parent>
 		<groupId>fi.ni.drumbeat</groupId>
-		<artifactId>drumbeat_security_datastore</artifactId>
+		<artifactId>drumbeat_security</artifactId>
 		<version>1.0</version>
-		<relativePath>../drumbeat_security_datastore</relativePath>
+		<relativePath>../drumbeat_security</relativePath>
 	</parent>
 
 </project>
