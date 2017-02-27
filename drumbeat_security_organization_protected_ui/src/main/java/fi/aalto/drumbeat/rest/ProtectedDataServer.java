@@ -1,4 +1,4 @@
-package fi;
+package fi.aalto.drumbeat.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
