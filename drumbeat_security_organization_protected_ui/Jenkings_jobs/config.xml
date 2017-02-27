@@ -41,7 +41,7 @@
   <concurrentBuild>false</concurrentBuild>
   <rootModule>
     <groupId>fi.ni.drumbeat</groupId>
-    <artifactId>drumbeat_security</artifactId>
+    <artifactId>drumbeat_security_organization_protected</artifactId>
   </rootModule>
   <rootPOM>drumbeat_security_organization_protected_ui/pom.xml</rootPOM>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
@@ -75,7 +75,7 @@
         </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
       </adapters>
       <contextPath>organization</contextPath>
-      <war>**/drumbeat_security_organization_protected_ui-1.0.war</war>
+      <war>**/drumbeat_security_organization_protected-1.0.war</war>
       <onFailure>false</onFailure>
     </hudson.plugins.deploy.DeployPublisher>
   </publishers>
