@@ -37,7 +37,6 @@ public class CertificateAuthenticator extends AuthenticatorBase {
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
 
-    	log.info("DRUMBEAT cert called");
     	if (checkForCachedAuthentication(request, response, false)) {
             return true;
         }
@@ -55,15 +54,12 @@ public class CertificateAuthenticator extends AuthenticatorBase {
         for(X509Certificate cert: certs)
         {
         	try {
-				log.info("DRUMBEAT cert: "+cert.getSubjectAlternativeNames().toString());
-			} catch (CertificateParsingException e) {
-				e.printStackTrace();
-			}
-        	
-        	log.info("DRUM cert  subject:"+cert.getSubjectDN());
-        	try {
-				for(Object alt:cert.getSubjectAlternativeNames().toArray())        		
-				   log.info("DRUM cert alt subject:"+alt);
+				for(Object alt:cert.getSubjectAlternativeNames().toArray()){        	
+					log.info("DRUM cert call getRequestURI was:"+request.getRequestURI()+" webid:"+alt);
+					log.info("DRUM cert getRequestURI:"+request.getRequestURL()+" webid:"+alt);
+				    log.info("DRUM cert getLocalAddr was:"+request.getLocalAddr()+" webid:"+alt);
+				    log.info("DRUM cert getPathTranslated was:"+request.getPathTranslated()+" webid:"+alt);
+				}
 			} catch (CertificateParsingException e) {
 				e.printStackTrace();
 			}
