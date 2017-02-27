@@ -44,9 +44,8 @@ public class DrumbeatAuthenticator extends AuthenticatorBase {
     private static final Log log = LogFactory.getLog(DrumbeatAuthenticator.class);
 
     @Override
-	protected boolean doAuthenticate(Request arg0, HttpServletResponse arg1) throws IOException {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean doAuthenticate(Request request, HttpServletResponse response) throws IOException {
+    	return authenticate(request,response);
 	}
 
    

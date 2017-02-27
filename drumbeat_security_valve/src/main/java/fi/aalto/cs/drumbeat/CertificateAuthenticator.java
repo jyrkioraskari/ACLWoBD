@@ -20,6 +20,7 @@ package fi.aalto.cs.drumbeat;
 
 
 import java.io.IOException;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,6 @@ import org.apache.juli.logging.LogFactory;
 public class CertificateAuthenticator extends AuthenticatorBase {
     private static final Log log = LogFactory.getLog(CertificateAuthenticator.class);
 
-    @Override
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
 
@@ -54,32 +54,20 @@ public class CertificateAuthenticator extends AuthenticatorBase {
          }
         for(X509Certificate cert: certs)
         {
-        	 /*Collection<? extends WebIdClaim> pls = null;        	 
-             try {
-                 X509Claim x509Claim = new X509Claim(cert);
-                 if (x509Claim.verify()) {
-                     pls = x509Claim.getVerified();
-                     if (pls == null || pls.isEmpty()) {
-                    	 response.getOutputStream().write("No foaf+ssl certificates".getBytes());
-                     }
-                     else
-                     {
-                    	 response.getOutputStream().write("WEBID foaf+ssl certificate OK".getBytes());
-                    	 log.info("DRUM WEBID cert verified OK");
-                     }
-                 }
-                 else
-                	 log.info("DRUM WEBID cert verification is not OK");
-             } catch (Exception ex) {
-            	 ex.printStackTrace();
-             }        	
+        	try {
+				log.info("DRUMBEAT cert: "+cert.getSubjectAlternativeNames().toString());
+			} catch (CertificateParsingException e) {
+				e.printStackTrace();
+			}
+        	
         	log.info("DRUM cert  subject:"+cert.getSubjectDN());
         	try {
 				for(Object alt:cert.getSubjectAlternativeNames().toArray())        		
 				   log.info("DRUM cert alt subject:"+alt);
 			} catch (CertificateParsingException e) {
 				e.printStackTrace();
-			}*/
+			}
+        	
         }
     	
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
@@ -94,9 +82,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
     }
 
 	@Override
-	protected boolean doAuthenticate(Request arg0, HttpServletResponse arg1) throws IOException {
-		log.info("DRUMBEAT doAuthenticate called");
-		return false;
+	protected boolean doAuthenticate(Request request, HttpServletResponse response) throws IOException {
+		return authenticate(request,response);
 	}
 
 
