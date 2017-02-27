@@ -20,9 +20,7 @@ package fi.aalto.cs.drumbeat;
 
 
 import java.io.IOException;
-import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
-import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +37,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
 
-    	log.info("DRUM cert called");
+    	log.info("DRUMBEAT cert called");
     	if (checkForCachedAuthentication(request, response, false)) {
             return true;
         }
@@ -91,12 +89,13 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
     @Override
     protected String getAuthMethod() {
+    	log.info("DRUMBEAT getAuthMethod called");
         return "DRUMBEAT";
     }
 
 	@Override
 	protected boolean doAuthenticate(Request arg0, HttpServletResponse arg1) throws IOException {
-		// TODO Auto-generated method stub
+		log.info("DRUMBEAT doAuthenticate called");
 		return false;
 	}
 
