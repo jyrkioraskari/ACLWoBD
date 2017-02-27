@@ -13,7 +13,7 @@
 	</contributors>
 	<repositories>
 	</repositories>
-	
+
 
 	<dependencies>
 		<dependency>
@@ -71,7 +71,7 @@
 	<modules>
 
 		<module>../drumbeat_security_commons</module>
-		<module>../drumbeat_security_datastore</module>
+
 		<module>../drumbeat_security_organization</module>
 		<module>../drumbeat_security_project</module>
 

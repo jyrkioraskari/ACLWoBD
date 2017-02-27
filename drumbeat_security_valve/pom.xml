@@ -28,9 +28,49 @@
 
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.openrdf.sesame/sesame-sail-nativerdf -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-sail-nativerdf</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openrdf.sesame/sesame-sail-memory -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-sail-memory</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openrdf.sesame/sesame-repository-sail -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-repository-sail</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openrdf.sesame/sesame-query -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-query</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openrdf.sesame/sesame-model -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-model</artifactId>
+			<version>4.1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_commons</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fi.ni.drumbeat</groupId>
+			<artifactId>drumbeat_security_datastore</artifactId>
 			<version>1.0</version>
 		</dependency>
 
@@ -54,9 +94,9 @@
 	</dependencies>
 	<parent>
 		<groupId>fi.ni.drumbeat</groupId>
-		<artifactId>drumbeat_security</artifactId>
+		<artifactId>drumbeat_security_datastore</artifactId>
 		<version>1.0</version>
-		<relativePath>../drumbeat_security</relativePath>
+		<relativePath>../drumbeat_security_datastore</relativePath>
 	</parent>
 
 </project>

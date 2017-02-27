@@ -39,7 +39,15 @@ public class OrganizationManager extends Fetchable {
 		return singleton;
 
 	}
-	
+	private OrganizationManager(URI uri) {
+		super();
+		rootURI = uri;
+		rdf_datastore = new RDFDataStore(rootURI, "organization");
+		datamodel = rdf_datastore.getModel();
+		// rdf_datastore.readRDFData();
+		root = datamodel.getResource(rootURI.toString());
+
+	}
 	
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
@@ -60,15 +68,7 @@ public class OrganizationManager extends Fetchable {
 
 	private RDFDataStore rdf_datastore = null;
 
-	private OrganizationManager(URI uri) {
-		super();
-		rootURI = uri;
-		rdf_datastore = new RDFDataStore(rootURI, "organization");
-		datamodel = rdf_datastore.getModel();
-		// rdf_datastore.readRDFData();
-		root = datamodel.getResource(rootURI.toString());
-
-	}
+	
 
 	public boolean checkRDFPath(String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);

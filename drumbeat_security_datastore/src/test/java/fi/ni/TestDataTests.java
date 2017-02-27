@@ -5,7 +5,10 @@ import java.net.URISyntaxException;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.junit.Test;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import fi.aalto.drumbeat.data_store_test_data.Collection;
 import fi.aalto.drumbeat.data_store_test_data.DataSet;
@@ -14,16 +17,20 @@ import junit.framework.TestCase;
 
 public class TestDataTests extends TestCase {
 	
-	final private Model model = ModelFactory.createDefaultModel();
-
 
 	public TestDataTests()
 	{
 		super();
+		
 	}
 	
 
 	public void test_JenaFromBean() {
+		DOMConfigurator.configure("/src/test/resources/log4j.xml"); 
+		BasicConfigurator.configure();
+		Logger l=Logger.getLogger("org.apache");
+		l.setLevel(Level.INFO);
+		Model model = ModelFactory.createDefaultModel();
 		try {
 			Collection c= new Collection(new URI("https://architectural.drb.cs.hut.fi/security/"), "turva", model);
 			c.addProject("project1");

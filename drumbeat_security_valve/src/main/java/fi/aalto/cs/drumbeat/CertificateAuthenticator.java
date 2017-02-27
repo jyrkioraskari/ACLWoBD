@@ -22,6 +22,7 @@ package fi.aalto.cs.drumbeat;
 import java.io.IOException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,9 +31,14 @@ import org.apache.catalina.connector.Request;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
+import fi.aalto.drumbeat.DataServer;
+import net.java.dev.sommer.foafssl.claims.WebIdClaim;
+import net.java.dev.sommer.foafssl.claims.X509Claim;
+
 
 public class CertificateAuthenticator extends AuthenticatorBase {
     private static final Log log = LogFactory.getLog(CertificateAuthenticator.class);
+   
 
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
@@ -53,18 +59,39 @@ public class CertificateAuthenticator extends AuthenticatorBase {
          }
         for(X509Certificate cert: certs)
         {
-        	try {
-				for(Object alt:cert.getSubjectAlternativeNames().toArray()){        	
-					log.info("DRUM cert call getRequestURI was:"+request.getRequestURI()+" webid:"+alt);
-					log.info("DRUM cert getRequestURI:"+request.getRequestURL()+" webid:"+alt);
-				    log.info("DRUM cert getLocalAddr was:"+request.getLocalAddr()+" webid:"+alt);
-				    log.info("DRUM cert getPathTranslated was:"+request.getPathTranslated()+" webid:"+alt);
-				}
-			} catch (CertificateParsingException e) {
-				e.printStackTrace();
-			}
+        	 Collection<? extends WebIdClaim> pls = null;        	 
+             try {
+                 X509Claim x509Claim = new X509Claim(cert);
+                 if (x509Claim.verify()) {
+                     pls = x509Claim.getVerified();
+                     if (pls == null || pls.isEmpty()) {
+                    	 response.getOutputStream().write("No foaf+ssl certificates".getBytes());
+                     }
+                     else
+                     {
+                    	 response.getOutputStream().write("WEBID foaf+ssl certificate OK".getBytes());
+                    	 log.info("DRUM WEBID cert verified OK");
+                    	 
+                    	 try {
+                 			for(Object alt:cert.getSubjectAlternativeNames().toArray()){        	
+                 				 DataServer dataserver =  DataServer.getDataServer(request.getRequestURL().toString());
+                 				 dataserver.connect((String)alt,request.getRequestURL().toString());
+                 			}
+                 		} catch (CertificateParsingException e) {
+                 			e.printStackTrace();
+                 		}
+                     }
+                 }
+                 else
+                	 log.info("DRUM WEBID cert verification is not OK");
+             } catch (Exception ex) {
+            	 ex.printStackTrace();
+             }
         	
         }
+        
+        
+
     	
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                  sm.getString("authenticator.certificates"));    	
