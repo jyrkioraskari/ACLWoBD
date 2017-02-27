@@ -4,8 +4,16 @@
 	<artifactId>drumbeat_security</artifactId>
 	<version>1.0</version>
 	<name>drumbeat_security</name>
+	<url>www.aalto.fi</url>
+	<contributors>
+		<contributor>
+			<name>Jyrki Oraskari</name>
+			<email>Jyrki.Oraskari@aalto.fi</email>
+		</contributor>
+	</contributors>
 	<repositories>
 	</repositories>
+	
 
 	<dependencies>
 		<dependency>
@@ -69,5 +77,7 @@
 
 
 
+
+		<module>../drumbeat_security_valve</module>
 	</modules>
 </project>

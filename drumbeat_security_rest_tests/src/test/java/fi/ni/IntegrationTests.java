@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -31,7 +32,7 @@ import fi.ni.test_categories.IntegrationTest;
 @Category(IntegrationTest.class)
 
 public class IntegrationTests {
-/*
+
 	@Test
 	public void testHelloGET_HTTP_architect_local_org() {
 		try {
@@ -146,9 +147,9 @@ public class IntegrationTests {
 					.resource("http://architect.local.org:8080/security/rest/organization/registerWebID");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
-			response.close();
 
 			String output = response.getEntity(String.class);
+			response.close();
 			return output;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,13 +199,16 @@ public class IntegrationTests {
 	@Test
 	public void test_webIDProfileTTLTest() {
 		try {
-			URI webid_url = new URI(registerWebID());
+			//TODO SSL
+			URI webid_url = new URIBuilder(registerWebID()).setScheme("http").build();
+			System.out.println("TTL integration test.  URL was: "+webid_url);
 			
 			Client client = Client.create();
 			WebResource webResource = client
 					.resource(webid_url.toString());
 			
 			ClientResponse response = webResource.accept("text/turtle").get(ClientResponse.class);
+			System.out.println(""+response);
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
@@ -222,6 +226,6 @@ public class IntegrationTests {
 			e.printStackTrace();
 		}
 	}
-*/
+
 
 }

@@ -3,6 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>drumbeat_security_project</artifactId>
 	<name>drumbeat_security_project</name>
+	<url>www.aalto.fi</url>
+	<contributors>
+		<contributor>
+			<name>Jyrki Oraskari</name>
+			<email>Jyrki.Oraskari@aalto.fi</email>
+		</contributor>
+	</contributors>
 	<repositories>
 	</repositories>
 

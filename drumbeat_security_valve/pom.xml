@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>drumbeat_security_datastore</artifactId>
+	<artifactId>drumbeat_security_valve</artifactId>
 	<name>drumbeat_security_datastore</name>
 	<url>www.aalto.fi</url>
 	<contributors>
@@ -61,6 +61,24 @@
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>9.0.0.M17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-util</artifactId>
+			<version>9.0.0.M17</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
 		</dependency>
 	</dependencies>
 	<parent>
