@@ -27,6 +27,9 @@
       <web-resource-name>all</web-resource-name>
       <url-pattern>/protected/*</url-pattern>
     </web-resource-collection>
+     <auth-constraint>
+			<role-name>default</role-name>
+		</auth-constraint>
   </security-constraint>
   <login-config>
     <auth-method>DRUMBEAT_AUTHENTICATION</auth-method>
