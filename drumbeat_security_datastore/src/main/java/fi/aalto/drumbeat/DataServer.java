@@ -2,6 +2,7 @@ package fi.aalto.drumbeat;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -42,8 +43,8 @@ public class DataServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(uri.isPresent())
-			rdf_datastore = Optional.of(new RDFDataStore(uri.get(), "datastore"));
+		uri.ifPresent(x-> rdf_datastore = Optional.of(new RDFDataStore(x, "datastore")));
+			
 		rdf_datastore.get().readRDFData(); // TODO read security data
 		rdf_datastore.get().saveRDFData();
 	}
@@ -54,7 +55,9 @@ public class DataServer {
 		System.out.println("req uri oli:" + request_uri);
 		System.out.println("canonized uri oli:" + canonizted_requestURI);
 
-		List<RDFNode> matched_paths = rdf_datastore.get().match(canonizted_requestURI.toString());
+		final List<RDFNode> matched_paths=new ArrayList<>(); 
+		rdf_datastore.ifPresent(x-> x.match(matched_paths,canonizted_requestURI.toString()));
+		
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			System.out.println("permissions: " + rdf_datastore.get().getPermissions(r.toString()));

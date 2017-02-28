@@ -119,9 +119,9 @@ public class RDFDataStore {
 	
 	}
 	
-	public List<RDFNode> match(String request_url)
+	public void match(List<RDFNode> ret,String request_url)
 	{
-		List<RDFNode> ret= new ArrayList<RDFNode>();
+		
 		StringBuilder sb=new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
 		sb.append(" ?path  <"+RDFConstants.property_hasAuthorizationRule.getURI()+"> ?x");
@@ -137,7 +137,6 @@ public class RDFDataStore {
 		         ret.add(x);
 		    }
 		  }
-         return ret;
 	}
 	
 	
