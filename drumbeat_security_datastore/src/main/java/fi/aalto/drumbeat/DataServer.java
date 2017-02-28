@@ -12,7 +12,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 
-public class DataServer extends Fetchable {
+public class DataServer {
 	private String host_name;
 	private URI uri;
 	// at the time

@@ -2,11 +2,9 @@ package fi.aalto.drumbeat.security;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.http.client.utils.URIBuilder;
@@ -18,18 +16,14 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
-import fi.aalto.drumbeat.Fetchable;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.webid.WebIDCertificate;
-import fi.aalto.drumbeat.webid.WebIDProfile;
 
-public class OrganizationManager extends Fetchable {
+public class OrganizationManager {
 	private URI rootURI;
 	private final Model datamodel;
 	private final Resource root;
 
-	private Map<String, WebIDProfile> webid_profiles = new HashMap<String, WebIDProfile>();
 
 	private static OrganizationManager singleton = null;
 
@@ -96,26 +90,25 @@ public class OrganizationManager extends Fetchable {
 			return false;
 	}
 
-	public WebIDProfile getWebIDProfile(String webid_uri) {
-		return webid_profiles.get(webid_uri);
+	public Resource getWebIDProfile(String webid_uri) {
+		return datamodel.getResource(webid_uri.toString());
 	}
 
-	public WebIDCertificate registerWebID(String name, String public_key) {
+	public Resource registerWebID(String name, String public_key) {
 		String id = UUID.randomUUID().toString();
 		URI webid_uri;
 		try {
 			String root_path=rootURI.getPath();
 			root_path=root_path.substring(0, root_path.substring(1).indexOf("/")+1);  //TODO lis‰‰ testej‰
 			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath(root_path+"/profile/" + id).build();
-			WebIDCertificate wc = new WebIDCertificate(webid_uri, name, public_key);
-			webid_profiles.put(webid_uri.toString(), new WebIDProfile(webid_uri.toString(), name, public_key));
+			
 			rdf_datastore.saveRDFData();
 
 			Resource widr=datamodel.getResource(webid_uri.toString());
 			root.addProperty(RDFConstants.property_knowsPerson, widr);
 			widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
 
-			return wc;
+			return widr;
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();

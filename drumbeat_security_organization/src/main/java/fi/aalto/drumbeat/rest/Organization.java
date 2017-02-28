@@ -26,8 +26,6 @@ import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
-import fi.aalto.drumbeat.webid.WebIDCertificate;
-import fi.aalto.drumbeat.webid.WebIDProfile;
 
 @Path("/organization")
 public class Organization extends RESTfulAPI {
@@ -144,14 +142,19 @@ public class Organization extends RESTfulAPI {
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
-		WebIDProfile wp = organization.get().getWebIDProfile(webid_url.toString());
+		Resource wp = organization.get().getWebIDProfile(webid_url.toString());
 		if (wp == null)
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
+		
+		RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
+		RDFNode name=wp.getProperty(RDFConstants.property_hasName).getObject();
+		
+		
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(RDFConstants.property_hasPublicKey, wp.getPublic_key());
-		response.addLiteral(RDFConstants.property_hasName, wp.getName());
+		response.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+		response.addLiteral(RDFConstants.property_hasName, name);
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 
@@ -178,14 +181,14 @@ public class Organization extends RESTfulAPI {
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode name = query.getProperty(RDFConstants.property_hasName).getObject();
 		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		WebIDCertificate wc = organization.get().registerWebID(name.asLiteral().getLexicalForm(),
+		Resource wc = organization.get().registerWebID(name.asLiteral().getLexicalForm(),
 				public_key.asLiteral().getLexicalForm());
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
-		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.getWebid_uri().toString()));
+		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.toString()));
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
