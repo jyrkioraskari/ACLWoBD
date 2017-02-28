@@ -77,7 +77,6 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFConstants rdf = new RDFConstants(output_model);
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 
@@ -105,7 +104,6 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFConstants rdf = new RDFConstants(output_model);
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
@@ -138,7 +136,6 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFConstants rdf = new RDFConstants(output_model);
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
@@ -176,7 +173,6 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFConstants rdf = new RDFConstants(output_model);
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode name = query.getProperty(RDFConstants.property_hasName).getObject();

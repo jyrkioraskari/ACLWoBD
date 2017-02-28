@@ -57,7 +57,6 @@ public class IntegrationTests {
 		Model model = ModelFactory.createDefaultModel();
 		try {
 
-			RDFConstants rdf = new RDFConstants(model);
 			Resource query = model.createResource();
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, RDFConstants.Query);
@@ -123,7 +122,6 @@ public class IntegrationTests {
 		Model model = ModelFactory.createDefaultModel();
 		try {
 
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);
@@ -163,8 +161,6 @@ public class IntegrationTests {
 		String webid = "http://user.com/user#me";
 
 		try {
-
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);

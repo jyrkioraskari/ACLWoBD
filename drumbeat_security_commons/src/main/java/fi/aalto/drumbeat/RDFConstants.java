@@ -1,66 +1,62 @@
 package fi.aalto.drumbeat;
 
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
 public class RDFConstants {
-	private Model model;
+	static PropertyOperation property = (a) -> ResourceFactory.createProperty(Constants.security_ontology_base + "#"+a);
+	static ResourceOperation resource = (a) -> ResourceFactory.createResource(Constants.security_ontology_base + "#"+a);
+	interface PropertyOperation {
+		Property create(String name);
+	   }
+	static private Property create(PropertyOperation operation,String name){
+	      return operation.create(name);
+	   }
+	
+	interface ResourceOperation {
+		Resource create(String name);
+	   }
+	static private Resource create(ResourceOperation operation,String name){
+	      return operation.create(name);
+	   }
 
-	public RDFConstants(Model model) {
-		this.model = model;
+	
+
+	public RDFConstants() {
 	}
 
 	// Ontolohy classes
-	static public Resource Query = ResourceFactory.createResource(Constants.security_ontology_base + "#Query");
-	static public Resource Response = ResourceFactory.createResource(Constants.security_ontology_base + "#Response");
+	static public Resource Query = create(resource,"Query");
+	static public Resource Response = create(resource,"Response");
 	
-	static public Resource DataStore = ResourceFactory.createResource(Constants.security_ontology_base + "#DataStore");
-	static public Resource Organization = ResourceFactory.createResource(Constants.security_ontology_base + "#Organization");
-	static public Resource Project = ResourceFactory.createResource(Constants.security_ontology_base + "#Project");
+	static public Resource DataStore = create(resource,"DataStore");
+	static public Resource Organization = create(resource,"Organization");
+	static public Resource Project = create(resource,"Project");
 	
-	static public Property property_hasTimeStamp = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasTimeStamp");
+	static public Property property_hasTimeStamp = create(property,"hasTimeStamp");
 
-	static public Property property_hasWebID = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasWebID");
-	static public Property property_hasName = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasName");
-	static public Property property_hasPublicKey = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasPublicKey");
+	static public Property property_hasWebID = create(property,"hasWebID");
+	static public Property property_hasName = create(property,"hasName");
+	static public Property property_hasPublicKey = create(property,"hasPublicKey");
 	
-	static public Property property_hasCollection = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasCollection");
-	static public Property property_hasDataSource = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasDataSource");
-	static public Property property_hasDataSet = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasDataSet");
+	static public Property property_hasCollection = create(property,"hasCollection");
+	static public Property property_hasDataSource = create(property,"hasDataSource");
+	static public Property property_hasDataSet = create(property,"hasDataSet");
 	
 
-	static public Property property_hasAuthorizationRule = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
-	static public Property property_hasPermission = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasPermission");
-	static public Property property_hasRulePath = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasRulePath");
-	static public Property property_hasPath = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasPath");
+	static public Property property_hasAuthorizationRule = create(property,"hasAuthorizationRule");
+	static public Property property_hasPermission = create(property,"hasPermission");
+	static public Property property_hasRulePath = create(property,"hasRulePath");
+	static public Property property_hasPath = create(property,"hasPath");
 	
 
-	static public Property property_hasProject = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasProject");
-	static public Property property_hasMainContractor = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasMainContractor");
-	static public Property property_hasContractor = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#hasContractor");
-	static public Property property_knowsPerson = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#knowsPerson");
+	static public Property property_hasProject = create(property,"hasProject");
+	static public Property property_hasMainContractor =create(property,"hasMainContractor");
+	static public Property property_hasContractor = create(property,"hasContractor");
+	static public Property property_knowsPerson = create(property,"knowsPerson");
+	static public Property property_status = create(property,"status");
+	static public Property property_information = create(property,"information");
 	
-	static public Property property_status = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#status");
-
 	
-	static public Property property_information = ResourceFactory
-			.createProperty(Constants.security_ontology_base + "#information");
 }

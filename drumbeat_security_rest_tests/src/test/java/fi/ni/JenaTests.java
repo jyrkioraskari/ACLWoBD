@@ -47,8 +47,6 @@ public class JenaTests extends TestCase {
 		
 		Model input_model = parseInput(msg);
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFConstants rdf = new RDFConstants(output_model);
-		
 		input_model.write(System.out,"TTL");
 
 		ResIterator iter = input_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
@@ -71,8 +69,6 @@ public class JenaTests extends TestCase {
 	public void test_checkUser_parameters() {
 		Model model = ModelFactory.createDefaultModel();
 		String webid = "http://user.com/user#me";
-		
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);

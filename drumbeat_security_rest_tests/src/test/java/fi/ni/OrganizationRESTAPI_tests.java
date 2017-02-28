@@ -49,8 +49,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	public void test_postHello() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
-
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);
@@ -86,8 +84,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 	private String call_registerWebID() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
-
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);
@@ -150,8 +146,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		String webid_url = registerWebID();
 		Model model = ModelFactory.createDefaultModel();
 		try {
-
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);
@@ -198,8 +192,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		Model model = ModelFactory.createDefaultModel();
 
 		try {
-
-			RDFConstants rdf = new RDFConstants(model);
 			RDFNode[] rulepath_list = new RDFNode[1];
 			rulepath_list[0] = RDFConstants.property_knowsPerson;
 			RDFList rulepath = model.createList(rulepath_list);

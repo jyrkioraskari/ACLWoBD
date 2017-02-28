@@ -2,9 +2,10 @@ package fi.aalto.drumbeat;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Property;
@@ -13,12 +14,12 @@ import org.apache.jena.rdf.model.Resource;
 
 
 public class DataServer {
-	private String host_name;
-	private URI uri;
+	private Optional<String> host_name=Optional.empty();;
+	private Optional<URI> uri=Optional.empty();;
 	// at the time
-	private RDFDataStore rdf_datastore = null;
+	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
 
-	private static DataServer singleton = null;
+	private static Optional<DataServer> singleton = Optional.empty();
 
 	public static DataServer getDataServer(String uri_str) {
 		if (singleton == null) {
@@ -26,25 +27,25 @@ public class DataServer {
 			try {
 				uri = new URI(uri_str);
 				URI service_oot = new URIBuilder(uri).setScheme("https").setPath("/security/").build();
-				singleton = new DataServer(service_oot.toString());
+				singleton = Optional.of(new DataServer(service_oot.toString()));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
 		}
-		return singleton;
+		return singleton.get();
 	}
 
 	private DataServer(String host_uri) {
 		try {
-			uri = new URI(host_uri);
+			uri = Optional.of(new URI(host_uri));
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		rdf_datastore = new RDFDataStore(uri, "datastore");
-		rdf_datastore.readRDFData(); // TODO read security data
-		rdf_datastore.saveRDFData();
+		if(uri.isPresent())
+			rdf_datastore = Optional.of(new RDFDataStore(uri.get(), "datastore"));
+		rdf_datastore.get().readRDFData(); // TODO read security data
+		rdf_datastore.get().saveRDFData();
 	}
 
 	public boolean connect(String wc, String request_uri) {
@@ -53,18 +54,20 @@ public class DataServer {
 		System.out.println("req uri oli:" + request_uri);
 		System.out.println("canonized uri oli:" + canonizted_requestURI);
 
-		List<RDFNode> matched_paths = rdf_datastore.match(canonizted_requestURI.toString());
+		List<RDFNode> matched_paths = rdf_datastore.get().match(canonizted_requestURI.toString());
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
-			System.out.println("permissions: " + rdf_datastore.getPermissions(r.toString()));
-			System.out.println("rule pahth is: " + rdf_datastore.parseRulePath(r.asResource()));
+			System.out.println("permissions: " + rdf_datastore.get().getPermissions(r.toString()));
+			System.out.println("rule pahth is: " + rdf_datastore.get().parseRulePath(r.asResource()));
 
-			Resource current_node = rdf_datastore.getModel().getResource(r.toString());
-			LinkedList<Resource> rulepath = rdf_datastore.parseRulePath(r.asResource());
+			Resource current_node = rdf_datastore.get().getModel().getResource(r.toString());
+			List<Resource> rulepath = rdf_datastore.get().parseRulePath(r.asResource());
+			rulepath=rulepath.stream().filter(rule -> ((Resource)rule).isLiteral()).collect(Collectors.toList());
 			ListIterator<Resource> iterator = rulepath.listIterator();
+			
 			while (iterator.hasNext()) {
 				Resource step = iterator.next();
-				Property p = rdf_datastore.getModel().getProperty(step.getURI());
+				Property p = rdf_datastore.get().getModel().getProperty(step.getURI());
 				Resource node = current_node.getPropertyResourceValue(p);
 				if (node != null) {
 					System.out.println("from local store:" + node);
