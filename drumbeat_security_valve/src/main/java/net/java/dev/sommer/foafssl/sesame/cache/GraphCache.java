@@ -186,16 +186,17 @@ public abstract class GraphCache {
                 //rdfFormat = RDFFormat.TURTLE;	forMIMEType(mimeType);
                 foafDocInputStream = conn.getInputStream();
 
-               if (true) {
-                    File tmpF = File.createTempFile("drumbeat_temp.", "." + rdfFormat.getFileExtensions().get(0));
+               /*if (true) {
+                    File tmpF = File.createTempFile("c:\\jo\\drumbeat_temp.", "." + rdfFormat.getFileExtensions().get(0));
                     FileOutputStream cacheout = new FileOutputStream(tmpF);
                     log.log(Level.INFO, "Storing output to file {0}", tmpF.getCanonicalPath());
                     cacheout.write(purl.toString().getBytes());
                     cacheout.write("\r\n\r\n".getBytes());
                     foafDocInputStream = new TeeInputStream(foafDocInputStream, cacheout);
-                }
+                }*/
             } catch (IOException e) {
             	log.warning("--- DRUMBEAT webid no connection explanation: "+"could not connect to resource ");
+            	e.printStackTrace();
                 webidClaim.fail("could not connect to resource " + purl, e);
                 return null;
             }
