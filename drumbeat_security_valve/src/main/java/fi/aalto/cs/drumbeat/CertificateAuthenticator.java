@@ -42,6 +42,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
+    	 log.info("DRUM WEBID authenticate started");
 
     	if (checkForCachedAuthentication(request, response, false)) {
             return true;
