@@ -129,7 +129,7 @@ public abstract class GraphCache {
         }
 
         InputStream foafDocInputStream = null;
-        RDFFormat rdfFormat = null;
+        RDFFormat rdfFormat = RDFFormat.TURTLE;
         try {
 
             try {
@@ -155,6 +155,8 @@ public abstract class GraphCache {
                      * in the code.
                      */
                     hconn.setInstanceFollowRedirects(true);
+                    
+                    hconn.setRequestProperty("Accept","text/turtle"); // Standard says that this has to exists always
                     /*hconn.setRequestProperty("Accept",
                             "application/rdf+xml;q=1.0, text/turtle;q=0.9, text/html;q=0.7, application/xhtml+xml;q=0.8");*/
                 }
