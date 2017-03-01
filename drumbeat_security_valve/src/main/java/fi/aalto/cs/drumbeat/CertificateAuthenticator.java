@@ -63,6 +63,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
         	 Collection<? extends WebIdClaim> pls = null;        	 
              try {
                  X509Claim x509Claim = new X509Claim(cert);
+                 
                  if (x509Claim.verify()) {
                      pls = x509Claim.getVerified();
                      if (pls == null || pls.isEmpty()) {
@@ -84,7 +85,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
                      }
                  }
                  else
-                	 log.info("DRUM WEBID cert verification is not OK");
+                	 log.info("DRUM WEBID cert verification is not OK"+x509Claim.getProblemDescription().toString());
              } catch (Exception ex) {
             	 ex.printStackTrace();
              }
