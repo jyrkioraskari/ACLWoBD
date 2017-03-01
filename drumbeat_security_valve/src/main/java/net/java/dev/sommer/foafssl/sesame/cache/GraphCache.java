@@ -191,6 +191,8 @@ public abstract class GraphCache {
           		  rdfFormat = RDFFormat.N3;
                 if(mimeType.equals("application/x-turtle"))
           		  rdfFormat = RDFFormat.TURTLE;
+                log.info("--- DRUMBEAT webid mimeType:"+mimeType);
+                log.info("--- DRUMBEAT webid rdfformat:"+rdfFormat);
                 
                
                 
