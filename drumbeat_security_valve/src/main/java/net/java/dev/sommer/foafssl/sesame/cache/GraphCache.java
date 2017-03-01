@@ -32,8 +32,6 @@
 
 package net.java.dev.sommer.foafssl.sesame.cache;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -41,7 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.Certificate;
-import java.util.logging.Level;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -53,10 +51,10 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.openrdf.rio.Rio;
 
 import net.java.dev.sommer.foafssl.claims.WebIdClaim;
 import net.java.dev.sommer.foafssl.util.SafeInputStream;
-import net.java.dev.sommer.foafssl.util.TeeInputStream;
 
 /**
  * @author Henry Story
@@ -182,21 +180,13 @@ public abstract class GraphCache {
                 String mimeType = mimeType(conn.getContentType());
                 
 
-                //FIX JO
-                if(mimeType.equals("application/rdf+xml"))
-                		rdfFormat = RDFFormat.RDFXML;
-                if(mimeType.equals("text/turtle"))
-            		rdfFormat = RDFFormat.TURTLE;
-                if(mimeType.equals("text/n3"))
-        		  rdfFormat = RDFFormat.N3;
-                if(mimeType.equals("text/rdf+n3"))
-          		  rdfFormat = RDFFormat.N3;
-                if(mimeType.equals("application/x-turtle"))
-          		  rdfFormat = RDFFormat.TURTLE;
+                //FIX JO  
+                
+                Optional<RDFFormat> format = Rio.getParserFormatForMIMEType(mimeType);
+                if(format.isPresent())
+                	rdfFormat=format.get();
                 log.info("--- DRUMBEAT webid mimeType:"+mimeType);
                 log.info("--- DRUMBEAT webid rdfformat:"+rdfFormat);
-                
-               
                 
                 //rdfFormat = RDFFormat.TURTLE;	forMIMEType(mimeType);
                 foafDocInputStream = conn.getInputStream();
