@@ -85,7 +85,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
                      }
                  }
                  else
-                	 log.info("DRUM WEBID cert verification is not OK"+x509Claim.getProblemDescription().toString());
+                	 log.info("DRUM WEBID cert verification is not OK");
              } catch (Exception ex) {
             	 ex.printStackTrace();
              }

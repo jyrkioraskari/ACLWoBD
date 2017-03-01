@@ -99,15 +99,18 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
         // do a check that this is indeed a URL first
         SailRepositoryConnection rep = cache.fetch(webid);
         if (rep == null)
+        {
+        	log.info("--- DRUMBEAT webid no connection for: "+webid);
             return false;
+        }
          for(Throwable t: webid.getProblems())
         	 log.info("--- DRUMBEAT webid problem: "+t.getMessage());
         PublicKey publicKey = webid.getVerifiedPublicKey();
 
         if (publicKey instanceof RSAPublicKey) {
             RSAPublicKey certRsakey = (RSAPublicKey) publicKey;
-            //log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
-            //log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
+            log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
+            log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
             
             
             TupleQuery query = null;
