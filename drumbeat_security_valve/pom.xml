@@ -46,12 +46,7 @@
 							</excludeGroupIds>
 						</configuration>
 					</execution>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>sources</goal>
-						</goals>
-					</execution>
+					
 				</executions>
 				<configuration>
 					<verbose>true</verbose>
