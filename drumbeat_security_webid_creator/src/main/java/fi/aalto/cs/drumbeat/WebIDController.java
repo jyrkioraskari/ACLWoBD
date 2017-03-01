@@ -1,7 +1,6 @@
 package fi.aalto.cs.drumbeat;
 
 import java.net.URL;
-import java.security.Security;
 import java.util.ResourceBundle;
 
 import fi.aalto.cs.drumbeat.vo.Data;

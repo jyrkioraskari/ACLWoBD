@@ -13,17 +13,15 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
-
 public class DataServer {
-	private Optional<String> host_name=Optional.empty();;
-	private Optional<URI> uri=Optional.empty();;
+	private Optional<URI> uri = Optional.empty();;
 	// at the time
 	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
 
 	private static Optional<DataServer> singleton = Optional.empty();
 
 	public static DataServer getDataServer(String uri_str) {
-		if (singleton == null) {
+		if (!singleton.isPresent()) {
 			URI uri;
 			try {
 				uri = new URI(uri_str);
@@ -43,10 +41,14 @@ public class DataServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		uri.ifPresent(x-> rdf_datastore = Optional.of(new RDFDataStore(x, "datastore")));
-			
-		rdf_datastore.get().readRDFData(); // TODO read security data
-		rdf_datastore.get().saveRDFData();
+		uri.ifPresent(x -> rdf_datastore = Optional.of(new RDFDataStore(x, "datastore")));
+
+		rdf_datastore.ifPresent(x -> {
+			// x.readRDFData(); // TODO read security data
+			x.saveRDFData();
+		}
+		);
+
 	}
 
 	public boolean connect(String wc, String request_uri) {
@@ -55,35 +57,39 @@ public class DataServer {
 		System.out.println("req uri oli:" + request_uri);
 		System.out.println("canonized uri oli:" + canonizted_requestURI);
 
-		final List<RDFNode> matched_paths=new ArrayList<>(); 
-		rdf_datastore.ifPresent(x-> x.match(matched_paths,canonizted_requestURI.toString()));
-		
+		final List<RDFNode> matched_paths = new ArrayList<>();
+		rdf_datastore.ifPresent(x -> x.match(matched_paths, canonizted_requestURI.toString()));
+
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
-			System.out.println("permissions: " + rdf_datastore.get().getPermissions(r.toString()));
-			System.out.println("rule pahth is: " + rdf_datastore.get().parseRulePath(r.asResource()));
+			rdf_datastore.ifPresent(x -> {
+				System.out.println("permissions: " + x.getPermissions(r.toString()));
+				System.out.println("rule path is: " + x.parseRulePath(r.asResource()));
 
-			Resource current_node = rdf_datastore.get().getModel().getResource(r.toString());
-			List<Resource> rulepath = rdf_datastore.get().parseRulePath(r.asResource());
-			rulepath=rulepath.stream().filter(rule -> ((Resource)rule).isLiteral()).collect(Collectors.toList());
-			ListIterator<Resource> iterator = rulepath.listIterator();
-			
-			while (iterator.hasNext()) {
-				Resource step = iterator.next();
-				Property p = rdf_datastore.get().getModel().getProperty(step.getURI());
-				Resource node = current_node.getPropertyResourceValue(p);
-				if (node != null) {
-					System.out.println("from local store:" + node);
-					current_node = node;
-				} else {
-					System.out.println("located somewhere else. current node was: " + current_node);
+				Resource current_node = x.getModel().getResource(r.toString());
+				List<Resource> rulepath = x.parseRulePath(r.asResource());
+				rulepath = rulepath.stream().filter(rule -> ((Resource) rule).isLiteral()).collect(Collectors.toList());
+				ListIterator<Resource> iterator = rulepath.listIterator();
 
-					List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
-					System.out.println("Path for the rest is:" + new_path);
+				while (iterator.hasNext()) {
+					Resource step = iterator.next();
+					Property p = x.getModel().getProperty(step.getURI());
+					Resource node = current_node.getPropertyResourceValue(p);
+					if (node != null) {
+						System.out.println("from local store:" + node);
+						current_node = node;
+					} else {
+						System.out.println("located somewhere else. current node was: " + current_node);
 
-					break;
+						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
+						System.out.println("Path for the rest is:" + new_path);
+
+						break;
+					}
 				}
-			}
+
+			});
+
 		}
 		return true;
 	}

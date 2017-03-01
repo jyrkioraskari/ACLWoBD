@@ -5,7 +5,7 @@ package fi.aalto.cs.drumbeat.vo;
 Jyrki Oraskari, Aalto University, 2016 
 
 This research has partly been carried out at Aalto University in DRUMBEAT 
-“Web-Enabled Construction Lifecycle” (2014-2017) —funded by Tekes, 
+Web-Enabled Construction Lifecycle (2014-2017) funded by Tekes, 
 Aalto University, and the participating companies.
 
 The MIT License (MIT)

@@ -115,10 +115,6 @@ public class RDFDataStore {
 		}
 	}
 	
-	private class RDFProperties {
-	
-	}
-	
 	public void match(List<RDFNode> ret,String request_url)
 	{
 		

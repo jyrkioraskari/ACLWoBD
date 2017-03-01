@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 Jyrki Oraskari, Aalto University, 2016 
 
 This research has partly been carried out at Aalto University in DRUMBEAT 
-“Web-Enabled Construction Lifecycle” (2014-2017) —funded by Tekes, 
+Web-Enabled Construction Lifecycle (2014-2017) funded by Tekes, 
 Aalto University, and the participating companies.
 
 The MIT License (MIT)
@@ -58,7 +58,7 @@ public class Country {
 	{
 		countries.add(new Country("US","United States of America")); 
 		countries.add(new Country("CA","Canada")); 
-		countries.add(new Country("AX","Åland Islands")); 
+		countries.add(new Country("AX","ï¿½land Islands")); 
 		countries.add(new Country("AD","Andorra")); 
 		countries.add(new Country("AE","United Arab Emirates")); 
 		countries.add(new Country("AF","Afghanistan")); 
