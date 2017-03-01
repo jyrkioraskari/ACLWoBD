@@ -40,6 +40,12 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.java.dev.sommer.foafssl.sesame.cache.GraphCache;
+import net.java.dev.sommer.foafssl.sesame.cache.GraphCacheLookup;
+import net.java.dev.sommer.foafssl.sesame.cache.MemoryGraphCache;
+import net.java.dev.sommer.foafssl.claims.WebIdClaim;
+import net.java.dev.sommer.foafssl.verifier.FoafSslVerifier;
+
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.openrdf.model.Literal;
@@ -48,16 +54,13 @@ import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepositoryConnection;
-
-import net.java.dev.sommer.foafssl.claims.WebIdClaim;
-import net.java.dev.sommer.foafssl.sesame.cache.GraphCache;
-import net.java.dev.sommer.foafssl.sesame.cache.GraphCacheLookup;
-import net.java.dev.sommer.foafssl.sesame.cache.MemoryGraphCache;
-import net.java.dev.sommer.foafssl.verifier.FoafSslVerifier;
 
 
 /**
@@ -103,8 +106,8 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
 
         if (publicKey instanceof RSAPublicKey) {
             RSAPublicKey certRsakey = (RSAPublicKey) publicKey;
-            log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
-            log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
+            //log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
+            //log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
             
             
             TupleQuery query = null;
@@ -126,16 +129,15 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
                         );
                 
                 log.info("DRUMBEAT Sesame Validator: qstring : "+qstring);
-            } catch (Exception e) { // MalformedQuery
+            } catch (MalformedQueryException e) {
             	log.fatal( "Error in Query String!", e);
-            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
-            } /*catch (RepositoryException e) {
+            } catch (RepositoryException e) {
             	log.fatal("Error with repository", e);
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
-            }*/
+            }
 
             ValueFactory vf = rep.getValueFactory();
             query.setBinding("agent", vf.createURI(webid.getWebId().toString()));
@@ -144,15 +146,14 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
             TupleQueryResult answer = null;
             try {
                 answer = query.evaluate();
-            } catch (Exception e) {
+            } catch (QueryEvaluationException e) {
             	log.fatal("Error evaluating Query", e);
-            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
             }
             try {
 				log.info("DRUMBEAT Sesame Validator: answer has next: "+answer.hasNext());
-			} catch (Exception e1) {				
+			} catch (QueryEvaluationException e1) {				
 				e1.printStackTrace();
 			}
             try {
@@ -185,9 +186,8 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
                     // success!
                     return true;
                 }
-            } catch (Exception e) {
+            } catch (QueryEvaluationException e) {
             	log.fatal( "Error accessing query results", e);
-            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
             }

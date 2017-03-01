@@ -104,8 +104,7 @@ public class WebIdClaim {
      * available by dereferencing this Web ID.
      */
     public boolean verify() {
-        //return verify(FoafSslVerifier.getVerifier());
-    	return verify(new SesameFoafSslVerifier());
+        return verify(FoafSslVerifier.getVerifier());   	
     }
 
     /**
