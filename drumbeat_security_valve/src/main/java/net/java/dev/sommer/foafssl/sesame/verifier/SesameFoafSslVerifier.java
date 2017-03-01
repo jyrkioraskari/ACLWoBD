@@ -106,8 +106,8 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
 
         if (publicKey instanceof RSAPublicKey) {
             RSAPublicKey certRsakey = (RSAPublicKey) publicKey;
-            //log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
-            //log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
+            log.info("--- DRUMBEAT webid: cert public exp:"+certRsakey.getPublicExponent());
+            log.info("--- DRUMBEAT webid: cert public mod:"+certRsakey.getModulus());
             
             
             TupleQuery query = null;

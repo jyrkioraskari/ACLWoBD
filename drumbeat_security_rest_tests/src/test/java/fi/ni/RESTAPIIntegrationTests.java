@@ -31,7 +31,7 @@ import fi.ni.test_categories.IntegrationTest;
 
 @Category(IntegrationTest.class)
 
-public class IntegrationTests {
+public class RESTAPIIntegrationTests {
 
 	@Test
 	public void testHelloGET_HTTP_architect_local_org() {
