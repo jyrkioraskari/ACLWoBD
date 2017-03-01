@@ -40,12 +40,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.java.dev.sommer.foafssl.sesame.cache.GraphCache;
-import net.java.dev.sommer.foafssl.sesame.cache.GraphCacheLookup;
-import net.java.dev.sommer.foafssl.sesame.cache.MemoryGraphCache;
-import net.java.dev.sommer.foafssl.claims.WebIdClaim;
-import net.java.dev.sommer.foafssl.verifier.FoafSslVerifier;
-
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.openrdf.model.Literal;
@@ -54,13 +48,17 @@ import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
-import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepositoryConnection;
+
+import net.java.dev.sommer.foafssl.claims.WebIdClaim;
+import net.java.dev.sommer.foafssl.sesame.cache.GraphCache;
+import net.java.dev.sommer.foafssl.sesame.cache.GraphCacheLookup;
+import net.java.dev.sommer.foafssl.sesame.cache.MemoryGraphCache;
+import net.java.dev.sommer.foafssl.verifier.FoafSslVerifier;
 
 
 /**
@@ -129,15 +127,16 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
                         );
                 
                 log.info("DRUMBEAT Sesame Validator: qstring : "+qstring);
-            } catch (MalformedQueryException e) {
+            } catch (Exception e) { // MalformedQuery
             	log.fatal( "Error in Query String!", e);
+            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
-            } catch (RepositoryException e) {
+            } /*catch (RepositoryException e) {
             	log.fatal("Error with repository", e);
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
-            }
+            }*/
 
             ValueFactory vf = rep.getValueFactory();
             query.setBinding("agent", vf.createURI(webid.getWebId().toString()));
