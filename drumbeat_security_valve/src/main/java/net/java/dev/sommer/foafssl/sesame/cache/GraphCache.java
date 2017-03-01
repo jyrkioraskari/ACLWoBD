@@ -158,7 +158,18 @@ public abstract class GraphCache {
                     /*hconn.setRequestProperty("Accept",
                             "application/rdf+xml;q=1.0, text/turtle;q=0.9, text/html;q=0.7, application/xhtml+xml;q=0.8");*/
                 }
-                conn.connect();
+                
+                
+                try {
+        			conn.connect();
+        		} catch (IOException e) {
+        			if (e.getMessage().startsWith("sun.security.validator.ValidatorException"))
+        				log.severe("!! A valid root certificate is missing in the Java keystore for URL: "+webid.toString());
+        			else
+        				log.severe(e.getMessage());
+        			e.printStackTrace();
+        		}
+
 
                 if (conn instanceof HttpsURLConnection) {
                     Certificate[] serverCertificates = ((HttpsURLConnection) conn)
