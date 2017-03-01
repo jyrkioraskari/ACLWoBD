@@ -48,7 +48,6 @@ import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
@@ -145,14 +144,15 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
             TupleQueryResult answer = null;
             try {
                 answer = query.evaluate();
-            } catch (QueryEvaluationException e) {
+            } catch (Exception e) {
             	log.fatal("Error evaluating Query", e);
+            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
             }
             try {
 				log.info("DRUMBEAT Sesame Validator: answer has next: "+answer.hasNext());
-			} catch (QueryEvaluationException e1) {				
+			} catch (Exception e1) {				
 				e1.printStackTrace();
 			}
             try {
@@ -185,8 +185,9 @@ public class SesameFoafSslVerifier extends FoafSslVerifier {
                     // success!
                     return true;
                 }
-            } catch (QueryEvaluationException e) {
+            } catch (Exception e) {
             	log.fatal( "Error accessing query results", e);
+            	e.printStackTrace();
                 webid.fail("SERVER ERROR - Please warn administrator");
                 return false;
             }
