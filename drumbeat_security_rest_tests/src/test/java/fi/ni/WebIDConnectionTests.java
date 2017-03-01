@@ -16,7 +16,7 @@ public class WebIDConnectionTests {
 
 	@Test
 	public void test() {
-		// System.setProperty("javax.net.ssl.trustStore","c:\\jo\\certs\\keystore.jks");
+		System.setProperty("javax.net.ssl.trustStore","c:\\jo\\certs\\keystore.jks");
 		URI webid=null;
 		URL purl = null;
 		try {

@@ -43,6 +43,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
     	 log.info("DRUM WEBID authenticate started");
+    	 //TODO laita johonkin vakiopaikkaan
+    	 System.setProperty("javax.net.ssl.trustStore","c:\\jo\\certs\\keystore.jks");
 
     	if (checkForCachedAuthentication(request, response, false)) {
             return true;
