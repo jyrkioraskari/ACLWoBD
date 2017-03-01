@@ -44,6 +44,7 @@ import java.util.List;
 
 import net.java.dev.sommer.foafssl.principals.DereferencedFoafSslPrincipal;
 import net.java.dev.sommer.foafssl.principals.WebIdPrincipal;
+import net.java.dev.sommer.foafssl.sesame.verifier.SesameFoafSslVerifier;
 import net.java.dev.sommer.foafssl.verifier.FoafSslVerifier;
 
 /**
@@ -103,7 +104,8 @@ public class WebIdClaim {
      * available by dereferencing this Web ID.
      */
     public boolean verify() {
-        return verify(FoafSslVerifier.getVerifier());
+        //return verify(FoafSslVerifier.getVerifier());
+    	return verify(new SesameFoafSslVerifier());
     }
 
     /**
