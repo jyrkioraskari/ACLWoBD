@@ -39,7 +39,7 @@ import net.java.dev.sommer.foafssl.claims.X509Claim;
 public class CertificateAuthenticator extends AuthenticatorBase {
     private static final Log log = LogFactory.getLog(CertificateAuthenticator.class);
    
-
+  
     public boolean authenticate(Request request, HttpServletResponse response)
             throws IOException {
     	 log.info("DRUM WEBID authenticate started");

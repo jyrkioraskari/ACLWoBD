@@ -34,7 +34,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib</classpathPrefix>
+							<classpathPrefix>drumbeat</classpathPrefix>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>lib/</Class-Path>
@@ -57,7 +57,7 @@
 							<outputDirectory>target/classes/lib</outputDirectory>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<excludeGroupIds>
-								junit,org.hamcrest,org.mockito,org.powermock,${project.groupId}
+								junit,org.hamcrest,org.mockito,org.powermock
 							</excludeGroupIds>
 						</configuration>
 					</execution>
