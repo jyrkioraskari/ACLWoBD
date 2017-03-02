@@ -6,11 +6,11 @@
     <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                maxThreads="150" SSLEnabled="true">
         <SSLHostConfig 
-                       truststoreFile="c:\my_own_location\keystore.jks"
-                       truststorePass="tomcat"
+                       truststoreFile="c:\file_location\trustStore.jks"
+                       truststorePass="verify_ceritificates_passwd"
                        certificateVerification="optional">
-            <Certificate certificateKeystoreFile="c:\my_own_location\keystore.jks"
-                          certificateKeystorePassword="my_own_password"
+            <Certificate certificateKeystoreFile="c:\file_location\keystore.jks"
+                          certificateKeystorePassword="own_ceritificates_passwd"
                           certificateKeyAlias="ALIAS"
                          type="RSA" />
         </SSLHostConfig>

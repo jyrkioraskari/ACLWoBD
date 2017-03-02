@@ -8,12 +8,16 @@ import java.util.ListIterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 public class DataServer {
+	private static final Log log = LogFactory.getLog(DataServer.class);
+
 	private Optional<URI> uri = Optional.empty();;
 	// at the time
 	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
@@ -53,9 +57,9 @@ public class DataServer {
 
 	public boolean connect(String wc, String request_uri) {
 		URI canonizted_requestURI = canonizateURI(request_uri);
-		System.out.println("WebID oli:" + wc);
-		System.out.println("req uri oli:" + request_uri);
-		System.out.println("canonized uri oli:" + canonizted_requestURI);
+		log.info("DRUMBEAT WebID oli:" + wc);
+		log.info("DRUMBEAT req uri oli:" + request_uri);
+		log.info("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 
 		final List<RDFNode> matched_paths = new ArrayList<>();
 		rdf_datastore.ifPresent(x -> x.match(matched_paths, canonizted_requestURI.toString()));
@@ -63,8 +67,8 @@ public class DataServer {
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			rdf_datastore.ifPresent(x -> {
-				System.out.println("permissions: " + x.getPermissions(r.toString()));
-				System.out.println("rule path is: " + x.parseRulePath(r.asResource()));
+				log.info("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
+				log.info("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
 
 				Resource current_node = x.getModel().getResource(r.toString());
 				List<Resource> rulepath = x.parseRulePath(r.asResource());
@@ -76,14 +80,13 @@ public class DataServer {
 					Property p = x.getModel().getProperty(step.getURI());
 					Resource node = current_node.getPropertyResourceValue(p);
 					if (node != null) {
-						System.out.println("from local store:" + node);
+						log.info("DRUMBEAT from local store:" + node);
 						current_node = node;
 					} else {
-						System.out.println("located somewhere else. current node was: " + current_node);
+						log.info("DRUMBEAT located somewhere else. current node was: " + current_node);
 
 						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
 						System.out.println("Path for the rest is:" + new_path);
-
 						break;
 					}
 				}
@@ -99,6 +102,7 @@ public class DataServer {
 		try {
 			uri = new URI(uri_txt);
 			String path = uri.getPath();
+			path = path.replaceFirst("/protected", "/security");
 			path = path.replaceFirst("/drumbeat/objects", "/security");
 			path = path.replaceFirst("/drumbeat/collections", "/security");
 			path = path.replaceFirst("/drumbeat/datasources", "/security");
