@@ -1,13 +1,20 @@
 package fi.ni;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.utils.URIBuilder;
@@ -33,25 +40,34 @@ import fi.ni.test_categories.IntegrationTest;
 
 public class RESTAPIIntegrationTests {
 
+	public static javax.ws.rs.client.Client IgnoreSSLClient() throws Exception {
+	    SSLContext sslcontext = SSLContext.getInstance("TLS");
+	    sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+	        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+	        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+	        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+
+	    }}, new java.security.SecureRandom());
+	    return ClientBuilder.newBuilder().sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
+	}
 	@Test
 	public void testHelloGET_HTTP_architect_local_org() {
 		try {
 
-			Client client = Client.create();
+			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			WebResource webResource = client
-					.resource("http://architect.local.org:8080/security/rest/organization/hello");
-			ClientResponse response = webResource.accept("text/plain").get(ClientResponse.class);
+			Response response = client.target("https://architect.local.org:8443/security/organization/hello").request("text/plain").get();
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
-			String output = response.getEntity(String.class);
+			String output = response.readEntity(String.class);
 			assertEquals("Hello OK!", output);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
+	
 
 	private String createEmptyQueryString() {
 		Model model = ModelFactory.createDefaultModel();

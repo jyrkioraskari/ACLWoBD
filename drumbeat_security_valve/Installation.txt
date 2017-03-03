@@ -1,22 +1,67 @@
 	These instructions are written for Tomcat version 9.	
+	
+	Command (example) to generate keystore.jks :
+	
+	keytool -genkeypair -alias ALIAS -keyalg RSA -dname "CN=architect.local.org,OU=Acs,O=Aalto University,L=Espoo,S=Uusimaa,C=FI" -keypass "own_passwd" -keystore keystore.jks -storepass "own_passwd"
+	keytool -exportcert -keystore Jyrki_Oraskari.p12 -storetype PKCS12 -storepass "own_passwd" -alias Jyrki_Oraskari -file jyrkio.cer
 
+    keytool -importcert -keystore keystore.jks -alias clientcert -file jyrkio.cer -storepass "own_passwd" -noprompt
+ 
+	# view the contents of the keystore (use -v for verbose output)
+	keytool -list -keystore keystore.jks -storepass own_passwd	
+
+    first and last name: your.host.name.org	
+	
 	1. Set Tomcat server to use SSH always:
 	   Exaple server.xml addition:
 	   
     <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                maxThreads="150" SSLEnabled="true">
         <SSLHostConfig 
-                       truststoreFile="c:\file_location\trustStore.jks"
-                       truststorePass="verify_ceritificates_passwd"
+                       truststoreFile="c:\file_location\keystore.jks"
+                       truststorePass="own_passwd"
                        certificateVerification="optional">
             <Certificate certificateKeystoreFile="c:\file_location\keystore.jks"
-                          certificateKeystorePassword="own_ceritificates_passwd"
+                          certificateKeystorePassword="own_passwd"
                           certificateKeyAlias="ALIAS"
                          type="RSA" />
         </SSLHostConfig>
     </Connector>
 	   
+	   
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig  
+	 	       truststoreFile="c:\web\certs\truststore.jks"
+                       truststorePass="own_passwd"                  
+                       certificateVerification="optional">
+            <Certificate certificateKeystoreFile="c:\web\certs\keystore.jks"
+                          certificateKeystorePassword="own_passwd"
+                          certificateKeyAlias="ALIAS"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    
+    
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig 
+                       truststoreFile="c:\jo\keystore.jks"
+                       truststorePass="tomcat"
+                       certificateVerification="optional">
+            <Certificate certificateKeystoreFile="c:\jo\keystore.jks"
+                          certificateKeystorePassword="ahgahgahga"
+                          certificateKeyAlias="ALIAS"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
 	
+	  <Connector
+           protocol="org.apache.coyote.http11.Http11NioProtocol"
+           port="8443" maxThreads="200"
+           scheme="https" secure="true" SSLEnabled="true"
+           keystoreFile="c:\web\certs\keystore.jks" keystorePass="own_passwd"
+           clientAuth="true" sslProtocol="TLS"/>
 
 	2. To make Tomcat to recognize the new authentication method, the method has to be registered. It is done by adding a new line:
 	DRUMBEAT_AUTHENTICATION=fi.aalto.cs.drumbeat.CertificateAuthenticator
