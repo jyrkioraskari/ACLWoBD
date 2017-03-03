@@ -24,7 +24,12 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>1.8</version>
+			<version>1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.9</version>
 		</dependency>
 
 		<dependency>
@@ -76,11 +81,11 @@
 		<module>../drumbeat_security_project</module>
 
 
-
-
-		<module>../drumbeat_security_valve</module>
 		<module>../drumbeat_security_webid_creator</module>
 		<module>../drumbeat_security_organization_protected_ui</module>
-		<module>../drumbeat_security_datastore</module>
+
+		
+
+		<module>../drumbeat_security_server</module>
 	</modules>
 </project>

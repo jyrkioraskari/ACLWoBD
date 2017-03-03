@@ -35,7 +35,7 @@ public class RDFDataStore {
 	private final URI rootURI;
 	private final String rdf_filename;
 
-	final private Model model= ModelFactory.createOntologyModel();
+	final private Model model= ModelFactory.createDefaultModel();
 
 	public RDFDataStore(URI rootURI,String type) {
 		super();

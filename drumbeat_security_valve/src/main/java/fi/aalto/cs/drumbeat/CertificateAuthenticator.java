@@ -17,19 +17,26 @@
 
 package fi.aalto.cs.drumbeat;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.json.simple.JSONObject;
 
-import fi.aalto.drumbeat.DataServer;
 import net.java.dev.sommer.foafssl.claims.WebIdClaim;
 import net.java.dev.sommer.foafssl.claims.X509Claim;
 
@@ -67,18 +74,19 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 					} else {
 						log.info("DRUMBEAT WEBID cert verified OK");
 						try {
-							for (Object alt : cert.getSubjectAlternativeNames().toArray()) {
-								DataServer dataserver = DataServer.getDataServer(request.getRequestURL().toString());
-								dataserver.connect((String) alt, request.getRequestURL().toString());
-								response.getOutputStream().write("WEBID foaf+ssl certificate OK".getBytes());
-								
+							for (Object altlist : cert.getSubjectAlternativeNames().toArray()) {
+								for(Object alt:(Collection)altlist) {
+									log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
+									server_connect((String) alt.toString(), request.getRequestURL().toString());
+									response.getOutputStream().write("WEBID foaf+ssl certificate OK".getBytes());
+								}
 							}
 						} catch (CertificateParsingException e) {
 							e.printStackTrace();
 						}
 					}
 				} else
-					log.info("DRUM WEBID cert verification is not OK");
+					log.info("DRUMBEAT WEBID cert verification is not OK");
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -87,6 +95,45 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, sm.getString("authenticator.certificates"));
 		return false; // temporary
+	}
+
+	private void server_connect(String alt, String requestURL) {
+		try {
+
+			JSONObject obj = new JSONObject();
+			obj.put("alt_name", alt);
+			obj.put("requestURL", requestURL);
+
+			String httpsURL = "http://localhost:8080/security/organization/hello";
+			URL myurl = new URL(httpsURL);
+			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
+			conn.setDoOutput(true);
+			conn.setInstanceFollowRedirects(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+			conn.setRequestProperty("charset", "utf-8");
+			conn.setRequestProperty("Content-Length", Integer.toString(obj.toJSONString().length()));
+			conn.setUseCaches(false);
+			try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+				wr.write(obj.toJSONString().getBytes());
+			}
+			InputStream ins = conn.getInputStream();
+			InputStreamReader isr = new InputStreamReader(ins);
+			BufferedReader in = new BufferedReader(isr);
+
+			String inputLine;
+
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println(inputLine);
+			}
+
+			in.close();
+			log.info("DRUMBEAT .... test passed");
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

@@ -1,25 +1,16 @@
 package fi.ni;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
+import javax.ws.rs.core.MediaType;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.json.simple.JSONObject;
 import org.junit.Test;
 
 //http://java.globinch.com/enterprise-java/security/fix-java-security-certificate-exception-no-matching-localhost-found/
@@ -27,7 +18,7 @@ public class HTTPSClientIntegrationTests {
 
 	
 	//http://stackoverflow.com/questions/1666052/java-https-client-certificate-authentication
-	@Test
+	/*@Test
 	public void test1() {
 		System.setProperty("javax.net.ssl.trustStore", "c:\\jo\\keystore.jks");
 		try {
@@ -45,12 +36,52 @@ public class HTTPSClientIntegrationTests {
 			}
 
 			in.close();
-			System.out.println("passwed");
+			System.out.println("passed");
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}*/
+	
+	@Test
+	public void testconnection() {
+		try {
+
+			JSONObject obj = new JSONObject();
+	        obj.put("alt_name", "alt");
+	        obj.put("requestURL", "URL");
+	        
+			String httpsURL = "http://localhost:8080/security/organization/hello";
+			URL myurl = new URL(httpsURL);
+			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
+			conn.setDoOutput( true );
+			conn.setInstanceFollowRedirects( false );
+			conn.setRequestMethod( "POST" );
+			conn.setRequestProperty( "Content-Type", MediaType.APPLICATION_JSON); 
+			conn.setRequestProperty( "charset", "utf-8");
+			conn.setRequestProperty( "Content-Length", Integer.toString( obj.toJSONString().length() ));
+			conn.setUseCaches( false );
+			try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
+			   wr.write( obj.toJSONString().getBytes() );
+			}
+			InputStream ins = conn.getInputStream();
+			InputStreamReader isr = new InputStreamReader(ins);
+			BufferedReader in = new BufferedReader(isr);
+
+			String inputLine;
+
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println(inputLine);
+			}
+
+			in.close();
+			System.out.println("passed");
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
 	}
+
 
 	/*@Test
 	public void test2() {
