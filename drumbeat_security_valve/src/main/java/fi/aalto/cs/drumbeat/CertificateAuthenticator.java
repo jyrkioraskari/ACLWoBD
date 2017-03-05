@@ -24,15 +24,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Principal;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.catalina.authenticator.AuthenticatorBase;
 import org.apache.catalina.connector.Request;
+import org.apache.catalina.realm.GenericPrincipal;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
@@ -78,7 +83,15 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 								for(Object alt:(Collection)altlist) {
 									log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
 									server_connect((String) alt.toString(), request.getRequestURL().toString());
-									response.getOutputStream().write("WEBID foaf+ssl certificate OK".getBytes());
+									
+									 final List<String> roles = new ArrayList<String>();
+									    roles.add("default");
+									    Principal principal = new GenericPrincipal("princi user", "princi pass", roles);
+									
+									    if (principal != null) {
+				                             register(request, response, principal,"DRUMBEAT_AUTHENTICATION", "user", "pass");
+				                             return true;
+				                         }
 								}
 							}
 						} catch (CertificateParsingException e) {
