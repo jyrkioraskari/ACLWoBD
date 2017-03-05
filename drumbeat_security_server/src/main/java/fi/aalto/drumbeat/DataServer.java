@@ -55,7 +55,8 @@ public class DataServer {
 
 	}
 
-	public boolean connect(String wc, String request_uri) {
+	public List<String> connect(String wc, String request_uri) {
+		List<String> ret=new ArrayList<>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		log.info("DRUMBEAT WebID oli:" + wc);
 		log.info("DRUMBEAT req uri oli:" + request_uri);
@@ -67,8 +68,6 @@ public class DataServer {
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			rdf_datastore.ifPresent(x -> {
-				log.info("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
-				log.info("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
 
 				Resource current_node = x.getModel().getResource(r.toString());
 				List<Resource> rulepath = x.parseRulePath(r.asResource());
@@ -90,11 +89,18 @@ public class DataServer {
 						break;
 					}
 				}
+				boolean OK=true;
+				if(OK) {
+					log.info("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
+					log.info("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
+					ret.add(x.getPermissions(r.toString()).toString());
+				}
+
 
 			});
 
 		}
-		return true;
+		return ret;
 	}
 
 	public URI canonizateURI(String uri_txt) {

@@ -25,7 +25,7 @@ public class BackEndIntegrationTests {
 			obj.put("alt_name", "alt");
 			obj.put("requestURL", "URL");
 
-			String httpsURL = "http://localhost:8080/security/server/hello";
+			String httpsURL = "http://localhost:8080/security/server/query";
 			URL myurl = new URL(httpsURL);
 			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
 			conn.setDoOutput(true);
@@ -53,6 +53,7 @@ public class BackEndIntegrationTests {
 				JSONObject response_obj = (JSONObject)parser.parse(response);
 				String status=(String) response_obj.get("status");
 				String roles=(String) response_obj.get("roles");
+				System.out.println(roles);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
