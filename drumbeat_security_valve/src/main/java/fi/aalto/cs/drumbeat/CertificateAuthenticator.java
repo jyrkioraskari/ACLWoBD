@@ -80,21 +80,27 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 						log.info("DRUMBEAT WEBID cert verified OK");
 						try {
 							for (Object altlist : cert.getSubjectAlternativeNames().toArray()) {
-								for(Object alt:(Collection)altlist) {
+								for (Object alt : (Collection) altlist) {
 									log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
 									server_connect((String) alt.toString(), request.getRequestURL().toString());
-									
-									 final List<String> roles = new ArrayList<String>();
-									    roles.add("default");
-									    Principal principal = new GenericPrincipal("princi user", "princi pass", roles);
-									
-									    if (principal != null) {
-				                             register(request, response, principal,"DRUMBEAT_AUTHENTICATION", "user", "pass");
-				                             return true;
-				                         }
+									log.info("DRUMBEAT WEBID cert servere ret 1");
+									final List<String> roles = new ArrayList<String>();
+									roles.add("default");
+									log.info("DRUMBEAT WEBID cert servere ret 2");
+									Principal principal = new GenericPrincipal("princi user", "princi pass", roles);
+									log.info("DRUMBEAT WEBID cert servere ret 3");
+									if (principal != null) {
+										log.info("DRUMBEAT WEBID cert verified RETURNED principal!");
+										register(request, response, principal, "DRUMBEAT_AUTHENTICATION", "user",
+												"pass");
+										return true;
+									}
+									else
+										log.info("DRUMBEAT WEBID cert verified RETURNED principal null??!");
 								}
 							}
 						} catch (CertificateParsingException e) {
+							log.info("DRUMBEAT WEBID cert servere ret 4");
 							e.printStackTrace();
 						}
 					}
@@ -112,7 +118,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
 	private void server_connect(String alt, String requestURL) {
 		try {
-
+			log.info("DRUMBEAT .... server connect alt: "+alt);
+			log.info("DRUMBEAT .... server connect requestURL: "+requestURL);
 			JSONObject obj = new JSONObject();
 			obj.put("alt_name", alt);
 			obj.put("requestURL", requestURL);

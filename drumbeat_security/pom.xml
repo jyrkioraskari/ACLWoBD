@@ -87,5 +87,6 @@
 		
 
 		<module>../drumbeat_security_server</module>
+		<module>../drumbeat_security_valve</module>
 	</modules>
 </project>
