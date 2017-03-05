@@ -58,13 +58,17 @@ public class DataServer {
 	public List<String> connect(String wc, String request_uri) {
 		List<String> ret=new ArrayList<>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
+		System.out.println("DRUMBEAT WebID oli:" + wc);
+		System.out.println("DRUMBEAT req uri oli:" + request_uri);
+		System.out.println("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
+		
 		log.info("DRUMBEAT WebID oli:" + wc);
 		log.info("DRUMBEAT req uri oli:" + request_uri);
 		log.info("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 
 		final List<RDFNode> matched_paths = new ArrayList<>();
 		rdf_datastore.ifPresent(x -> x.match(matched_paths, canonizted_requestURI.toString()));
-
+		
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			rdf_datastore.ifPresent(x -> {
@@ -93,7 +97,13 @@ public class DataServer {
 				if(OK) {
 					log.info("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
 					log.info("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
-					ret.add(x.getPermissions(r.toString()).toString());
+					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+						String sy=y.asResource().getURI();
+						int i=sy.lastIndexOf("/");
+						sy=sy.substring(i+1);
+						return sy;
+					}).collect(Collectors.toCollection(ArrayList::new));
+					ret.addAll(perms);
 				}
 
 

@@ -17,8 +17,6 @@ public class RulePath extends AbstractData {
 
 	public RulePath(URI root,Model model) {
 		super(root, UUID.randomUUID().toString(), model);  // uudeelleenkäyttöä varten!, muuten olisi blank node
-		Resource person1 = model.getResource("http://company1/mats");
-		
 		RDFNode[] rulepath_list_contractor1 = new RDFNode[3];
 		rulepath_list_contractor1[0]  =   RDFConstants.property_hasProject;
 		rulepath_list_contractor1[1] =   RDFConstants.property_hasContractor;
@@ -33,11 +31,10 @@ public class RulePath extends AbstractData {
 	
 
 /*
- * RDFNode[] rulepath_list_maincontractor1 = new RDFNode[4];
+ * RDFNode[] rulepath_list_maincontractor1 = new RDFNode[3];
 		rulepath_list_maincontractor1[0] =   property.hasProject;
 		rulepath_list_maincontractor1[1] =   property.hasMainContractor;
 		rulepath_list_maincontractor1[2] =   property.knowsPerson;
-		rulepath_list_maincontractor1[3] =   person1;
 		RDFList rulepath_maincontractor1 = model.createList(rulepath_list_maincontractor1);	
 		
  */

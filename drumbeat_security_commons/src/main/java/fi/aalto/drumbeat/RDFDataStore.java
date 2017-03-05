@@ -41,6 +41,7 @@ public class RDFDataStore {
 		super();
 		this.rootURI=rootURI;
 		rdf_filename=Constants.RDF_filePath + rootURI.getHost()+"_"+type+"_securitydata.ttl"; 
+		createDemoData();
 	}
 
 	private Resource getRoot() {
@@ -98,7 +99,7 @@ public class RDFDataStore {
 			c_smc.addRule("contractors_allowed_read");
 			
 			
-			Collection c= new Collection(new URI("https://architect.local.org/security/"), "smc2", model);
+			Collection c= new Collection(new URI("https://architect.local.org/security/"), "data", model);
 			c.addProject("project1");
 			c.addRule("maincontractor_allowed_read");
 			
@@ -117,7 +118,7 @@ public class RDFDataStore {
 	
 	public void match(List<RDFNode> ret,String request_url)
 	{
-		
+		System.out.println("etsitty: "+request_url);
 		StringBuilder sb=new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
 		sb.append(" ?path  <"+RDFConstants.property_hasAuthorizationRule.getURI()+"> ?x");
@@ -129,6 +130,7 @@ public class RDFDataStore {
 		    {
 		      QuerySolution soln = results.nextSolution() ;
 		      RDFNode x = soln.get("path") ; 
+		      System.out.println("path: "+x.toString());
 		      if (request_url.startsWith(x.toString()))
 		         ret.add(x);
 		    }
