@@ -86,7 +86,6 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 									if (String.class.isInstance(alt)) {
 										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
 										String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
-										request.setAttribute("AccessedPath", request.getRequestURL().toString());
 										final List<String> roles = new ArrayList<String>();
 										roles.add("default");
 										for(String r:roles_list)
