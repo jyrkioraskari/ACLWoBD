@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>SO question 2370960</title>
+        <title>Drumbeat protected content</title>
     </head>
     <body>
-         <p>Person: ${message}</p>
+         <p>WebID: ${name}</p>
+         <p>Certificate DN: ${CertDN}</p>
     </body>
 </html>

@@ -91,7 +91,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 									log.info("DRUMBEAT WEBID cert servere ret 3");
 									if (principal != null) {
 										log.info("DRUMBEAT WEBID cert verified RETURNED principal!");
-										register(request, response, principal, "DRUMBEAT_AUTHENTICATION", "user",
+										request.setAttribute("certDN", cert.getSubjectDN().getName());
+										register(request, response, principal, "DRUMBEAT_AUTHENTICATION", alt.toString(),
 												"pass");
 										return true;
 									}
