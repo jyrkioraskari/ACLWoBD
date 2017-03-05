@@ -4,6 +4,6 @@
         <title>SO question 2370960</title>
     </head>
     <body>
-         <p>Message: ${message}</p>
+         <p>Person: ${message}</p>
     </body>
 </html>

@@ -16,17 +16,10 @@ public class ProtectedDataServer {
 
 	@Path("/hello")
 	@GET
-	public Viewable  getHello( @Context HttpServletRequest request, @Context HttpServletResponse response) {
+	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		String message = "Hello World";
-		request.setAttribute("message", "value");
+		request.setAttribute("name", sc.getUserPrincipal().getName() );
 		return new Viewable("/hello.jsp", null);
 	}
 	
-	@Path("/test2")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String isSecure2(@Context SecurityContext sc) {
-		return "{\"name\":\"" + sc.getUserPrincipal().getName() + " \"}";
-	}
-
 }
