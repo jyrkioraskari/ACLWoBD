@@ -1,7 +1,5 @@
 package fi.ni;
 
-import static org.junit.Assert.*;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,6 +11,8 @@ import java.net.URL;
 import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 public class BackEndIntegrationTests {
@@ -44,8 +44,17 @@ public class BackEndIntegrationTests {
 
 			String inputLine;
 
+			String response="";
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println(inputLine);
+				response+=inputLine;
+			}
+			JSONParser parser = new JSONParser();
+			try {
+				JSONObject response_obj = (JSONObject)parser.parse(response);
+				String status=(String) response_obj.get("status");
+				String roles=(String) response_obj.get("roles");
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 
 			in.close();

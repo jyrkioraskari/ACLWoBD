@@ -26,7 +26,7 @@ public class SecurityServer extends RESTfulAPI {
 
 		String result = "ServiceQuery : " + query;
 		ServiceResponce response=new ServiceResponce();
-		response.setRoles("");
+		response.setRoles("role1,role2,role3");
 		response.setStatus("OK");
 		return response;
 	}
