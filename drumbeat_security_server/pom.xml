@@ -43,6 +43,12 @@
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/juli -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>juli</artifactId>
+			<version>6.0.26</version>
+		</dependency>
 	</dependencies>
 
 	<parent>
