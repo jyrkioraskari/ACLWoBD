@@ -4,8 +4,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/server")
@@ -21,11 +21,14 @@ public class SecurityServer extends RESTfulAPI {
 	@POST
 	@Path("/hello")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createTrackInJSON(ServiceQuery query) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public ServiceResponce createTrackInJSON(ServiceQuery query) {
 
 		String result = "ServiceQuery : " + query;
-		return Response.status(201).entity(result).build();
-
+		ServiceResponce response=new ServiceResponce();
+		response.setRoles("");
+		response.setStatus("OK");
+		return response;
 	}
 	
 	
