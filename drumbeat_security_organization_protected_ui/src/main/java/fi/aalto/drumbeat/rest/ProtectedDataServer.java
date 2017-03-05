@@ -19,7 +19,7 @@ public class ProtectedDataServer {
 	public Viewable  getHello( @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		String message = "Hello World";
 		request.setAttribute("message", "value");
-		return new Viewable("/jsps/hello.jsp", null);
+		return new Viewable("/hello.jsp", null);
 	}
 	
 	@Path("/test2")
