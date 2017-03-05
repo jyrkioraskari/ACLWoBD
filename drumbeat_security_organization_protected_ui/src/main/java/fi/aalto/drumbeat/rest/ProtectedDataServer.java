@@ -17,8 +17,32 @@ public class ProtectedDataServer {
 	@Path("/hello")
 	@GET
 	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
-		String message = "Hello World";
 		request.setAttribute("name", sc.getUserPrincipal().getName() );
+		
+		if(sc.isUserInRole("CREATE"))
+			request.setAttribute("CreatePermission", "TRUE");
+		else
+			request.setAttribute("CreatePermission", "FALSE");
+		
+		
+		if(sc.isUserInRole("READ"))
+			request.setAttribute("ReadPermission", "TRUE");
+		else
+			request.setAttribute("ReadPermission", "FALSE");
+		
+		
+		if(sc.isUserInRole("UPDATE"))
+			request.setAttribute("UpdatePermission", "TRUE");
+		else
+			request.setAttribute("UpdatePermission", "FALSE");
+
+		
+		if(sc.isUserInRole("DELETE"))
+			request.setAttribute("DeletePermission", "TRUE");
+		else
+			request.setAttribute("DeletePermission", "FALSE");
+
+		
 		return new Viewable("/hello.jsp", null);
 	}
 	

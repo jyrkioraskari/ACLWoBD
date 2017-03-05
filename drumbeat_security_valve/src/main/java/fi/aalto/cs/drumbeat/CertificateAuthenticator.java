@@ -41,6 +41,8 @@ import org.apache.catalina.realm.GenericPrincipal;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import net.java.dev.sommer.foafssl.claims.WebIdClaim;
 import net.java.dev.sommer.foafssl.claims.X509Claim;
@@ -83,10 +85,14 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 								for (Object alt : (Collection) altlist) {
 									if (String.class.isInstance(alt)) {
 										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
-										server_connect((String) alt.toString(), request.getRequestURL().toString());
+										String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
+										
 										log.info("DRUMBEAT WEBID cert servere ret 1");
 										final List<String> roles = new ArrayList<String>();
 										roles.add("default");
+										for(String r:roles_list)
+											roles.add(r);
+										
 										log.info("DRUMBEAT WEBID cert servere ret 2");
 										Principal principal = new GenericPrincipal(alt.toString(), "princi pass",
 												roles);
@@ -119,15 +125,14 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 		return false; // temporary
 	}
 
-	private void server_connect(String alt, String requestURL) {
+	private String server_connect(String alt, String requestURL) {
+		log.info("DRUMBEAT .... server connect alt: " + alt);
+		log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
+		JSONObject obj = new JSONObject();
+		obj.put("alt_name", alt);
+		obj.put("requestURL", requestURL);
 		try {
-			log.info("DRUMBEAT .... server connect alt: " + alt);
-			log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
-			JSONObject obj = new JSONObject();
-			obj.put("alt_name", alt);
-			obj.put("requestURL", requestURL);
-
-			String httpsURL = "http://localhost:8080/security/organization/hello";
+			String httpsURL = "http://localhost:8080/security/server/query";
 			URL myurl = new URL(httpsURL);
 			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
 			conn.setDoOutput(true);
@@ -146,17 +151,28 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
 			String inputLine;
 
+			String response="";
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println(inputLine);
+				response+=inputLine;
+			}
+			in.close();
+
+			JSONParser parser = new JSONParser();
+			try {
+				JSONObject response_obj = (JSONObject)parser.parse(response);
+				String status=(String) response_obj.get("status");
+				String roles=(String) response_obj.get("roles");
+				return roles;
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 
-			in.close();
-			log.info("DRUMBEAT .... test passed");
+			log.info("DRUMBEAT .... server connect passed");
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
-
+		return ""; // No roles
 	}
 
 	@Override
