@@ -81,22 +81,24 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 						try {
 							for (Object altlist : cert.getSubjectAlternativeNames().toArray()) {
 								for (Object alt : (Collection) altlist) {
-									log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
-									server_connect((String) alt.toString(), request.getRequestURL().toString());
-									log.info("DRUMBEAT WEBID cert servere ret 1");
-									final List<String> roles = new ArrayList<String>();
-									roles.add("default");
-									log.info("DRUMBEAT WEBID cert servere ret 2");
-									Principal principal = new GenericPrincipal("princi user", "princi pass", roles);
-									log.info("DRUMBEAT WEBID cert servere ret 3");
-									if (principal != null) {
-										log.info("DRUMBEAT WEBID cert verified RETURNED principal!");
-										request.setAttribute("certDN", cert.getSubjectDN().getName());
-										register(request, response, principal, "DRUMBEAT_AUTHENTICATION", alt.toString(),
-												"pass");
-										return true;
-									}
-									else
+									if (String.class.isInstance(alt)) {
+										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
+										server_connect((String) alt.toString(), request.getRequestURL().toString());
+										log.info("DRUMBEAT WEBID cert servere ret 1");
+										final List<String> roles = new ArrayList<String>();
+										roles.add("default");
+										log.info("DRUMBEAT WEBID cert servere ret 2");
+										Principal principal = new GenericPrincipal(alt.toString(), "princi pass",
+												roles);
+										log.info("DRUMBEAT WEBID cert servere ret 3");
+										if (principal != null) {
+											log.info("DRUMBEAT WEBID cert verified RETURNED principal!");
+											request.setAttribute("CertDN", cert.getSubjectDN().getName());
+											register(request, response, principal, "DRUMBEAT_AUTHENTICATION",
+													alt.toString(), "pass");
+											return true;
+										}
+									} else
 										log.info("DRUMBEAT WEBID cert verified RETURNED principal null??!");
 								}
 							}
@@ -119,8 +121,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 
 	private void server_connect(String alt, String requestURL) {
 		try {
-			log.info("DRUMBEAT .... server connect alt: "+alt);
-			log.info("DRUMBEAT .... server connect requestURL: "+requestURL);
+			log.info("DRUMBEAT .... server connect alt: " + alt);
+			log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
 			JSONObject obj = new JSONObject();
 			obj.put("alt_name", alt);
 			obj.put("requestURL", requestURL);
