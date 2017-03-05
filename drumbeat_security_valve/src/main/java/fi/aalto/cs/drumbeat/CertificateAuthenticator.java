@@ -86,17 +86,14 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 									if (String.class.isInstance(alt)) {
 										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
 										String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
-										
-										log.info("DRUMBEAT WEBID cert servere ret 1");
+										request.setAttribute("AccessedPath", request.getRequestURL().toString());
 										final List<String> roles = new ArrayList<String>();
 										roles.add("default");
 										for(String r:roles_list)
 											roles.add(r);
 										
-										log.info("DRUMBEAT WEBID cert servere ret 2");
-										Principal principal = new GenericPrincipal(alt.toString(), "princi pass",
+										Principal principal = new GenericPrincipal(alt.toString(), "pass",
 												roles);
-										log.info("DRUMBEAT WEBID cert servere ret 3");
 										if (principal != null) {
 											log.info("DRUMBEAT WEBID cert verified RETURNED principal!");
 											request.setAttribute("CertDN", cert.getSubjectDN().getName());
@@ -109,7 +106,6 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 								}
 							}
 						} catch (CertificateParsingException e) {
-							log.info("DRUMBEAT WEBID cert servere ret 4");
 							e.printStackTrace();
 						}
 					}
