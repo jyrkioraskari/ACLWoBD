@@ -5,8 +5,9 @@ import java.net.URISyntaxException;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.Constants;
+import fi.aalto.drumbeat.RDFConstants;
 
 abstract class ProtectedPath extends AbstractData {
 	private Project  project;
@@ -19,16 +20,20 @@ abstract class ProtectedPath extends AbstractData {
 
 	
 	public Project addProject(String name) throws URISyntaxException {
-		Property hasProject = model.getProperty(Constants.security_ontology_base + "#hasProject");
+		Property hasProject = RDFConstants.property_hasProject;
 
 		this.project = new Project(new URI(self.getURI()), name, model);
 		self.addProperty(hasProject, this.project.self);
+		System.out.println("add contractor");
+		Resource contractor= this.model.createResource("http://fabricator.local.org/");
+		this.project.self.addProperty(RDFConstants.property_hasContractor, contractor);
+		
 		return this.project;
 	}
 
 
 	public AuthenticationRule addRule(String name) throws URISyntaxException {
-		Property hasAuthorizationRule = model.getProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
+		Property hasAuthorizationRule = RDFConstants.property_hasAuthorizationRule;
 
 		this.rule = new AuthenticationRule(new URI(self.getURI()), name, model);
 		self.addProperty(hasAuthorizationRule, this.rule.self);

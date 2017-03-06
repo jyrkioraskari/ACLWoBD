@@ -104,7 +104,7 @@ public class RDFDataStore {
 			
 			
 			Collection c= new Collection(new URI("https://architect.local.org/security/"), "data", model);
-			c.addProject("project1");
+			c.addProject("fix2");
 			c.addRule("maincontractor_allowed_read");
 			
 			DataSource ds=c.addDataSource("architectural");
@@ -164,7 +164,6 @@ public class RDFDataStore {
 
 
 	public LinkedList<Resource> parseRulePath(Resource node) {
-		System.out.println("parse rulepath for:"+node.toString());
 		LinkedList<Resource> ret = new LinkedList<Resource>();
 		
 		
@@ -177,13 +176,14 @@ public class RDFDataStore {
 		}
 		
 		if(ret.size()==0 ) {
-			Resource rr=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
-			Iterator i=rr.listProperties();
+			//Resource rr=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
+			System.out.println("properties... ");
+			Iterator i=node.listProperties();
 			while(i.hasNext())
 			{
 				System.out.println("property was:"+i.next().toString());
 			}
-		}
+		} else System.out.println("rule path: "+ret);
 		
 		return ret;
 	}

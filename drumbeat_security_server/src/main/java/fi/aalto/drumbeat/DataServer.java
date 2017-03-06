@@ -3,6 +3,7 @@ package fi.aalto.drumbeat;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.sparql.function.library.e;
 
 public class DataServer {
 	private static final Log log = LogFactory.getLog(DataServer.class);
@@ -73,30 +75,54 @@ public class DataServer {
 			System.out.println("match: " + r.toString());
 			rdf_datastore.ifPresent(x -> {
 				Resource current_node = x.getModel().getResource(r.toString());
-				List<Resource> rulepath = x.parseRulePath(r.asResource());
 				
-				rulepath = rulepath.stream().filter(rule -> ((Resource) rule).isLiteral()).collect(Collectors.toList());
-				ListIterator<Resource> iterator = rulepath.listIterator();
-				System.out.println("rulepaths size: " + rulepath.size());
+				List<Resource> rulepath_list = null;
+				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
+				if(authorizationRule!=null) {
+					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFConstants.property_hasRulePath);
+					Resource path_root=rule_path.getPropertyResourceValue(RDFConstants.property_hasPath);
+					rulepath_list = x.parseRulePath(path_root); 
+				}
+				
+				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral()).collect(Collectors.toList());
+				ListIterator<Resource> iterator = rulepath_list.listIterator();
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();
 					Property p = x.getModel().getProperty(step.getURI());
-					Resource node = current_node.getPropertyResourceValue(p);
+					Resource node = current_node.getPropertyResourceValue(p); //TODO Huomaa  URL ei voi olla Literal!
 					if (node != null) {
 						System.out.println("DRUMBEAT from local store:" + node);
 						current_node = node;
+						if(!iterator.hasNext())
+						{
+							if(node.toString().equals(wc))
+							{
+								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+									String sy=y.asResource().getURI();
+									int i=sy.lastIndexOf("/");
+									sy=sy.substring(i+1);
+									return sy;
+								}).collect(Collectors.toCollection(ArrayList::new));
+								ret.addAll(perms); //TODO test is collective
+							}
+						}
+						
 					} else {
-						System.out.println("DRUMBEAT located somewhere else. current node was: " + current_node);
+						System.out.println("DRUMBEAT located somewhere else. current node was: " + current_node+" property was:"+p.toString());
+						{
+						 Iterator i=current_node.listProperties();
+						 while(i.hasNext())
+							 System.out.println("str: "+i.next().toString());
+						}
 
-						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
+						List<Resource> new_path = rulepath_list.subList(rulepath_list.indexOf(step), rulepath_list.size());
 						System.out.println("Path for the rest is:" + new_path);
 						break;
 					}
 				}
-				boolean OK=true;
-				if(OK) {
+				{
 					System.out.println("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
-					System.out.println("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
+					//System.out.println("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
 					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 						String sy=y.asResource().getURI();
 						int i=sy.lastIndexOf("/");
