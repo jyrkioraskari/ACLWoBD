@@ -40,7 +40,10 @@ public class RDFDataStore {
 	public RDFDataStore(URI rootURI,String type) {
 		super();
 		this.rootURI=rootURI;
-		rdf_filename=Constants.RDF_filePath + rootURI.getHost()+"_"+type+"_securitydata.ttl"; 
+		if(rootURI.getHost()==null)
+		   rdf_filename=Constants.RDF_filePath + "localhost_"+type+"_securitydata.ttl"; 
+		else
+			rdf_filename=Constants.RDF_filePath + rootURI.getHost()+"_"+type+"_securitydata.ttl"; 
 		createDemoData();
 	}
 

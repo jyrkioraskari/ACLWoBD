@@ -72,21 +72,20 @@ public class DataServer {
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			rdf_datastore.ifPresent(x -> {
-
 				Resource current_node = x.getModel().getResource(r.toString());
 				List<Resource> rulepath = x.parseRulePath(r.asResource());
 				rulepath = rulepath.stream().filter(rule -> ((Resource) rule).isLiteral()).collect(Collectors.toList());
 				ListIterator<Resource> iterator = rulepath.listIterator();
-
+				System.out.println("rulepaths size: " + rulepath.size());
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();
 					Property p = x.getModel().getProperty(step.getURI());
 					Resource node = current_node.getPropertyResourceValue(p);
 					if (node != null) {
-						log.info("DRUMBEAT from local store:" + node);
+						System.out.println("DRUMBEAT from local store:" + node);
 						current_node = node;
 					} else {
-						log.info("DRUMBEAT located somewhere else. current node was: " + current_node);
+						System.out.println("DRUMBEAT located somewhere else. current node was: " + current_node);
 
 						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
 						System.out.println("Path for the rest is:" + new_path);
@@ -95,15 +94,15 @@ public class DataServer {
 				}
 				boolean OK=true;
 				if(OK) {
-					log.info("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
-					log.info("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
+					System.out.println("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
+					System.out.println("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
 					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 						String sy=y.asResource().getURI();
 						int i=sy.lastIndexOf("/");
 						sy=sy.substring(i+1);
 						return sy;
 					}).collect(Collectors.toCollection(ArrayList::new));
-					ret.addAll(perms);
+					ret.addAll(perms); //TODO test is collective
 				}
 
 
