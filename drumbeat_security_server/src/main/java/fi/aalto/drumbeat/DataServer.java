@@ -3,19 +3,21 @@ package fi.aalto.drumbeat;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.sparql.function.library.e;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 
 public class DataServer {
 	private static final Log log = LogFactory.getLog(DataServer.class);
@@ -57,8 +59,8 @@ public class DataServer {
 
 	}
 
-	public List<String> connect(String wc, String request_uri) {
-		List<String> ret=new ArrayList<>();
+	public Set<String> connect(String wc, String request_uri) {
+		Set<String> ret=new HashSet<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + wc);
 		System.out.println("DRUMBEAT req uri oli:" + request_uri);
@@ -120,18 +122,7 @@ public class DataServer {
 						break;
 					}
 				}
-				{
-					System.out.println("DRUMBEAT permissions: " + x.getPermissions(r.toString()));
-					//System.out.println("DRUMBEAT rule path is: " + x.parseRulePath(r.asResource()));
-					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
-						String sy=y.asResource().getURI();
-						int i=sy.lastIndexOf("/");
-						sy=sy.substring(i+1);
-						return sy;
-					}).collect(Collectors.toCollection(ArrayList::new));
-					ret.addAll(perms); //TODO test is collective
-				}
-
+				
 
 			});
 
