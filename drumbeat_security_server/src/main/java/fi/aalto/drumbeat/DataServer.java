@@ -109,7 +109,7 @@ public class DataServer {
 								ret.addAll(perms); //TODO test is collective
 							}
 							else
-								System.out.println("Not Equals");
+								System.out.println("Not Equals: "+node.toString());
 						}
 						
 					} else {
