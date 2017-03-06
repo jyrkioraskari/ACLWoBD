@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -163,6 +164,7 @@ public class RDFDataStore {
 
 
 	public LinkedList<Resource> parseRulePath(Resource node) {
+		System.out.println("parse rulepath for:"+node.toString());
 		LinkedList<Resource> ret = new LinkedList<Resource>();
 		
 		
@@ -172,6 +174,15 @@ public class RDFDataStore {
 			if(current.hasProperty(RDF.first))
 					ret.add(current.getPropertyResourceValue(RDF.first));
 			current=current.getPropertyResourceValue(RDF.rest);
+		}
+		
+		if(ret.size()==0 ) {
+			Resource rr=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
+			Iterator i=rr.listProperties();
+			while(i.hasNext())
+			{
+				System.out.println("property was:"+i.next().toString());
+			}
 		}
 		
 		return ret;

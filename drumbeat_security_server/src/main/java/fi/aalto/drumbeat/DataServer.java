@@ -74,6 +74,7 @@ public class DataServer {
 			rdf_datastore.ifPresent(x -> {
 				Resource current_node = x.getModel().getResource(r.toString());
 				List<Resource> rulepath = x.parseRulePath(r.asResource());
+				
 				rulepath = rulepath.stream().filter(rule -> ((Resource) rule).isLiteral()).collect(Collectors.toList());
 				ListIterator<Resource> iterator = rulepath.listIterator();
 				System.out.println("rulepaths size: " + rulepath.size());
