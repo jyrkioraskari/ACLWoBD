@@ -125,8 +125,11 @@ public class DataServer {
 						{
 						 Iterator i=current_node.listProperties();
 						 while(i.hasNext())
-							 System.out.println("str: "+i.next().toString());
-						 	 log.info("str: "+i.next().toString());
+						 {
+							 String ir=i.next().toString();
+							 System.out.println("str: "+ir);
+						 	 log.info("str: "+ir);
+						 }
 						}
 
 						List<Resource> new_path = rulepath_list.subList(rulepath_list.indexOf(step), rulepath_list.size());
