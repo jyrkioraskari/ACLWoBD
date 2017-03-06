@@ -101,7 +101,7 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 											return true;
 										}
 									} else
-										log.info("DRUMBEAT WEBID cert verified RETURNED principal null??!");
+										log.info("DRUMBEAT WEBID cert verified RETURNED principal null??! "+alt.toString());
 								}
 							}
 						} catch (CertificateParsingException e) {

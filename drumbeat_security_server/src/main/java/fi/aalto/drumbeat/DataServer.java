@@ -59,8 +59,8 @@ public class DataServer {
 
 	}
 
-	public Set<String> connect(String wc, String request_uri) {
-		Set<String> ret=new HashSet<String>();
+	public List<String> connect(String wc, String request_uri) {
+		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + wc);
 		System.out.println("DRUMBEAT req uri oli:" + request_uri);
@@ -123,10 +123,19 @@ public class DataServer {
 					}
 				}
 				
-
+				{
+					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+						String sy=y.asResource().getURI();
+						int i=sy.lastIndexOf("/");
+						sy=sy.substring(i+1);
+						return sy;
+					}).collect(Collectors.toCollection(ArrayList::new));
+					ret.addAll(perms); //TODO test is collective
+				}
 			});
 
 		}
+		
 		return ret;
 	}
 
