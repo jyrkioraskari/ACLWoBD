@@ -24,7 +24,6 @@ abstract class ProtectedPath extends AbstractData {
 
 		this.project = new Project(new URI(self.getURI()), name, model);
 		self.addProperty(hasProject, this.project.self);
-		System.out.println("add contractor");
 		Resource contractor= this.model.createResource("http://fabricator.local.org/");
 		this.project.self.addProperty(RDFConstants.property_hasContractor, contractor);
 		Resource jyrkio= this.model.createResource("https://jyrkio2.databox.me/profile/card#me");

@@ -32,11 +32,18 @@ import fi.aalto.drumbeat.rest.Organization;
 
 public class OrganizationRESTAPI_tests extends JerseyTest {
 
+	private Model parseInput(String msg) {
+		final Model json_input_model = ModelFactory.createDefaultModel();
+		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
+		return json_input_model;
+	}
+
 	@Override
 	protected Application configure() {
 		return new ResourceConfig(Organization.class);
 	}
 
+	
 	@Test
 	public void test_getHello() {
 		Response response = target("/organization/hello").request().get();
@@ -81,6 +88,8 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 
 	}
 
+	
+	
 	private String call_registerWebID() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
@@ -93,7 +102,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, RDFConstants.Query);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
+			query.addLiteral(RDFConstants.property_hasWebID, "https:/joku#me");
 			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
 
 			StringWriter writer = new StringWriter();
@@ -108,15 +117,11 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			return response_string;
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		return "";
 	}
 
-	private Model parseInput(String msg) {
-		final Model json_input_model = ModelFactory.createDefaultModel();
-		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
-		return json_input_model;
-	}
 
 	private String registerWebID() {
 		String reply = call_registerWebID();
@@ -128,6 +133,8 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		RDFNode webid_url = response.getProperty(RDFConstants.property_hasWebID).getObject();
 		return webid_url.toString();
 	}
+	
+	
 
 	@Test
 	public void test_registerWebID() {
@@ -172,8 +179,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			Resource rest_response = null;
 			if (iter.hasNext())
 				rest_response = iter.next();
-			String name=rest_response.getProperty(RDFConstants.property_hasName).getObject().asLiteral().getLexicalForm();
-			assertNotNull(name);
 			String pk=rest_response.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
 			assertNotNull(pk);
 			
@@ -184,6 +189,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		}
 
 	}
+	/*
 
 	
 	@Test
@@ -247,6 +253,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-	}
+	}*/
 
 }

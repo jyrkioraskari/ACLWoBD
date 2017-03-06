@@ -109,6 +109,7 @@ public class Organization extends RESTfulAPI {
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
 		RDFNode path = query.getProperty(RDFConstants.property_hasRulePath).getObject();
+		
 		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
 
 		Resource response = output_model.createResource();
@@ -145,14 +146,12 @@ public class Organization extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		
 		RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		RDFNode name=wp.getProperty(RDFConstants.property_hasName).getObject();
 		
 		
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(RDFConstants.property_hasPublicKey, public_key);
-		response.addLiteral(RDFConstants.property_hasName, name);
+		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 
@@ -162,7 +161,7 @@ public class Organization extends RESTfulAPI {
 	@Path("/registerWebID")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response registerNewWebID(@Context UriInfo uriInfo, String msg) {
+	public Response registerWebID(@Context UriInfo uriInfo, String msg) {
 		setBaseURI(uriInfo);
 
 		if (!this.organization.isPresent())
@@ -176,9 +175,10 @@ public class Organization extends RESTfulAPI {
 		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode name = query.getProperty(RDFConstants.property_hasName).getObject();
+		RDFNode webid = query.getProperty(RDFConstants.property_hasWebID).getObject();
+		//TODO Exponent+modulus
 		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		Resource wc = organization.get().registerWebID(name.asLiteral().getLexicalForm(),
+		Resource wc = organization.get().registerExistingWebID(webid.toString(),
 				public_key.asLiteral().getLexicalForm());
 
 		Resource response = output_model.createResource();

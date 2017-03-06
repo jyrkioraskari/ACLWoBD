@@ -93,28 +93,18 @@ public class OrganizationManager {
 	public Resource getWebIDProfile(String webid_uri) {
 		return datamodel.getResource(webid_uri.toString());
 	}
-
-	public Resource registerWebID(String name, String public_key) {
-		String id = UUID.randomUUID().toString();
-		URI webid_uri;
-		try {
-			String root_path=rootURI.getPath();
-			root_path=root_path.substring(0, root_path.substring(1).indexOf("/")+1);  //TODO lis‰‰ testej‰
-			webid_uri = new URIBuilder(rootURI).setScheme("https").setPath(root_path+"/profile/" + id).build();
-			
-			rdf_datastore.saveRDFData();
-
-			Resource widr=datamodel.getResource(webid_uri.toString());
-			root.addProperty(RDFConstants.property_knowsPerson, widr);
-			widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
-
-			return widr;
-
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		return null;
+	
+	
+	
+	public Resource registerExistingWebID(String webidURI, String public_key) {
+		rdf_datastore.saveRDFData();
+		Resource widr=datamodel.getResource(webidURI);
+		root.addProperty(RDFConstants.property_knowsPerson, widr);
+		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+		return widr;
 	}
+
+
 
 	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
