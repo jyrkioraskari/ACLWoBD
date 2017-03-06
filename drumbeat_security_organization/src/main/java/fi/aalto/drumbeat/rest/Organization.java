@@ -154,7 +154,7 @@ public class Organization extends RESTfulAPI {
 		RDFNode webid = query.getProperty(RDFConstants.property_hasWebID).getObject();
 		//TODO Exponent+modulus
 		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		Resource wc = organization.get().registerExistingWebID(webid.toString(),
+		Resource wc = organization.get().registerWebID(webid.toString(),
 				public_key.asLiteral().getLexicalForm());
 
 		Resource response = output_model.createResource();

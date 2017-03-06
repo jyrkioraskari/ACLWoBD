@@ -12,7 +12,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
-import org.junit.Test;
 
 import fi.aalto.drumbeat.Constants;
 import fi.aalto.drumbeat.RDFConstants;
@@ -44,10 +43,10 @@ public class JenaTests extends TestCase {
 	}
 
 	public void jenaReadWrite(String msg) {
-		
+
 		Model input_model = parseInput(msg);
 		Model output_model = ModelFactory.createDefaultModel();
-		input_model.write(System.out,"TTL");
+		input_model.write(System.out, "TTL");
 
 		ResIterator iter = input_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
 		Resource query = null;
@@ -56,8 +55,8 @@ public class JenaTests extends TestCase {
 		else
 			return;
 		System.out.println(query.hasProperty(RDFConstants.property_hasTimeStamp));
-		
-		RDFNode ts=query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+
+		RDFNode ts = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 		System.out.println(ts);
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Response);
@@ -69,26 +68,26 @@ public class JenaTests extends TestCase {
 	public void test_checkUser_parameters() {
 		Model model = ModelFactory.createDefaultModel();
 		String webid = "http://user.com/user#me";
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
-			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
-			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
-			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
+		RDFNode[] rulepath_list = new RDFNode[1];
+		rulepath_list[0] = RDFConstants.property_knowsPerson;
+		RDFList rulepath = model.createList(rulepath_list);
+		Resource query = model.createResource();
+		query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
-			StringWriter writer = new StringWriter();
-			model.write(writer, "JSON-LD");
-			writer.flush();
+		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+		query.addProperty(RDF.type, RDFConstants.Query);
+		query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+		query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
 
-			jenaReadWrite(writer.toString());
-		
+		StringWriter writer = new StringWriter();
+		model.write(writer, "JSON-LD");
+		writer.flush();
+
+		jenaReadWrite(writer.toString());
 
 	}
-	
+
 	protected Model parseInput(String msg) {
 		final Model json_input_model = ModelFactory.createDefaultModel();
 		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");

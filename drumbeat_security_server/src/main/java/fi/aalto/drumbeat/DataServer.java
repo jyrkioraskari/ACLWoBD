@@ -1,5 +1,7 @@
 package fi.aalto.drumbeat;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -10,11 +12,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 
 public class DataServer {
@@ -57,14 +69,14 @@ public class DataServer {
 
 	}
 
-	public List<String> connect(String wc, String request_uri) {
+	public List<String> connect(String webid, String request_uri) {
 		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
-		System.out.println("DRUMBEAT WebID oli:" + wc);
+		System.out.println("DRUMBEAT WebID oli:" + webid);
 		System.out.println("DRUMBEAT req uri oli:" + request_uri);
 		System.out.println("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 		
-		log.info("DRUMBEAT WebID oli:" + wc);
+		log.info("DRUMBEAT WebID oli:" + webid);
 		log.info("DRUMBEAT req uri oli:" + request_uri);
 		log.info("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 
@@ -98,7 +110,7 @@ public class DataServer {
 						current_node = node;
 						if(!iterator.hasNext())
 						{
-							if(node.toString().equals(wc))
+							if(node.toString().equals(webid))
 							{
 								System.out.println("Equals");
 								log.info("Equals");
@@ -108,7 +120,7 @@ public class DataServer {
 									sy=sy.substring(i+1);
 									return sy;
 								}).collect(Collectors.toCollection(ArrayList::new));
-								ret.addAll(perms); //TODO test is collective
+								ret.addAll(perms); 
 							}
 							else
 							{
@@ -133,6 +145,19 @@ public class DataServer {
 						List<Resource> new_path = rulepath_list.subList(rulepath_list.indexOf(step), rulepath_list.size());
 						System.out.println("Path for the rest is:" + new_path);
 						log.info("Path for the rest is:" + new_path);
+						
+						
+						if(checkPath_HTTP(current_node.getURI(),webid,new_path)) {
+							System.out.println("remote "+current_node.getURI()+" says OK");
+							log.info("remote "+current_node.getURI()+" says OK");
+							List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+								String sy=y.asResource().getURI();
+								int i=sy.lastIndexOf("/");
+								sy=sy.substring(i+1);
+								return sy;
+							}).collect(Collectors.toCollection(ArrayList::new));
+							ret.addAll(perms); 
+						}
 						break;
 					}
 				}
@@ -144,57 +169,56 @@ public class DataServer {
 		
 		return ret;
 	}
-	/*
-	
-	private String server_connect(String alt, String requestURL) {
-		log.info("DRUMBEAT .... server connect alt: " + alt);
-		log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
-		JSONObject obj = new JSONObject();
-		obj.put("alt_name", alt);
-		obj.put("requestURL", requestURL);
+	public boolean checkPath_HTTP(String pathURL,String webid,List<Resource> new_path ) {
+		final Model query_model = ModelFactory.createDefaultModel();
+
 		try {
-			String httpsURL = "http://localhost:8080/security/server/query";
-			URL myurl = new URL(httpsURL);
-			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
-			conn.setDoOutput(true);
-			conn.setInstanceFollowRedirects(false);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-			conn.setRequestProperty("charset", "utf-8");
-			conn.setRequestProperty("Content-Length", Integer.toString(obj.toJSONString().length()));
-			conn.setUseCaches(false);
-			try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
-				wr.write(obj.toJSONString().getBytes());
+			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
+			for(int i=0;i<new_path.size();i++)
+			{
+			   rulepath_list[i] = new_path.get(i);
 			}
-			InputStream ins = conn.getInputStream();
-			InputStreamReader isr = new InputStreamReader(ins);
-			BufferedReader in = new BufferedReader(isr);
+			RDFList rulepath = query_model.createList(rulepath_list);
+			Resource query = query_model.createResource();
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
-			String inputLine;
+			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, query_model.getResource(webid));
 
-			String response="";
-			while ((inputLine = in.readLine()) != null) {
-				response+=inputLine;
-			}
-			in.close();
+			StringWriter writer = new StringWriter();
+			query_model.write(writer, "JSON-LD");
+			writer.flush();
+			Client client = Client.create();
+			WebResource webResource = client
+					.resource(pathURL);
+			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
+					writer.toString());
 
-			JSONParser parser = new JSONParser();
-			try {
-				JSONObject response_obj = (JSONObject)parser.parse(response);
-				String status=(String) response_obj.get("status");
-				String roles=(String) response_obj.get("roles");
-				return roles;
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			String response_txt = response.getEntity(String.class);
+			response.close();
 
-			log.info("DRUMBEAT .... server connect passed");
-		} catch (IOException e) {
-
+			
+			
+			final Model response_model = ModelFactory.createDefaultModel();
+			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
+			
+			
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+			Resource result = null;
+			if (iter.hasNext())
+				result = iter.next();
+			
+			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ""; // No roles
-	}*/
+		return false;
+	}
+	
 
 
 	public URI canonizateURI(String uri_txt) {

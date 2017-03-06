@@ -97,7 +97,7 @@ public class OrganizationManager {
 	
 	
 	
-	public Resource registerExistingWebID(String webidURI, String public_key) {
+	public Resource registerWebID(String webidURI, String public_key) {
 		rdf_datastore.saveRDFData();
 		Resource widr=datamodel.getResource(webidURI);
 		root.addProperty(RDFConstants.property_knowsPerson, widr);

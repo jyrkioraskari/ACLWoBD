@@ -1,13 +1,10 @@
 package fi.ni;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -17,7 +14,6 @@ import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -234,38 +230,7 @@ public class RESTAPIIntegrationTests {
 			e.printStackTrace();
 		}
 	}
-	//TODO chech the URL of the  URL in the registration
-	/*
-	@Test
-	public void test_webIDProfileTTLTest() {
-		try {
-			//TODO SSL
-			URI webid_url = new URIBuilder(registerWebID()).setScheme("http").build();
-			System.out.println("TTL integration test.  URL was: "+webid_url);
-			
-			Client client = Client.create();
-			WebResource webResource = client
-					.resource(webid_url.toString());
-			
-			ClientResponse response = webResource.accept("text/turtle").get(ClientResponse.class);
-			System.out.println(""+response);
-			if (response.getStatus() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-			}
-		    response.close();
-			String result_string = response.getEntity(String.class);
-			
-			Model input_model = ModelFactory.createDefaultModel();
-			input_model.read(new ByteArrayInputStream(result_string.getBytes()), null, "TTL");
-			Resource rwebid= input_model.getResource(webid_url.toString());
-			String pk=rwebid.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
-			
-			assertNotNull(pk);
-
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-	}*/
+	
 
 
 }

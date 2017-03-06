@@ -32,7 +32,7 @@ public class OrganizationManagerTests extends TestCase {
 	
 
 	public void testSimpleWCRegistration() {
-		Resource wc = organization.get().registerExistingWebID("http://person#i","1234");
+		Resource wc = organization.get().registerWebID("http://person#i","1234");
 		//TODO hae PK
 		assertNotNull(wc);
 		
@@ -42,7 +42,7 @@ public class OrganizationManagerTests extends TestCase {
 	@Test
 	public void testCreateAndTestPath() {
 		Model model = ModelFactory.createDefaultModel();
-		Resource wc = organization.get().registerExistingWebID("http://person#i","1234");
+		Resource wc = organization.get().registerWebID("http://person#i","1234");
 		
 		RDFNode[] rulepath_list = new RDFNode[1];
 		rulepath_list[0] = RDFConstants.property_knowsPerson;
