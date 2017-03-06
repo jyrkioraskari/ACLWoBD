@@ -94,12 +94,14 @@ public class DataServer {
 					Resource node = current_node.getPropertyResourceValue(p); //TODO Huomaa  URL ei voi olla Literal!
 					if (node != null) {
 						System.out.println("DRUMBEAT from local store:" + node);
+						log.info("DRUMBEAT from local store:" + node);
 						current_node = node;
 						if(!iterator.hasNext())
 						{
 							if(node.toString().equals(wc))
 							{
 								System.out.println("Equals");
+								log.info("Equals");
 								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
 									int i=sy.lastIndexOf("/");
@@ -109,32 +111,29 @@ public class DataServer {
 								ret.addAll(perms); //TODO test is collective
 							}
 							else
+							{
 								System.out.println("Not Equals: "+node.toString());
+								log.info("Not Equals: "+node.toString());
+							}
 						}
 						
 					} else {
 						System.out.println("DRUMBEAT located somewhere else. current node was: " + current_node+" property was:"+p.toString());
+						log.info("DRUMBEAT located somewhere else. current node was: " + current_node+" property was:"+p.toString());
 						{
 						 Iterator i=current_node.listProperties();
 						 while(i.hasNext())
 							 System.out.println("str: "+i.next().toString());
+						 	 log.info("str: "+i.next().toString());
 						}
 
 						List<Resource> new_path = rulepath_list.subList(rulepath_list.indexOf(step), rulepath_list.size());
 						System.out.println("Path for the rest is:" + new_path);
+						log.info("Path for the rest is:" + new_path);
 						break;
 					}
 				}
-				
-				{
-					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
-						String sy=y.asResource().getURI();
-						int i=sy.lastIndexOf("/");
-						sy=sy.substring(i+1);
-						return sy;
-					}).collect(Collectors.toCollection(ArrayList::new));
-					ret.addAll(perms); //TODO test is collective
-				}
+	
 			});
 
 		}
