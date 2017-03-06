@@ -38,30 +38,6 @@ public class Organization extends RESTfulAPI {
 		return "Hello OK!";
 	}
 	
-	
-	@Path("/profile/{Id}")
-	@GET
-	@Produces("text/turtle")
-	public Response getStandardWebIDProfile(@Context UriInfo uriInfo, @PathParam("Id") String id) {
-		setBaseURI(uriInfo);
-		if (!this.organization.isPresent())
-			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
-					.build();
-		String root_path=getBase_url().getPath();
-		root_path=root_path.substring(0, root_path.substring(1).indexOf("/")+1);  //TODO lis‰‰ testej‰
-		Model output_model = ModelFactory.createDefaultModel();
-		try {
-			URI webid_uri = new URIBuilder(getBase_url()).setScheme("https").setPath(root_path+"/profile/" + id).build();
-			 output_model = organization.get().getWebID(webid_uri.toString());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-
-		StringWriter writer = new StringWriter();
-		output_model.write(writer, "TTL");
-		writer.flush();
-		return Response.status(200).entity(writer.toString()).build();
-	}
 
 	@POST
 	@Path("/hello")

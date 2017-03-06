@@ -43,6 +43,7 @@ public class OrganizationManager {
 
 	}
 	
+	/*
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
 		// @formatter:off
@@ -58,7 +59,7 @@ public class OrganizationManager {
 		Query query=ps.asQuery();
 		Model result = QueryExecutionFactory.create(query, datamodel).execConstruct();
 		return result;
-	}
+	}*/
 
 	private RDFDataStore rdf_datastore = null;
 

@@ -3,12 +3,10 @@ package fi.aalto.drumbeat;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.http.client.utils.URIBuilder;
@@ -146,6 +144,58 @@ public class DataServer {
 		
 		return ret;
 	}
+	/*
+	
+	private String server_connect(String alt, String requestURL) {
+		log.info("DRUMBEAT .... server connect alt: " + alt);
+		log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
+		JSONObject obj = new JSONObject();
+		obj.put("alt_name", alt);
+		obj.put("requestURL", requestURL);
+		try {
+			String httpsURL = "http://localhost:8080/security/server/query";
+			URL myurl = new URL(httpsURL);
+			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
+			conn.setDoOutput(true);
+			conn.setInstanceFollowRedirects(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
+			conn.setRequestProperty("charset", "utf-8");
+			conn.setRequestProperty("Content-Length", Integer.toString(obj.toJSONString().length()));
+			conn.setUseCaches(false);
+			try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+				wr.write(obj.toJSONString().getBytes());
+			}
+			InputStream ins = conn.getInputStream();
+			InputStreamReader isr = new InputStreamReader(ins);
+			BufferedReader in = new BufferedReader(isr);
+
+			String inputLine;
+
+			String response="";
+			while ((inputLine = in.readLine()) != null) {
+				response+=inputLine;
+			}
+			in.close();
+
+			JSONParser parser = new JSONParser();
+			try {
+				JSONObject response_obj = (JSONObject)parser.parse(response);
+				String status=(String) response_obj.get("status");
+				String roles=(String) response_obj.get("roles");
+				return roles;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			log.info("DRUMBEAT .... server connect passed");
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		return ""; // No roles
+	}*/
+
 
 	public URI canonizateURI(String uri_txt) {
 		URI uri;

@@ -56,12 +56,5 @@ public class OrganizationManagerTests extends TestCase {
 
 	}
 	
-	@Test
-	public void testCreateAndTestWebID() {
-		Model model = ModelFactory.createDefaultModel();
-		Resource wc = organization.get().registerExistingWebID("http://person#i","1234");
-		
-		Model response=organization.get().getWebID(wc.toString());
-		response.write(System.out,"TTL");
-	}
+	
 }

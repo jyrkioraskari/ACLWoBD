@@ -189,7 +189,7 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		}
 
 	}
-	/*
+	
 
 	
 	@Test
@@ -231,28 +231,6 @@ public class OrganizationRESTAPI_tests extends JerseyTest {
 		}
 	}
 
-	@Test
-	public void test_webIDProfileTTLTest() {
-		try {
-			URI webid_url = new URI(registerWebID());
-			String path = webid_url.getPath();
-			String webid = URLEncoder.encode(webid_url.toString());
-			Response response = target(path).request().get();
-			String result_string = response.readEntity(String.class);
-			response.close();
-			
-			
-			Model input_model = ModelFactory.createDefaultModel();
-			input_model.read(new ByteArrayInputStream(result_string.getBytes()), null, "TTL");
-			Resource rwebid= input_model.getResource(webid_url.toString());
-			String pk=rwebid.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
-			
-			assertNotNull(pk);
-
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-	}*/
+	
 
 }
