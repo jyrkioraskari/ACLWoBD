@@ -75,7 +75,9 @@ public class DataServer {
 		
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
-			rdf_datastore.ifPresent(x -> {
+			//rdf_datastore.ifPresent(x -> 
+			RDFDataStore x=rdf_datastore.get();
+			{
 				Resource current_node = x.getModel().getResource(r.toString());
 				
 				List<Resource> rulepath_list = null;
@@ -134,7 +136,8 @@ public class DataServer {
 					}
 				}
 	
-			});
+			//});
+			}
 
 		}
 		
