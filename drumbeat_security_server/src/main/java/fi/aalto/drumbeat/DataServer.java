@@ -99,6 +99,7 @@ public class DataServer {
 						{
 							if(node.toString().equals(wc))
 							{
+								System.out.println("Equals");
 								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
 									int i=sy.lastIndexOf("/");
@@ -107,6 +108,8 @@ public class DataServer {
 								}).collect(Collectors.toCollection(ArrayList::new));
 								ret.addAll(perms); //TODO test is collective
 							}
+							else
+								System.out.println("Not Equals");
 						}
 						
 					} else {
@@ -123,7 +126,7 @@ public class DataServer {
 					}
 				}
 				
-				/*{
+				{
 					List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 						String sy=y.asResource().getURI();
 						int i=sy.lastIndexOf("/");
@@ -131,7 +134,7 @@ public class DataServer {
 						return sy;
 					}).collect(Collectors.toCollection(ArrayList::new));
 					ret.addAll(perms); //TODO test is collective
-				}*/
+				}
 			});
 
 		}
