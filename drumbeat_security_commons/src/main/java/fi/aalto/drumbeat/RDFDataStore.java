@@ -98,12 +98,12 @@ public class RDFDataStore {
 
 	private void createDemoData() {
 		try {
-			Collection c_smc= new Collection(new URI("https://architect.local.org/security/"), "turva", model);
+			Collection c_smc= new Collection(new URI("https://architect.local.org/"), "turva", model);
 			c_smc.addProject("fix1");
 			c_smc.addRule("contractors_allowed_read");
 			
 			
-			Collection c= new Collection(new URI("https://architect.local.org/security/"), "data", model);
+			Collection c= new Collection(new URI("https://architect.local.org/"), "data", model);
 			c.addProject("fix2");
 			c.addRule("maincontractor_allowed_read");
 			

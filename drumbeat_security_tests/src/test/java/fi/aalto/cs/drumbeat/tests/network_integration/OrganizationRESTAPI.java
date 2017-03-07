@@ -53,10 +53,11 @@ public class OrganizationRESTAPI {
 
 			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			Response response = client.target("https://architect.local.org:8443/security/organization/hello").request("text/plain").get();
+			Response response = client.target("https://architect.local.org:8443/organization/hello").request("text/plain").get();
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
+			assertEquals(200, response.getStatus());
 			String output = response.readEntity(String.class);
 			assertEquals("Hello OK!", output);
 		} catch (Exception e) {
@@ -86,29 +87,7 @@ public class OrganizationRESTAPI {
 		return "";
 	}
 	
-	@Test
-	public void testHelloLocalhost() {
-		try {
-
-			Client client = Client.create();
-
-			WebResource webResource = client
-					.resource("http://localhost:8080/security/organization/hello");
-			System.out.println("QUERY (POST Hello ) " + createEmptyQueryString());
-			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
-					createEmptyQueryString());
-			System.out.println("RESPONSE localhost (POST Hello ) from Server .... \n");
-			String output = response.getEntity(String.class);
-			System.out.println(output);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-
-		}
-
-	}
-
+	
 
 	@Test
 	public void testHelloPOST_HTTP_architect_local_org() {
@@ -117,7 +96,7 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/security/organization/hello");
+					.resource("http://architect.local.org:8080/organization/hello");
 			System.out.println("QUERY (POST Hello ) " + createEmptyQueryString());
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					createEmptyQueryString());
@@ -184,10 +163,10 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/security/rest/organization/registerWebID");
+					.resource("http://architect.local.org:8080/rest/organization/registerWebID");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
-
+			assertEquals(200, response.getStatus());
 			String output = response.getEntity(String.class);
 			response.close();
 			return output;
@@ -224,10 +203,11 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/security/rest/organization/checkPath");
+					.resource("http://architect.local.org:8080/organization/checkPath");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
 
+			assertEquals(200, response.getStatus());
 			String output = response.getEntity(String.class);
 			System.out.println("RESPONSE (Check RulePath) " + output);
 			response.close();
@@ -263,7 +243,9 @@ public class OrganizationRESTAPI {
 
 			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			Response response = client.target("https://architect.local.org:8443/security/rest/organization/checkPath").request().post(Entity.entity(writer.toString(), "application/ld+json"));
+			Response response = client.target("https://architect.local.org:8443/organization/checkPath").request().post(Entity.entity(writer.toString(), "application/ld+json"));
+			
+			assertEquals(200, response.getStatus());
 			String response_string = response.readEntity(String.class);
 
 			System.out.println("HTTPS RESPONSE (Check RulePath) " + response_string);

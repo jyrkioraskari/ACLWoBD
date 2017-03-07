@@ -30,6 +30,40 @@ import fi.aalto.drumbeat.security.OrganizationManager;
 
 @Path("/organization")
 public class Organization extends RESTfulAPI {
+	
+	//TODO mitä tapahtuu, jos haetaan GETillä?
+	
+	@POST
+	@Consumes("application/ld+json")
+	@Produces("application/ld+json")
+	public Response checkPath(@Context UriInfo uriInfo, String msg) {
+		setBaseURI(uriInfo);
+		if (!this.organization.isPresent())
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
+					.build();
+		Model input_model = parseInput(msg);
+		Resource query = getQuery(input_model);
+		if (query == null)
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
+
+		Model output_model = ModelFactory.createDefaultModel();
+
+		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
+		RDFNode path = query.getProperty(RDFConstants.property_hasRulePath).getObject();
+		
+		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
+
+		Resource response = output_model.createResource();
+		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
+
+		Literal result_code = output_model.createTypedLiteral(new Boolean(result));
+		response.addLiteral(RDFConstants.property_status, result_code);
+		return Response.status(200).entity(writeModel(output_model)).build();
+
+	}
+
 
 	@Path("/hello")
 	@GET
@@ -66,37 +100,6 @@ public class Organization extends RESTfulAPI {
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 
-	@POST
-	@Path("/checkPath")
-	@Consumes("application/ld+json")
-	@Produces("application/ld+json")
-	public Response checkPath(@Context UriInfo uriInfo, String msg) {
-		setBaseURI(uriInfo);
-		if (!this.organization.isPresent())
-			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
-					.build();
-		Model input_model = parseInput(msg);
-		Resource query = getQuery(input_model);
-		if (query == null)
-			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
-
-		Model output_model = ModelFactory.createDefaultModel();
-
-		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
-		RDFNode path = query.getProperty(RDFConstants.property_hasRulePath).getObject();
-		
-		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
-
-		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Response);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
-
-		Literal result_code = output_model.createTypedLiteral(new Boolean(result));
-		response.addLiteral(RDFConstants.property_status, result_code);
-		return Response.status(200).entity(writeModel(output_model)).build();
-
-	}
 
 	@POST
 	@Path("/getWebIDProfile")
