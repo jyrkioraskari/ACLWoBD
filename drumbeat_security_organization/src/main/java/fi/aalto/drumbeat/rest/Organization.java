@@ -1,8 +1,5 @@
 package fi.aalto.drumbeat.rest;
 
-import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,11 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -34,9 +29,10 @@ public class Organization extends RESTfulAPI {
 	//TODO mitä tapahtuu, jos haetaan GETillä?
 	
 	@POST
+	@Path("/{container}{urlend:.*}")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
-	public Response checkPath(@Context UriInfo uriInfo, String msg) {
+	public Response checkPath(@Context UriInfo uriInfo, String msg,@PathParam("container") int container, @PathParam("urlend") String urlend) {
 		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
