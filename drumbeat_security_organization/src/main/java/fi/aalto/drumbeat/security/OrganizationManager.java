@@ -40,7 +40,7 @@ public class OrganizationManager {
 		datamodel = rdf_datastore.getModel();
 		// rdf_datastore.readRDFData();
 		root = datamodel.getResource(rootURI.toString());
-
+		registerWebID("https://jyrkio2.databox.me/profile/card#me", "1234");
 	}
 	
 	/*
