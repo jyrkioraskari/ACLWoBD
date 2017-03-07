@@ -1,6 +1,4 @@
-package fi.ni.network_integration;
-
-import static org.junit.Assert.*;
+package fi.aalto.cs.drumbeat.tests.network_integration;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,7 +10,7 @@ import java.net.URLConnection;
 
 import org.junit.Test;
 
-public class WebIDConnectionTests {
+public class WebIDConnection {
 
 	@Test
 	public void test() {

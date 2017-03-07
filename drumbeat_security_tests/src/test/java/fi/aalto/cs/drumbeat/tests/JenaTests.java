@@ -1,4 +1,4 @@
-package fi.ni;
+package fi.aalto.cs.drumbeat.tests;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;

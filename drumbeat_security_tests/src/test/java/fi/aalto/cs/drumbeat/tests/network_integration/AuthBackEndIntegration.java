@@ -1,4 +1,4 @@
-package fi.ni.network_integration;
+package fi.aalto.cs.drumbeat.tests.network_integration;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,7 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-public class BackEndIntegrationTests {
+public class AuthBackEndIntegration {
 
 	@Test
 	public void testconnection() {

@@ -1,4 +1,4 @@
-package fi.ni.network_integration;
+package fi.aalto.cs.drumbeat.tests.network_integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -29,12 +29,12 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import fi.aalto.cs.drumbeat.tests.test_categories.IntegrationTest;
 import fi.aalto.drumbeat.RDFConstants;
-import fi.ni.test_categories.IntegrationTest;
 
 @Category(IntegrationTest.class)
 
-public class RESTAPIIntegrationTests {
+public class OrganizationRESTAPI {
 
 	public static javax.ws.rs.client.Client IgnoreSSLClient() throws Exception {
 	    SSLContext sslcontext = SSLContext.getInstance("TLS");

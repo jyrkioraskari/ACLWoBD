@@ -1,4 +1,4 @@
-package fi.ni;
+package fi.aalto.cs.drumbeat.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
