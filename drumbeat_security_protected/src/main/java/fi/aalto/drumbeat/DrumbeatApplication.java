@@ -7,6 +7,7 @@ public class DrumbeatApplication extends ResourceConfig {
 		packages("fi.aalto.drumbeat.rest");
 		property("com.sun.jersey.config.property.JSPTemplatesBasePath", "/WEB-INF/jsp");
 		property("com.sun.jersey.config.property.WebPageContentRegex", "/(resources|(WEB-INF/jsp))/.*");
+		
 	}
 
 }
