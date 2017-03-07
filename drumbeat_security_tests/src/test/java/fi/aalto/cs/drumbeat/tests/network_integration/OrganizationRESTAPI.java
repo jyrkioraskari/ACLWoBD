@@ -203,7 +203,7 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/organization/checkPath");
+					.resource("http://architect.local.org:8080/organization/");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
 
@@ -243,7 +243,7 @@ public class OrganizationRESTAPI {
 
 			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			Response response = client.target("https://architect.local.org:8443/organization/checkPath").request().post(Entity.entity(writer.toString(), "application/ld+json"));
+			Response response = client.target("https://architect.local.org:8443/organization/").request().post(Entity.entity(writer.toString(), "application/ld+json"));
 			
 			assertEquals(200, response.getStatus());
 			String response_string = response.readEntity(String.class);
