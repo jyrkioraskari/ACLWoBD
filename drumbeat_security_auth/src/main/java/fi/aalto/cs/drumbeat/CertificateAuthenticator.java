@@ -127,7 +127,9 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 		obj.put("alt_name", alt);
 		obj.put("requestURL", requestURL);
 		try {
-			String httpsURL = "http://localhost:8080/security/server/query";
+			// DO NOT CHANGE THIS
+			// HTTPS is not a local connection!
+			final String httpsURL = "http://localhost:8080/backend/server/query";
 			URL myurl = new URL(httpsURL);
 			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
 			conn.setDoOutput(true);

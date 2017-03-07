@@ -13,7 +13,7 @@ import javax.ws.rs.core.UriInfo;
 
 import fi.aalto.drumbeat.DataServer;
 
-@Path("/server")
+@Path("/security")
 public class SecurityServer extends RESTfulAPI {
 
 	@Path("/hello")
@@ -22,6 +22,8 @@ public class SecurityServer extends RESTfulAPI {
 		
 		return "Hello OK!";
 	}
+	
+	//TODD Is a local tcp connection any risk? Can HTTPS help locally?
 	
 	@POST
 	@Path("/query")
