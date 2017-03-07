@@ -29,7 +29,7 @@ public class Organization extends RESTfulAPI {
 	//TODO mitä tapahtuu, jos haetaan GETillä?
 	
 	@POST
-	@Path("/{container}{urlend:.*}")
+	@Path("/{container}/{urlend:.*}")
 	@Consumes("application/ld+json")
 	@Produces("application/ld+json")
 	public Response checkPath(@Context UriInfo uriInfo, String msg,@PathParam("container") int container, @PathParam("urlend") String urlend) {
