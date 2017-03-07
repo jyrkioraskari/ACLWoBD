@@ -24,7 +24,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>Drumbeat Protected<</servlet-name>
+		<servlet-name>Drumbeat Protected</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
