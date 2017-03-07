@@ -1,5 +1,7 @@
 package fi.aalto.drumbeat.security;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -11,10 +13,19 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
@@ -81,8 +92,7 @@ public class OrganizationManager {
 
 				List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
 				System.out.println("Path for the rest is:" + new_path);
-
-				break;
+				return checkPath_HTTP(current_node.toString(),webid_uri, new_path);
 			}
 		}
 		if (current_node.toString().equals(webid_uri))
@@ -90,6 +100,60 @@ public class OrganizationManager {
 		else
 			return false;
 	}
+	
+	
+	
+	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
+		final Model query_model = ModelFactory.createDefaultModel();
+		System.out.println("Next step URL is: "+nextStepURL);
+		try {
+			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
+			for(int i=0;i<new_path.size();i++)
+			{
+			   rulepath_list[i] = new_path.get(i);
+			}
+			RDFList rulepath = query_model.createList(rulepath_list);
+			Resource query = query_model.createResource();
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, query_model.getResource(webid));
+
+			StringWriter writer = new StringWriter();
+			query_model.write(writer, "JSON-LD");
+			writer.flush();
+			Client client = Client.create();
+			WebResource webResource = client
+					.resource(nextStepURL);
+			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
+					writer.toString());
+
+			String response_txt = response.getEntity(String.class);
+			response.close();
+
+			
+			
+			final Model response_model = ModelFactory.createDefaultModel();
+			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
+			
+			
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+			Resource result = null;
+			if (iter.hasNext())
+				result = iter.next();
+			
+			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+
 
 	public Resource getWebIDProfile(String webid_uri) {
 		return datamodel.getResource(webid_uri.toString());
