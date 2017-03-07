@@ -8,8 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
-import com.sun.jersey.api.view.Viewable;
-
 @Path("/")
 public class ProtectedDataServer {
 	
