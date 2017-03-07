@@ -11,7 +11,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.sun.jersey.api.view.Viewable;
 
-@Path("/")
+@Path("/musiikkitalo")
 public class ProtectedDataServer {
 
 	@GET

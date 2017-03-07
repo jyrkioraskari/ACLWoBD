@@ -103,7 +103,7 @@ public class RDFDataStore {
 			c_smc.addRule("contractors_allowed_read");
 			
 			
-			Collection c= new Collection(new URI("https://architect.local.org/"), "data", model);
+			Collection c= new Collection(new URI("https://architect.local.org/"), "musiikkitalo", model);
 			c.addProject("fix2");
 			c.addRule("maincontractor_allowed_read");
 			
