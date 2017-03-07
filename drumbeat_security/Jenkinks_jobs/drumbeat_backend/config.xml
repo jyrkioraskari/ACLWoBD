@@ -37,7 +37,18 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>drumbeat_security </upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
   <concurrentBuild>false</concurrentBuild>
   <rootModule>
     <groupId>fi.ni.drumbeat</groupId>
@@ -46,7 +57,7 @@
   <rootPOM>drumbeat_security/pom.xml</rootPOM>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
-  <ignoreUpstremChanges>false</ignoreUpstremChanges>
+  <ignoreUpstremChanges>true</ignoreUpstremChanges>
   <ignoreUnsuccessfulUpstreams>false</ignoreUnsuccessfulUpstreams>
   <archivingDisabled>false</archivingDisabled>
   <siteArchivingDisabled>false</siteArchivingDisabled>
@@ -69,7 +80,7 @@
           <url>http://localhost/</url>
         </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
       </adapters>
-      <contextPath>backend</contextPath>
+      <contextPath>security</contextPath>
       <war>**/drumbeat_security_auth_backend-1.0.war</war>
       <onFailure>false</onFailure>
     </hudson.plugins.deploy.DeployPublisher>
