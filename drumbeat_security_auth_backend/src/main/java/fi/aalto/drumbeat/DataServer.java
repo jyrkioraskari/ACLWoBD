@@ -11,6 +11,8 @@ import java.util.ListIterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.PathParam;
+
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -43,8 +45,9 @@ public class DataServer {
 			URI uri;
 			try {
 				uri = new URI(uri_str);
-				URI service_oot = new URIBuilder(uri).setScheme("https").setPath("/security/").build();
-				singleton = Optional.of(new DataServer(service_oot.toString()));
+				URI service_root = new URIBuilder(uri).setScheme("https").setPath("/").build();
+				System.out.println("DataServer root: "+service_root.toString());
+				singleton = Optional.of(new DataServer(service_root.toString()));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -169,9 +172,9 @@ public class DataServer {
 		
 		return ret;
 	}
-	public boolean checkPath_HTTP(String pathURL,String webid,List<Resource> new_path ) {
+	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
 		final Model query_model = ModelFactory.createDefaultModel();
-
+		System.out.println("Next step URL is: "+nextStepURL);
 		try {
 			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
 			for(int i=0;i<new_path.size();i++)
@@ -192,7 +195,7 @@ public class DataServer {
 			writer.flush();
 			Client client = Client.create();
 			WebResource webResource = client
-					.resource(pathURL);
+					.resource(nextStepURL);
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
 
@@ -226,11 +229,11 @@ public class DataServer {
 		try {
 			uri = new URI(uri_txt);
 			String path = uri.getPath();
-			path = path.replaceFirst("/protected", "/security");
-			path = path.replaceFirst("/drumbeat/objects", "/security");
-			path = path.replaceFirst("/drumbeat/collections", "/security");
-			path = path.replaceFirst("/drumbeat/datasources", "/security");
-			path = path.replaceFirst("/drumbeat/datasets", "/security");
+			path = path.replaceFirst("/protected", "");
+			path = path.replaceFirst("/drumbeat/objects", "");
+			path = path.replaceFirst("/drumbeat/collections", "");
+			path = path.replaceFirst("/drumbeat/datasources", "");
+			path = path.replaceFirst("/drumbeat/datasets", "/");
 			return new URIBuilder().setScheme("https").setHost(uri.getHost()).setPath(path).build();
 
 		} catch (URISyntaxException e) {

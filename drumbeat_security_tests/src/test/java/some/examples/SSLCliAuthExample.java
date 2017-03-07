@@ -52,7 +52,7 @@ public class SSLCliAuthExample {
 				null, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
 		try (CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(csf).build()) {
 			System.out.println("1");
-			HttpGet req = new HttpGet("https://architect.local.org:8443/protected/data/hello");
+			HttpGet req = new HttpGet("https://architect.local.org/protected/data/hello");
 			System.out.println("2");
 
 			CloseableHttpResponse response1 = httpclient.execute(req);

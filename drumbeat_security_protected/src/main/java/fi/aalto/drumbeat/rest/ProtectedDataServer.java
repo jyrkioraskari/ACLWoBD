@@ -11,10 +11,9 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.sun.jersey.api.view.Viewable;
 
-@Path("/data")
+@Path("/")
 public class ProtectedDataServer {
 
-	@Path("/hello")
 	@GET
 	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		request.setAttribute("name", sc.getUserPrincipal().getName() );
