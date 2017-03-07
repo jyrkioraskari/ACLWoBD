@@ -74,19 +74,12 @@
 	<packaging>pom</packaging>
 	<groupId>fi.ni.drumbeat</groupId>
 	<modules>
-
 		<module>../drumbeat_security_commons</module>
-
 		<module>../drumbeat_security_organization</module>
 		<module>../drumbeat_security_project</module>
-
-
 		<module>../drumbeat_security_webid_creator</module>
-		<module>../drumbeat_security_organization_protected_ui</module>
-
-		
-
 		<module>../drumbeat_security_server</module>
-		
+		<module>../drumbeat_security_auth_backend</module>
+		<module>../drumbeat_security_protected</module>
 	</modules>
 </project>
