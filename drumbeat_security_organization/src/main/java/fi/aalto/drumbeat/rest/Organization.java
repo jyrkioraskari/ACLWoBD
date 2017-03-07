@@ -29,10 +29,9 @@ public class Organization extends RESTfulAPI {
 	//TODO mitä tapahtuu, jos haetaan GETillä?
 	
 	@POST
-	@Path("/musiikkitalo/{container}/{urlend:.*}")
 	@Consumes("application/ld+json")	
 	@Produces("application/ld+json")
-	public Response checkPath(@Context UriInfo uriInfo, String msg,@PathParam("container") int container, @PathParam("urlend") String urlend) {
+	public Response checkPath(@Context UriInfo uriInfo, String msg) {
 		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")

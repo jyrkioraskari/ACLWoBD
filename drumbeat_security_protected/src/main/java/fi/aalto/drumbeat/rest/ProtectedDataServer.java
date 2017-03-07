@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -14,8 +15,9 @@ import com.sun.jersey.api.view.Viewable;
 @Path("/")
 public class ProtectedDataServer {
 
+	@Path("/{container}/{urlend:.*}")
 	@GET
-	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response,@PathParam("container") int container, @PathParam("urlend") String urlend) {
 		request.setAttribute("name", sc.getUserPrincipal().getName() );
 		
 		if(sc.isUserInRole("CREATE"))

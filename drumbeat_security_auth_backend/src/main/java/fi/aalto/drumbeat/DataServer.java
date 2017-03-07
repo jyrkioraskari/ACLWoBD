@@ -198,9 +198,16 @@ public class DataServer {
 					.resource(nextStepURL);
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
+			
 
 			String response_txt = response.getEntity(String.class);
 			response.close();
+			if(response.getStatus()!=200)
+			{
+				System.err.println(response_txt);
+				return false;
+				
+			}
 
 			
 			
@@ -209,6 +216,9 @@ public class DataServer {
 			
 			
 			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+			
+			
+			
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
