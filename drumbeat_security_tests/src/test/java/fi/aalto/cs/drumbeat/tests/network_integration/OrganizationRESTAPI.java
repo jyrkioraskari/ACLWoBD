@@ -53,7 +53,7 @@ public class OrganizationRESTAPI {
 
 			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			Response response = client.target("https://architect.local.org:8443/organization/hello").request("text/plain").get();
+			Response response = client.target("https://architect.local.org:8443/unit/hello").request("text/plain").get();
 			if (response.getStatus() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 			}
@@ -96,7 +96,7 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/organization/hello");
+					.resource("http://architect.local.org:8080/unit/hello");
 			System.out.println("QUERY (POST Hello ) " + createEmptyQueryString());
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					createEmptyQueryString());
@@ -163,7 +163,7 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/rest/organization/registerWebID");
+					.resource("http://architect.local.org:8080/rest/unit/registerWebID");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
 			assertEquals(200, response.getStatus());
@@ -203,7 +203,7 @@ public class OrganizationRESTAPI {
 			Client client = Client.create();
 
 			WebResource webResource = client
-					.resource("http://architect.local.org:8080/organization/");
+					.resource("http://architect.local.org:8080/unit/");
 			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
 					writer.toString());
 
@@ -243,7 +243,7 @@ public class OrganizationRESTAPI {
 
 			javax.ws.rs.client.Client  client = IgnoreSSLClient();
 
-			Response response = client.target("https://architect.local.org:8443/organization/").request().post(Entity.entity(writer.toString(), "application/ld+json"));
+			Response response = client.target("https://architect.local.org:8443/unit/").request().post(Entity.entity(writer.toString(), "application/ld+json"));
 			
 			assertEquals(200, response.getStatus());
 			String response_string = response.readEntity(String.class);

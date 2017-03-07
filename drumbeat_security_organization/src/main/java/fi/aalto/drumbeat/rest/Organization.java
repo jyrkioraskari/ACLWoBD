@@ -28,7 +28,7 @@ import org.apache.jena.vocabulary.RDF;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
 
-@Path("/organization")
+@Path("/")
 public class Organization extends RESTfulAPI {
 	
 	//TODO mitä tapahtuu, jos haetaan GETillä?
