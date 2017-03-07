@@ -11,18 +11,19 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
-import fi.aalto.drumbeat.data_store_test_data.Permission.Right;
+import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.data_store_test_data.PermittedRoles.Right;
 
 public class AuthenticationRule extends AbstractData {
 	
-	private Map<Right,Permission> permissions= new HashMap<Right,Permission>();
+	private Map<Right,PermittedRoles> permissions= new HashMap<Right,PermittedRoles>();
 	private Set<RulePath> rulepaths= new HashSet<RulePath>();
 
 	public AuthenticationRule(URI root,String name, Model model) {
 		super(root, name, model);
 		//DEFAULT
 		try {
-			addRight(Permission.Right.READ);
+			addAllowedRole(PermittedRoles.Right.READ);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -36,22 +37,18 @@ public class AuthenticationRule extends AbstractData {
 	}
 
 	
-	public Permission addRight(Permission.Right right) throws URISyntaxException {
-		Property hasPermission = model.getProperty(Constants.security_ontology_base + "#hasPermission");
-
-		Permission p = Permission.getPermission(right, model);
+	public PermittedRoles addAllowedRole(PermittedRoles.Right right) throws URISyntaxException {
+		PermittedRoles p = PermittedRoles.getPermission(right, model);
 		permissions.put(right, p);
-		self.addProperty(hasPermission, p.self);
+		self.addProperty(RDFConstants.property_hasPermittedRole, p.self);
 		return p;
 	}
 
 	
 	public RulePath addRulePath() throws URISyntaxException {
-		Property hasRulePath = model.getProperty(Constants.security_ontology_base + "#hasRulePath");
-
 		RulePath rp =new RulePath(new URI(self.getURI()), model);
 		rulepaths.add(rp);
-		self.addProperty(hasRulePath, rp.self);
+		self.addProperty(RDFConstants.property_hasRulePath, rp.self);
 		return rp;
 	}
 }

@@ -147,7 +147,7 @@ public class RDFDataStore {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
 		sb.append(" <" + uri + ">  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + RDFConstants.property_hasPermission.getURI() + "> ?p .");
+		sb.append(" ?x  <" + RDFConstants.property_hasPermittedRole.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {

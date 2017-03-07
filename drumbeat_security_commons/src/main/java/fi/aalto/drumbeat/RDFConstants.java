@@ -46,7 +46,7 @@ public class RDFConstants {
 	
 
 	static public Property property_hasAuthorizationRule = create(property,"hasAuthorizationRule");
-	static public Property property_hasPermission = create(property,"hasPermission");
+	static public Property property_hasPermittedRole = create(property,"hasPermittedRole");
 	static public Property property_hasRulePath = create(property,"hasRulePath");
 	static public Property property_hasPath = create(property,"hasPath");
 	

@@ -6,18 +6,18 @@ import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
 
-public class Permission extends AbstractData {
+public class PermittedRoles extends AbstractData {
 	public enum Right{
 		CREATE,READ,UPDATE,DELETE
 	}
 
-	static Map<Right,Permission> permissions= new HashMap<Right,Permission>();
-	static Permission getPermission(Right right, Model model)
+	static Map<Right,PermittedRoles> permissions= new HashMap<Right,PermittedRoles>();
+	static PermittedRoles getPermission(Right right, Model model)
 	{
-		Permission p=permissions.get(right);
+		PermittedRoles p=permissions.get(right);
 		if(p==null)
 			try {
-				p=new Permission(right.toString(), model);
+				p=new PermittedRoles(right.toString(), model);
 				permissions.put(right, p);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
@@ -27,7 +27,7 @@ public class Permission extends AbstractData {
 	
 	
 	
-	public Permission(String name, Model model) throws URISyntaxException {
+	public PermittedRoles(String name, Model model) throws URISyntaxException {
 			super(name, model);
 	}
 
