@@ -43,7 +43,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 	
 	@Test
 	public void test_getHello() {
-		Response response = target("/organization/hello").request().get();
+		Response response = target("/hello").request().get();
 		String hello = response.readEntity(String.class);
 		assertEquals("Hello OK!", hello);
 		response.close();
@@ -67,7 +67,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			model.write(writer, "JSON-LD");
 			writer.flush();
 
-			Response response = target("/organization/hello").request()
+			Response response = target("/hello").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
@@ -106,7 +106,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			model.write(writer, "JSON-LD");
 			writer.flush();
 
-			Response response = target("/organization/registerWebID").request()
+			Response response = target("/registerWebID").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
@@ -165,7 +165,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			model.write(writer, "JSON-LD");
 			writer.flush();
 
-			Response response = target("/organization/getWebIDProfile").request()
+			Response response = target("/getWebIDProfile").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
@@ -210,7 +210,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			model.write(writer, "JSON-LD");
 			writer.flush();
 
-			Response http_response = target("/organization/checkPath").request()
+			Response http_response = target("/").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 			String response_string = http_response.readEntity(String.class);
 			http_response.close();

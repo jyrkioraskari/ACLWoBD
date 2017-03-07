@@ -27,7 +27,7 @@ public class AuthBackEndIntegration {
 			obj.put("alt_name", "alt");
 			obj.put("requestURL", "URL");
 
-			String httpsURL = "http://localhost/backend/security/query";
+			String httpsURL = "http://localhost/security/";
 			URL myurl = new URL(httpsURL);
 			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
 			conn.setDoOutput(true);
