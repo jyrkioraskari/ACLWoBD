@@ -12,6 +12,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import org.apache.jena.rdf.model.Literal;
@@ -102,6 +103,7 @@ public class OrganizationRESTAPI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 
 		}
 
@@ -125,6 +127,7 @@ public class OrganizationRESTAPI {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 
 		}
 
@@ -190,7 +193,9 @@ public class OrganizationRESTAPI {
 			return output;
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
+		fail("null result");
 		return null;
 	}
 
@@ -228,9 +233,46 @@ public class OrganizationRESTAPI {
 			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 	
+	@Test
+	public void testCheckPath_HTTPS_insecure_architect_local_org() {
+		
 
+		Model model = ModelFactory.createDefaultModel();
+		String webid = "http://user.com/user#me";
+
+		try {
+			RDFNode[] rulepath_list = new RDFNode[1];
+			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			RDFList rulepath = model.createList(rulepath_list);
+			Resource query = model.createResource();
+			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+
+			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
+			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
+
+			StringWriter writer = new StringWriter();
+			model.write(writer, "JSON-LD");
+			writer.flush();
+			System.out.println("QUERY (Check RulePath) " + writer.toString());
+
+			javax.ws.rs.client.Client  client = IgnoreSSLClient();
+
+			Response response = client.target("https://architect.local.org:8443/security/rest/organization/checkPath").request().post(Entity.entity(writer.toString(), "application/ld+json"));
+			String response_string = response.readEntity(String.class);
+
+			System.out.println("HTTPS RESPONSE (Check RulePath) " + response_string);
+			response.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
 
 }

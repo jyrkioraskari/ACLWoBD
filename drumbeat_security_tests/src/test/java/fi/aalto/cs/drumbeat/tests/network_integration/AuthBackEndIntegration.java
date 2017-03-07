@@ -1,5 +1,7 @@
 package fi.aalto.cs.drumbeat.tests.network_integration;
 
+import static org.junit.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class AuthBackEndIntegration {
 			obj.put("alt_name", "alt");
 			obj.put("requestURL", "URL");
 
-			String httpsURL = "http://localhost:8080/security/server/query";
+			String httpsURL = "http://localhost:8080/backend/security/query";
 			URL myurl = new URL(httpsURL);
 			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
 			conn.setDoOutput(true);
@@ -56,6 +58,7 @@ public class AuthBackEndIntegration {
 				System.out.println(roles);
 			} catch (ParseException e) {
 				e.printStackTrace();
+				fail(e.getMessage());
 			}
 
 			in.close();
@@ -63,6 +66,7 @@ public class AuthBackEndIntegration {
 		} catch (IOException e) {
 
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 }
