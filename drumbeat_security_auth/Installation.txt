@@ -36,7 +36,64 @@
 	to:
 	Tomcat:/lib/catalina.jar/org/apache/catalina/startup/Authenticators.properties
 
-    3. drumbeat_security_valve-1.0.jar	 needs to be copied to: Tomcat:/lib/
+    3. drumbeat_security_auth-1.0.jar	 needs to be copied to: Tomcat:/lib/
+    Tomcat:/lib/drumbeat should be created and contain the following files:
+    
+    		commons-codec-1.9.jar
+			commons-io-2.4.jar
+			commons-rdf-api-0.2.0-incubating.jar
+			guava-18.0.jar
+			httpclient-4.5.2.jar
+			httpcore-4.4.4.jar
+			javax.servlet-api-3.1.0.jar
+			jersey-client-1.9.jar
+			jersey-core-1.9.jar
+			json-simple-1.1.1.jar
+			log4j-1.2.17.jar
+			mapdb-1.0.7.jar
+			sesame-http-client-4.1.2.jar
+			sesame-http-protocol-4.1.2.jar
+			sesame-model-4.1.2.jar
+			sesame-query-4.1.2.jar
+			sesame-queryalgebra-evaluation-4.1.2.jar
+			sesame-queryalgebra-model-4.1.2.jar
+			sesame-queryparser-api-4.1.2.jar
+			sesame-queryparser-serql-4.1.2.jar
+			sesame-queryparser-sparql-4.1.2.jar
+			sesame-queryresultio-api-4.1.2.jar
+			sesame-queryresultio-sparqlxml-4.1.2.jar
+			sesame-repository-api-4.1.2.jar
+			sesame-repository-sail-4.1.2.jar
+			sesame-repository-sparql-4.1.2.jar
+			sesame-rio-api-4.1.2.jar
+			sesame-rio-datatypes-4.1.2.jar
+			sesame-rio-languages-4.1.2.jar
+			sesame-rio-ntriples-4.1.2.jar
+			sesame-rio-trig-4.1.2.jar
+			sesame-rio-turtle-4.1.2.jar
+			sesame-sail-api-4.1.2.jar
+			sesame-sail-base-4.1.2.jar
+			sesame-sail-inferencer-4.1.2.jar
+			sesame-sail-memory-4.1.2.jar
+			sesame-sail-model-4.1.2.jar
+			sesame-sail-nativerdf-4.1.2.jar
+			sesame-util-4.1.2.jar
+			slf4j-api-1.7.10.jar
+			slf4j-log4j12-1.7.22.jar
+			tomcat-annotations-api-9.0.0.M17.jar
+			tomcat-api-9.0.0.M17.jar
+			tomcat-catalina-9.0.0.M17.jar
+			tomcat-coyote-9.0.0.M17.jar
+			tomcat-el-api-9.0.0.M17.jar
+			tomcat-jaspic-api-9.0.0.M17.jar
+			tomcat-jni-9.0.0.M17.jar
+			tomcat-jsp-api-9.0.0.M17.jar
+			tomcat-juli-9.0.0.M17.jar
+			tomcat-servlet-api-9.0.0.M17.jar
+			tomcat-util-9.0.0.M17.jar
+			tomcat-util-scan-9.0.0.M17.jar
+    
+	They are located in the drumbeat_security_auth-1.0.jar file in the /lib directory.
 
 	4. The web applications needs to define on its web.xml:
 
