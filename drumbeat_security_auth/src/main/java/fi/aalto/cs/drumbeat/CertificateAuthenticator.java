@@ -98,6 +98,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 											request.setAttribute("CertDN", cert.getSubjectDN().getName());
 											register(request, response, principal, "DRUMBEAT_AUTHENTICATION",
 													alt.toString(), "pass");
+											
+											
 											response.setHeader("Cache-Control", "no-cache,must-revalidate");
 											response.addHeader("Cache-Control", "post-check=0,pre-check=0");
 											response.addHeader("Cache-Control", "proxy-revalidate");

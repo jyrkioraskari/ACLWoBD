@@ -43,6 +43,12 @@
 			<artifactId>drumbeat_security_commons</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<!-- Annotations for role management -->
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<parent>
