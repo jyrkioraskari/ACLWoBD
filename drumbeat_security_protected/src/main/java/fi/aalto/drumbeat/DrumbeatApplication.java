@@ -5,7 +5,6 @@ import javax.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-@ApplicationPath("/")
 public class DrumbeatApplication extends ResourceConfig {
 	public DrumbeatApplication() {
 		packages("fi.aalto.drumbeat.rest");
