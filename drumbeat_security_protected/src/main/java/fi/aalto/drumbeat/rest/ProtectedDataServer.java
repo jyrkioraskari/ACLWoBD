@@ -15,9 +15,9 @@ import com.sun.jersey.api.view.Viewable;
 @Path("/")
 public class ProtectedDataServer {
 
-	@Path("/{container}/{urlend:.*}")
+	@Path("/musiikkitalo")
 	@GET
-	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response,@PathParam("container") int container, @PathParam("urlend") String urlend) {
+	public Viewable  getHello(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		request.setAttribute("name", sc.getUserPrincipal().getName() );
 		
 		if(sc.isUserInRole("CREATE"))
