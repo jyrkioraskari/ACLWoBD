@@ -50,25 +50,20 @@
 			<version>1.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.22.1</version>
-			<scope>provided</scope>
+			<version>2.26-b02</version>
 		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>2.22.1</version>
-			<scope>provided</scope>
-		</dependency>
+
+		<!-- if you are using Jersey client specific features without the server 
+			side -->
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>2.22.1</version>
-			<scope>provided</scope>
+			<version>2.26-b02</version>
 		</dependency>
-
 	</dependencies>
 
 	<parent>
