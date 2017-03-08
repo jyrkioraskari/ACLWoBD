@@ -89,7 +89,7 @@
 	<groupId>fi.ni.drumbeat</groupId>
 	<modules>
 		<module>../drumbeat_security_commons</module>
-		<module>../drumbeat_security_organization</module>
+		
 
 		<module>../drumbeat_security_webid_creator</module>
 

@@ -38,10 +38,10 @@
 	</build>
 
 	<dependencies>
-	<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet -->
-	
-	
-	
+		<!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet -->
+
+
+
 		<dependency>
 			<groupId>fi.ni.drumbeat</groupId>
 			<artifactId>drumbeat_security_commons</artifactId>
@@ -54,6 +54,11 @@
 			<version>1.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+			<artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+			<version>2.22.1</version>
+		</dependency>
 
 	</dependencies>
 
