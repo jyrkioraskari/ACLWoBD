@@ -1,6 +1,7 @@
 package fi.aalto.cs.drumbeat.tests.network_integration;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
@@ -11,8 +12,10 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import org.apache.jena.rdf.model.Literal;
@@ -26,14 +29,12 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
 import fi.aalto.cs.drumbeat.tests.test_categories.IntegrationTest;
 import fi.aalto.drumbeat.RDFConstants;
 
 @Category(IntegrationTest.class)
+
 
 public class OrganizationRESTAPI {
 
@@ -47,6 +48,7 @@ public class OrganizationRESTAPI {
 	    }}, new java.security.SecureRandom());
 	    return ClientBuilder.newBuilder().sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
 	}
+	
 	@Test
 	public void testHelloGET_HTTPS_architect_local_org() {
 		try {
@@ -93,16 +95,19 @@ public class OrganizationRESTAPI {
 	public void testHelloPOST_HTTP_architect_local_org() {
 		try {
 
-			Client client = Client.create();
+			Client client = ClientBuilder.newClient();
+			WebTarget target = client.target("http://architect.local.org/hello");
 
-			WebResource webResource = client
-					.resource("http://architect.local.org/hello");
-			System.out.println("QUERY (POST Hello ) " + createEmptyQueryString());
-			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
-					createEmptyQueryString());
+			
+			Response response = target.request()
+					.post(Entity.entity(createEmptyQueryString(), "application/ld+json"));
+			
+			String response_txt = response.readEntity(String.class);
+			
+			
 			System.out.println("RESPONSE (POST Hello ) from Server .... \n");
-			String output = response.getEntity(String.class);
-			System.out.println(output);
+			System.out.println(response_txt);
+			response.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,13 +117,7 @@ public class OrganizationRESTAPI {
 
 	}
 
-	//TODO the URL foemat does not match
-	/*
-	@Test
 	
-	public void testRegisterWebID_HTTP_architect_local_org() {
-		assertNotNull(registerWebID());
-	}*/
 	
 	private String registerWebID() {
 		String reply = call_registerWebID();
@@ -160,16 +159,16 @@ public class OrganizationRESTAPI {
 			writer.flush();
 			System.out.println("QUERY (WebID registration) " + writer.toString());
 
-			Client client = Client.create();
-
-			WebResource webResource = client
-					.resource("http://architect.local.org/registerWebID");
-			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
-					writer.toString());
+			
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget target = client.target("http://architect.local.org/registerWebID");
+			Response response = target.request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+			String response_txt = response.readEntity(String.class);
 			assertEquals(200, response.getStatus());
-			String output = response.getEntity(String.class);
 			response.close();
-			return output;
+			return response_txt;
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -200,22 +199,26 @@ public class OrganizationRESTAPI {
 			writer.flush();
 			System.out.println("QUERY (Check RulePath) " + writer.toString());
 
-			Client client = Client.create();
+			
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget target = client.target("http://architect.local.org/");
 
-			WebResource webResource = client
-					.resource("http://architect.local.org/");
-			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
-					writer.toString());
+			
+			Response response = target.request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+			
+			String response_txt = response.readEntity(String.class);
 
 			assertEquals(200, response.getStatus());
-			String output = response.getEntity(String.class);
-			System.out.println("RESPONSE (Check RulePath) " + output);
+			System.out.println("RESPONSE (Check RulePath) " + response_txt);
 			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
+	
 	
 	@Test
 	public void testCheckPath_HTTPS_insecure_architect_local_org() {

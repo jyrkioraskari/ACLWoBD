@@ -3,6 +3,8 @@ package fi.aalto.cs.drumbeat.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import org.junit.Test;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
@@ -20,9 +22,9 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.Test;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.rest.Organization;
@@ -43,12 +45,11 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 	
 	@Test
 	public void test_getHello() {
-		Response response = target("/hello").request().get();
-		String hello = response.readEntity(String.class);
+		String hello=target("/hello").request().get(String.class);
 		assertEquals("Hello OK!", hello);
-		response.close();
 	}
-
+	
+    
 	@Test
 	public void test_postHello() {
 		Model model = ModelFactory.createDefaultModel();
@@ -69,7 +70,6 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 
 			Response response = target("/hello").request()
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
-
 			String response_string = response.readEntity(String.class);
 			Model response_model = parseInput(response_string);
 			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
@@ -77,9 +77,8 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			if (iter.hasNext())
 				rest_response = iter.next();
 			assertNotNull(rest_response);
-			
-			response.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail(e.getMessage());
 		}
 
@@ -110,7 +109,6 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 
 			String response_string = response.readEntity(String.class);
-			response.close();
 			return response_string;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,6 +117,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 		return "";
 	}
 
+	
 
 	private String registerWebID() {
 		String reply = call_registerWebID();
@@ -144,6 +143,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 			fail("The registered WebID URL should be in a correct format.");
 		}
 	}
+	
 
 	@Test
 	public void test_getWebIDProfile() {
@@ -228,6 +228,5 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 		}
 	}
 
-	
 
 }

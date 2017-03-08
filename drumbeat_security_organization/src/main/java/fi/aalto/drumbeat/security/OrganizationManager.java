@@ -3,16 +3,16 @@ package fi.aalto.drumbeat.security;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.UUID;
 
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecutionFactory;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -22,10 +22,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
@@ -124,16 +120,16 @@ public class OrganizationManager {
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
 			writer.flush();
-			Client client = Client.create();
-			WebResource webResource = client
-					.resource(nextStepURL);
-			ClientResponse response = webResource.type("application/ld+json").post(ClientResponse.class,
-					writer.toString());
-
-			String response_txt = response.getEntity(String.class);
-			response.close();
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget target = client.target(nextStepURL);
 
 			
+			Response response = target.request()
+					.post(Entity.entity(writer.toString(), "application/ld+json"));
+			
+			String response_txt = response.readEntity(String.class);
+			response.close();
 			
 			final Model response_model = ModelFactory.createDefaultModel();
 			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");

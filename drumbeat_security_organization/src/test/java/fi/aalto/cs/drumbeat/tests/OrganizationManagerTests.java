@@ -1,4 +1,4 @@
-package fi.ni;
+package fi.aalto.cs.drumbeat.tests;
 
 import java.net.URI;
 import java.net.URISyntaxException;
