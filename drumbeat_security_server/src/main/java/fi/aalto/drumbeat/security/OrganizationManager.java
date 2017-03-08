@@ -21,6 +21,8 @@ import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.drumbeat.RDFConstants;
@@ -31,7 +33,6 @@ public class OrganizationManager {
 	private final Model datamodel;
 	private final Resource root;
 
-
 	private static OrganizationManager singleton = null;
 
 	public static OrganizationManager getOrganizationManager(URI uri) {
@@ -40,6 +41,7 @@ public class OrganizationManager {
 		return singleton;
 
 	}
+
 	private OrganizationManager(URI uri) {
 		super();
 		rootURI = uri;
@@ -49,7 +51,7 @@ public class OrganizationManager {
 		root = datamodel.getResource(rootURI.toString());
 		registerWebID("https://jyrkio2.databox.me/profile/card#me", "1234");
 	}
-	
+
 	/*
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
@@ -70,8 +72,6 @@ public class OrganizationManager {
 
 	private RDFDataStore rdf_datastore = null;
 
-	
-
 	public boolean checkRDFPath(String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
 		Resource current_node = root;
@@ -79,34 +79,42 @@ public class OrganizationManager {
 		while (iterator.hasNext()) {
 			Resource step = iterator.next();
 			Property p = rdf_datastore.getModel().getProperty(step.getURI());
-			Resource node = current_node.getPropertyResourceValue(p);
-			if (node != null) {
-				System.out.println("from local store:" + node);
-				current_node = node;
-			} else {
-				System.out.println("located somewhere else. current node was: " + current_node);
+			StmtIterator connected_triples = current_node.listProperties(p);
+			while (connected_triples.hasNext()) {
+				Statement triple = connected_triples.next();
+				Resource node = triple.getObject().asResource();
+				if (node != null) {
+					System.out.println("from local store:" + node);
+					current_node = node;
+					if (!iterator.hasNext()) {
+						if (current_node.toString().equals(webid_uri))
+							return true;
+					}
+				} else {
+					System.out.println("located somewhere else. current node was: " + current_node);
 
-				List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
-				System.out.println("Path for the rest is:" + new_path);
-				return checkPath_HTTP(current_node.toString(),webid_uri, new_path);
+					List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
+					System.out.println("Path for the rest is:" + new_path);
+					return checkPath_HTTP(current_node.toString(), webid_uri, new_path);
+				}
 			}
 		}
-		if (current_node.toString().equals(webid_uri))
-			return true;
-		else
-			return false;
+
+		saveUnsucceeLocaldQuery(webid_uri, path);
+		return false;
 	}
-	
-	
-	
-	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
+
+	private void saveUnsucceeLocaldQuery(String webid_uri, Resource path) {
+        System.out.println("unsuccessful webid: "+webid_uri);
+	}
+
+	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {
 		final Model query_model = ModelFactory.createDefaultModel();
-		System.out.println("Next step URL is: "+nextStepURL);
+		System.out.println("Next step URL is: " + nextStepURL);
 		try {
 			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
-			for(int i=0;i<new_path.size();i++)
-			{
-			   rulepath_list[i] = new_path.get(i);
+			for (int i = 0; i < new_path.size(); i++) {
+				rulepath_list[i] = new_path.get(i);
 			}
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
@@ -120,52 +128,43 @@ public class OrganizationManager {
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
 			writer.flush();
-			
+
 			Client client = ClientBuilder.newClient();
 			WebTarget target = client.target(nextStepURL);
 
-			
-			Response response = target.request()
-					.post(Entity.entity(writer.toString(), "application/ld+json"));
-			
+			Response response = target.request().post(Entity.entity(writer.toString(), "application/ld+json"));
+
 			String response_txt = response.readEntity(String.class);
 			response.close();
-			
+
 			final Model response_model = ModelFactory.createDefaultModel();
-			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
-			
-			
+			response_model.read(new ByteArrayInputStream(response_txt.getBytes()), null, "JSON-LD");
+
 			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
-			
+
 			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
-	
-
 
 	public Resource getWebIDProfile(String webid_uri) {
 		return datamodel.getResource(webid_uri.toString());
 	}
-	
-	
-	
+
 	public Resource registerWebID(String webidURI, String public_key) {
 		rdf_datastore.saveRDFData();
-		Resource widr=datamodel.getResource(webidURI);
+		Resource widr = datamodel.getResource(webidURI);
 		root.addProperty(RDFConstants.property_knowsPerson, widr);
 		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
 		return widr;
 	}
-
-
 
 	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
