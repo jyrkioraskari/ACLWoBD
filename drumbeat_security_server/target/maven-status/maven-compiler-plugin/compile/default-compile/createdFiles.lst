@@ -1,0 +1,8 @@
+fi\aalto\drumbeat\security\OrganizationManager.class
+fi\aalto\drumbeat\rest\Organization.class
+fi\aalto\drumbeat\DrumbeatUserManager\UserManagerUI$UserManagerUIServlet.class
+fi\aalto\drumbeat\DrumbeatApplication.class
+fi\aalto\drumbeat\DrumbeatUserManager\events\REST_Event.class
+fi\aalto\drumbeat\rest\ProtectedDataServer.class
+fi\aalto\drumbeat\DrumbeatUserManager\events\EventBusCommunication.class
+fi\aalto\drumbeat\DrumbeatUserManager\UserManagerUI.class
