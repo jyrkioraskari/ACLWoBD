@@ -71,10 +71,15 @@ public class OrganizationManager {
 	}*/
 
 	private RDFDataStore rdf_datastore = null;
-
 	public boolean checkRDFPath(String webid_uri, Resource path) {
+		return checkRDFPath(null,webid_uri, path);
+	}
+	private boolean checkRDFPath(Resource previous_node,String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
+		
 		Resource current_node = root;
+		if(previous_node!=null)
+		  current_node=previous_node;
 		ListIterator<Resource> iterator = rulepath.listIterator();
 		while (iterator.hasNext()) {
 			Resource step = iterator.next();
@@ -89,6 +94,11 @@ public class OrganizationManager {
 					if (!iterator.hasNext()) {
 						if (current_node.toString().equals(webid_uri))
 							return true;
+					}
+					else
+					{
+						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
+						return checkRDFPath(current_node,webid_uri, new_path.get(0));
 					}
 				} else {
 					System.out.println("located somewhere else. current node was: " + current_node);
