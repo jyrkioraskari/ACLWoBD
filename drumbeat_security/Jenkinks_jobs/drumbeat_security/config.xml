@@ -79,7 +79,7 @@
         </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
       </adapters>
       <contextPath>/</contextPath>
-      <war>**/drumbeat_security_protected-1.0.war</war>
+      <war>**/drumbeat_security_server-1.0-SNAPSHOT.war</war>
       <onFailure>false</onFailure>
     </hudson.plugins.deploy.DeployPublisher>
   </publishers>

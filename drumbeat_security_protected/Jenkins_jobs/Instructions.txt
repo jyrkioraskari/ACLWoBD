@@ -1,3 +1,0 @@
-To make this deployment function, the security settings need to be added to Tomcat (The <auth-method>DRUMBEAT_AUTHENTICATION</auth-method> is needed).
-See: drumbeat_security_valve Installation.txt
-
