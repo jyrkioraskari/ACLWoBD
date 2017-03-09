@@ -37,6 +37,7 @@
 			<role-name>default</role-name>
 		</auth-constraint>
 	</security-constraint>
+
 	<login-config>
 		<auth-method>DRUMBEAT</auth-method>
 	</login-config>
@@ -46,4 +47,7 @@
 			<max-age>31536000</max-age>
 		</cookie-config>
 	</session-config>
+	<security-role>
+		<role-name>default</role-name>
+	</security-role>
 </web-app>
