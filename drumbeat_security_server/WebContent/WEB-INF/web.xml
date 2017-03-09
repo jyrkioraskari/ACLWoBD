@@ -38,7 +38,7 @@
 		</auth-constraint>
 	</security-constraint>
 	<login-config>
-		<auth-method>DRUMBEAT_AUTHENTICATION</auth-method>
+		<auth-method>DRUMBEAT</auth-method>
 	</login-config>
 	<session-config>
 		<session-timeout>525600</session-timeout>

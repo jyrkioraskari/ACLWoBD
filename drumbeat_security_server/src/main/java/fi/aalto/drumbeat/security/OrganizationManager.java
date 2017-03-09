@@ -3,6 +3,7 @@ package fi.aalto.drumbeat.security;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -24,11 +25,15 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
+import org.utils.Tuple;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 
 public class OrganizationManager {
+	final private List<Tuple<String,Resource>> unseen_locals=new ArrayList<>();
+	final private List<Tuple<String,Long>> accesses=new ArrayList<>();
+	
 	private URI rootURI;
 	private final Model datamodel;
 	private final Resource root;
@@ -110,12 +115,14 @@ public class OrganizationManager {
 			}
 		}
 
-		saveUnsucceeLocaldQuery(webid_uri, path);
+		saveUnsucceeLocal(webid_uri, path);
 		return false;
 	}
 
-	private void saveUnsucceeLocaldQuery(String webid_uri, Resource path) {
+	private void saveUnsucceeLocal(String webid_uri, Resource path) {
         System.out.println("unsuccessful webid: "+webid_uri);
+        unseen_locals.add(new Tuple(webid_uri,path));
+        
 	}
 
 	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {

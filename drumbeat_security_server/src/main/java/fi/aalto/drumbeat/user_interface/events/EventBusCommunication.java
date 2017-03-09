@@ -1,4 +1,8 @@
-package fi.aalto.drumbeat.DrumbeatUserManager.events;
+package fi.aalto.drumbeat.user_interface.events;
+
+
+
+import com.google.common.eventbus.EventBus;
 
 /*
 * 
@@ -29,20 +33,35 @@ SOFTWARE.
 */
 
 
-public class REST_Event {
-	final private int sender;
+public class EventBusCommunication {
+	private final EventBus commucication_bus = new EventBus();
 	
 	
-	public REST_Event(int sender) {
-		super();
-		this.sender=sender;
-	}
+	private static EventBusCommunication instance = null;
+
 	
-	
-	public int getSender() {
-		return sender;
+	protected EventBusCommunication() {
+		commucication_bus.register(this);
 	}
 
+	public static EventBusCommunication getInstance() {
+		if (instance == null) {
+			instance = new EventBusCommunication();
+		}
+		return instance;
+	}
+
+	
+	public void post( Object  event) {
+		commucication_bus.post(event);
+	}
+	
+	
+
+	public void register(Object subscriber)
+	{
+		commucication_bus.register(subscriber);
+	}
 
 	
 }

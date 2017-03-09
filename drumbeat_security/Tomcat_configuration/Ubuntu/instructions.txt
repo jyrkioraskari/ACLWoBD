@@ -1,0 +1,27 @@
+add line:
+
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8080   
+
+to /etc/rc.local
+(before the "exit 0" command)
+
+
+
+To use Jenkins remorely do the following:
+
+
+http://stackoverflow.com/questions/36703856/access-tomcat-manager-app-from-different-host
+For Tomcat v8.5.4 and above, the file <tomcat>/webapps/manager/META-INF/context.xml has been adjusted:
+
+<Context antiResourceLocking="false" privileged="true" >
+    <!--
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+    -->
+</Context>
+
+
+sudo mkdir /var/drumbeat_admin
+sudo chmod 777 /var/drumbeat_admin
+
+

@@ -31,7 +31,7 @@
 	   
 
 	2. To make Tomcat to recognize the new authentication method, the method has to be registered. It is done by adding a new line:
-	DRUMBEAT_AUTHENTICATION=fi.aalto.cs.drumbeat.CertificateAuthenticator
+	DRUMBEAT=fi.aalto.cs.drumbeat.CertificateAuthenticator
 
 	to:
 	Tomcat:/lib/catalina.jar/org/apache/catalina/startup/Authenticators.properties

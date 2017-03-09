@@ -86,6 +86,8 @@
 			<artifactId>vaadin-themes</artifactId>
 		</dependency>
 
+
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-rdf-api</artifactId>
@@ -110,6 +112,11 @@
 			<version>2.22.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-mvc-jsp</artifactId>
+			<version>2.26-b02</version>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
