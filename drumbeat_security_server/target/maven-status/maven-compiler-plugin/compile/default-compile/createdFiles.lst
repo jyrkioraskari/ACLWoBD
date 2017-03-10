@@ -1,14 +1,9 @@
-fi\aalto\drumbeat\user_interface\UserInterface.class
+fi\aalto\drumbeat\events\REST_Event.class
 fi\aalto\drumbeat\security\DataServer.class
 fi\aalto\drumbeat\rest\SecurityServer.class
-fi\aalto\drumbeat\user_interface\events\REST_Event.class
-fi\aalto\drumbeat\user_interface\UserInterface$UserManagerUIServlet.class
+fi\aalto\drumbeat\events\EventBusCommunication.class
 fi\aalto\drumbeat\resource\ServiceResponce.class
 fi\aalto\drumbeat\security\OrganizationManager.class
-fi\aalto\drumbeat\user_interface\UserInterface$1.class
-fi\aalto\drumbeat\user_interface\events\EventBusCommunication.class
 fi\aalto\drumbeat\resource\ServiceQuery.class
 fi\aalto\drumbeat\DrumbeatApplication.class
-fi\aalto\drumbeat\user_interface\UserInterface$2.class
 fi\aalto\drumbeat\rest\ProtectedDataServer.class
-fi\aalto\drumbeat\user_interface\UserInterface$3.class
