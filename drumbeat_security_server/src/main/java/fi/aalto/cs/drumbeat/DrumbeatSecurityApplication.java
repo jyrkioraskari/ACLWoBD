@@ -52,7 +52,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 			log.info("DrumbeatAuthFilter Tomcat ROLES are:"+roles.stream()
 				     .collect(Collectors.joining(",")));
 			
-            requestContext.setSecurityContext(new DrumbeatSecurityContext("webid",roles));
+            requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(),roles));
         }
     }
 
