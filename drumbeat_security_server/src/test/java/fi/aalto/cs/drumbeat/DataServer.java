@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import fi.aalto.drumbeat.controllers.DataProtectionController;
 
-public class TestDataServer {
+public class DataServer {
 
 	@Test
 	public void test() {
@@ -16,6 +16,7 @@ public class TestDataServer {
 		String roles = ds.autenticate("https://jyrkio2.databox.me/profile/card#me", "https://architect.local.org/protected/musiikkitalo").stream()
 			     .collect(Collectors.joining(","));
 		System.out.println("Roles:"+roles);
+		// Only after the first installation
 		assertEquals("READ", roles);
 	}
 
