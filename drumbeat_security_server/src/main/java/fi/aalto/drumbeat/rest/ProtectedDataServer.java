@@ -6,8 +6,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+
+import org.glassfish.jersey.server.mvc.Viewable;
 
 @Path("/protected")
 public class ProtectedDataServer {
@@ -16,7 +17,7 @@ public class ProtectedDataServer {
 	@Produces("text/plain")
 	@GET
 	
-	public Response  getMusiikkitalo(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+	public  Viewable   getMusiikkitalo(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		request.setAttribute("name", sc.getUserPrincipal().getName() );
 		
 		if(sc.isUserInRole("CREATE"))
@@ -43,7 +44,8 @@ public class ProtectedDataServer {
 			request.setAttribute("DeletePermission", "FALSE");
 
 		
-		return Response.status(200).entity("OK..... READ: "+sc.isUserInRole("READ")).build();
+		//return Response.status(200).entity("OK..... READ: "+sc.isUserInRole("READ")).build();
+		return new Viewable("/hello.jsp", null);
 	}
 	/*
 	@RolesAllowed("admin")	
