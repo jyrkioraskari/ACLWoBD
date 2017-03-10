@@ -31,9 +31,19 @@ import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 
 public class OrganizationManager {
-	final private List<Tuple<String,Resource>> unseen_locals=new ArrayList<>();
-	final private List<Tuple<String,Long>> accesses=new ArrayList<>();
+	final static private List<Tuple<String,Resource>> unseen_locals=new ArrayList<>();
+	final static private List<Tuple<String,Long>> access_list=new ArrayList<>();
 	
+	
+	public static List<Tuple<String, Resource>> getUnseenLocals() {
+		return unseen_locals;
+	}
+
+	public static List<Tuple<String, Long>> getAccessList() {
+		return access_list;
+	}
+
+
 	private URI rootURI;
 	private final Model datamodel;
 	private final Resource root;

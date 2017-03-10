@@ -43,8 +43,6 @@ public class ProtectedDataServer {
 		else
 			request.setAttribute("DeletePermission", "FALSE");
 
-		
-		//return Response.status(200).entity("OK..... READ: "+sc.isUserInRole("READ")).build();
 		return new Viewable("/hello.jsp", null);
 	}
 	/*
