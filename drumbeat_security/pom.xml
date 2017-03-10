@@ -95,7 +95,7 @@
 
 		<module>../drumbeat_security_webid_creator</module>
 
-		<module>../drumbeat_security_auth_backend</module>
+		
 		
 		<module>../drumbeat_security_server</module>
 	</modules>

@@ -3,8 +3,6 @@ package fi.aalto.cs.drumbeat.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import org.junit.Test;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
@@ -22,12 +20,12 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
-
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.junit.Test;
 
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.rest.Organization;
+import fi.aalto.drumbeat.rest.SecurityServer;
 
 public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 
@@ -39,7 +37,7 @@ public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
 
 	@Override
 	protected Application configure() {
-		return new ResourceConfig(Organization.class);
+		return new ResourceConfig(SecurityServer.class);
 	}
 
 	

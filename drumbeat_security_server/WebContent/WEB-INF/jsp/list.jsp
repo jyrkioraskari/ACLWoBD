@@ -10,12 +10,6 @@
 	<ul>
 		<%
 		    List<Tuple<String, Long>> access_list = OrganizationManager.getAccessList();
-		
-		    if(access_list.isEmpty())
-		%>
-		   <li> List empty </li>
-		<%
-		    
 			for (Tuple<String, Long> tuple : access_list) {
 		%>
 		
