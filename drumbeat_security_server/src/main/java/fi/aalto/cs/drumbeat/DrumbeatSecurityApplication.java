@@ -39,7 +39,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
             SecurityContext sc=requestContext.getSecurityContext();
             if(sc==null)
             	return;
-            if(sc.getUserPrincipal().getName()==null)
+            if(sc.getUserPrincipal()==null)
             	return;
             log.info("DrumbeatAuthFilter webid: "+sc.getUserPrincipal().getName());
             UriInfo uriInfo = requestContext.getUriInfo();

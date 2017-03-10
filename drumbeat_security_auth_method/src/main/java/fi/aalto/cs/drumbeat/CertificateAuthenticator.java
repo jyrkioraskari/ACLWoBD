@@ -85,11 +85,11 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 								for (Object alt : (Collection) altlist) {
 									if (String.class.isInstance(alt)) {
 										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
-										String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
+										//String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
 										final List<String> roles = new ArrayList<String>();
 										roles.add("default");
-										for(String r:roles_list)
-											roles.add(r);
+										/*for(String r:roles_list)
+											roles.add(r);*/
 										
 										Principal principal = new GenericPrincipal(alt.toString(), "pass",
 												roles);
