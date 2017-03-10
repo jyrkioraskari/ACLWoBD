@@ -85,11 +85,8 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 								for (Object alt : (Collection) altlist) {
 									if (String.class.isInstance(alt)) {
 										log.info("DRUMBEAT WEBID cert alt class:" + alt.getClass().getName());
-										//String[] roles_list=server_connect((String) alt.toString(), request.getRequestURL().toString()).split(",");
 										final List<String> roles = new ArrayList<String>();
 										roles.add("default");
-										/*for(String r:roles_list)
-											roles.add(r);*/
 										
 										Principal principal = new GenericPrincipal(alt.toString(), "pass",
 												roles);
@@ -127,57 +124,6 @@ public class CertificateAuthenticator extends AuthenticatorBase {
 		return false; // temporary
 	}
 
-	private String server_connect(String alt, String requestURL) {
-		log.info("DRUMBEAT .... server connect alt: " + alt);
-		log.info("DRUMBEAT .... server connect requestURL: " + requestURL);
-		JSONObject obj = new JSONObject();
-		obj.put("alt_name", alt);
-		obj.put("requestURL", requestURL);
-		try {
-			// DO NOT CHANGE THIS
-			// HTTPS if not a local connection!
-			final String httpsURL = "http://127.0.0.1/authenticate";
-			URL myurl = new URL(httpsURL);
-			HttpURLConnection conn = (HttpURLConnection) myurl.openConnection();
-			conn.setDoOutput(true);
-			conn.setInstanceFollowRedirects(false);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", MediaType.APPLICATION_JSON);
-			conn.setRequestProperty("charset", "utf-8");
-			conn.setRequestProperty("Content-Length", Integer.toString(obj.toJSONString().length()));
-			conn.setUseCaches(false);
-			try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
-				wr.write(obj.toJSONString().getBytes());
-			}
-			InputStream ins = conn.getInputStream();
-			InputStreamReader isr = new InputStreamReader(ins);
-			BufferedReader in = new BufferedReader(isr);
-
-			String inputLine;
-
-			String response="";
-			while ((inputLine = in.readLine()) != null) {
-				response+=inputLine;
-			}
-			in.close();
-
-			JSONParser parser = new JSONParser();
-			try {
-				JSONObject response_obj = (JSONObject)parser.parse(response);
-				String status=(String) response_obj.get("status");
-				String roles=(String) response_obj.get("roles");
-				return roles;
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-			log.info("DRUMBEAT .... server connect passed");
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-		return ""; // No roles
-	}
 
 	@Override
 	protected String getAuthMethod() {

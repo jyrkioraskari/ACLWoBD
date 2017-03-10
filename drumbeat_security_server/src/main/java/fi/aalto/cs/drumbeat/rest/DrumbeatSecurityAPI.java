@@ -85,24 +85,6 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 	}
 
 
-	
-	//TODD Is a local tcp connection any risk? Can HTTPS help locally?
-	@POST
-	@Path("/authenticate")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public DrumbeatSecurityResponce createTrackInJSON(DrumbeatSecurityQuery query) {
-		DataProtectionController ds=DataProtectionController.getDataServer(query.requestURL);
-		String roles = ds.autenticate(query.alt_name, query.requestURL).stream()
-			     .collect(Collectors.joining(","));
-		DrumbeatSecurityResponce response=new DrumbeatSecurityResponce();
-		response.setRoles(roles);
-		response.setStatus("OK");
-		return response;
-	}
-	
-
-	
 	//TODO mitä tapahtuu, jos haetaan GETillä?
 	@POST
 	@Consumes("application/ld+json")	
