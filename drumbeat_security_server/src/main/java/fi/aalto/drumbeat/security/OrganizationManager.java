@@ -91,7 +91,7 @@ public class OrganizationManager {
 	}
 	private boolean checkRDFPath(Resource previous_node,String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
-		access_list.add(new Tuple(webid_uri,System.currentTimeMillis()));
+		access_list.add(new Tuple<String, Long>(webid_uri,System.currentTimeMillis()));
 		Resource current_node = root;
 		if(previous_node!=null)
 		  current_node=previous_node;
@@ -131,7 +131,7 @@ public class OrganizationManager {
 
 	private void saveUnsucceeLocal(String webid_uri, Resource path) {
         System.out.println("unsuccessful webid: "+webid_uri);
-        unseen_locals.add(new Tuple(webid_uri,path));
+        unseen_locals.add(new Tuple<String, Resource>(webid_uri,path));
         
 	}
 
@@ -172,8 +172,11 @@ public class OrganizationManager {
 			if (iter.hasNext())
 				result = iter.next();
 
+			@SuppressWarnings("unused")
 			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+			//TODO check the time_stamp
 			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
