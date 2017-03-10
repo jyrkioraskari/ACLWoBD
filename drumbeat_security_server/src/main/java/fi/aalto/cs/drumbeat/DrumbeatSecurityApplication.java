@@ -1,7 +1,10 @@
 package fi.aalto.cs.drumbeat;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -10,6 +13,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -18,6 +22,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
+
+import fi.aalto.cs.drumbeat.controllers.DataProtectionController;
 
 
 public class DrumbeatSecurityApplication extends ResourceConfig {
@@ -33,17 +39,27 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
             SecurityContext sc=requestContext.getSecurityContext();
             if(sc==null)
             	return;
-            System.out.println(sc.getUserPrincipal().getName());
             log.info("DrumbeatAuthFilter webid: "+sc.getUserPrincipal().getName());
-            requestContext.setSecurityContext(new DrumbeatSecurityContext("webid"));
+            UriInfo uriInfo = requestContext.getUriInfo();
+            URI requestUri = uriInfo.getRequestUri();
+            log.info("DrumbeatAuthFilter req url: "+requestUri.toString());
+
+            DataProtectionController ds=DataProtectionController.getDataServer(requestUri.toString());
+            final List<String> roles  = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
+			roles.add("default");
+			log.info("DrumbeatAuthFilter Tomcat ROLES are:"+roles.stream()
+				     .collect(Collectors.joining(",")));
+			
+            requestContext.setSecurityContext(new DrumbeatSecurityContext("webid",roles));
         }
     }
 
     static class DrumbeatSecurityContext implements SecurityContext {
     	private final String webid;
-
-        public DrumbeatSecurityContext(String webid) {
+    	final List<String> roles;
+        public DrumbeatSecurityContext(String webid,List<String> roles ) {
             this.webid=webid;
+            this.roles=roles;
         }
 
         @Override
@@ -58,7 +74,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 
         @Override
         public boolean isUserInRole(String role) {
-            return role.equals("possible");  // TODO add listed roles
+            return roles.contains(role);  
         }
 
         @Override
