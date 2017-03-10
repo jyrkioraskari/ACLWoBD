@@ -29,6 +29,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.utils.Tuple;
 
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
@@ -76,6 +77,7 @@ public class DataProtectionController {
 	}
 
 	public List<String> autenticate(String webid, String request_uri) {
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(webid,System.currentTimeMillis()));
 		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + webid);
@@ -119,6 +121,8 @@ public class DataProtectionController {
 							if(node.toString().equals(webid))
 							{
 								System.out.println("Equals");
+								DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+" found here",System.currentTimeMillis()));
+
 								log.info("Equals");
 								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
@@ -178,6 +182,8 @@ public class DataProtectionController {
 	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
 		final Model query_model = ModelFactory.createDefaultModel();
 		System.out.println("Next step URL is: "+nextStepURL);
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
+
 		try {
 			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
 			for(int i=0;i<new_path.size();i++)

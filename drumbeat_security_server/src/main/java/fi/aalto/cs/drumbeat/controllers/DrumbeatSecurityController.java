@@ -75,7 +75,7 @@ public class DrumbeatSecurityController {
 	}
 	private boolean validatePath(Resource previous_node,String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
-		access_list.add(new Tuple<String, Long>(webid_uri,System.currentTimeMillis()));
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(webid_uri,System.currentTimeMillis()));
 		Resource current_node = root;
 		if(previous_node!=null)
 		  current_node=previous_node;
@@ -92,7 +92,10 @@ public class DrumbeatSecurityController {
 					current_node = node;
 					if (!iterator.hasNext()) {
 						if (current_node.toString().equals(webid_uri))
+						{
+							DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid_uri+" found here",System.currentTimeMillis()));
 							return true;
+						}
 					}
 					else
 					{
@@ -120,6 +123,8 @@ public class DrumbeatSecurityController {
 	}
 
 	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
+
 		final Model query_model = ModelFactory.createDefaultModel();
 		System.out.println("Next step URL is: " + nextStepURL);
 		try {
