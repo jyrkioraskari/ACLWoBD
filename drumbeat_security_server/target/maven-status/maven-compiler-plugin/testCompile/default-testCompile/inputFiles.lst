@@ -1,3 +1,3 @@
-C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\DataServerTests.java
-C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\tests\OrganizationManagerTests.java
-C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\tests\JerseyTests_OrganizationRESTAPI.java
+C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\tests\TestOrganizationRESTAPI.java
+C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\tests\TestOrganizationManager.java
+C:\GitHub\SecuredLinkedData\drumbeat_security_server\src\test\java\fi\aalto\cs\drumbeat\TestDataServer.java

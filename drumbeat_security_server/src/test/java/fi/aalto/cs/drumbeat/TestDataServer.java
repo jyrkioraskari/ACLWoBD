@@ -1,12 +1,14 @@
 package fi.aalto.cs.drumbeat;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import fi.aalto.drumbeat.security.DataServer;
 
-public class DataServerTests {
+public class TestDataServer {
 
 	@Test
 	public void test() {
@@ -14,6 +16,7 @@ public class DataServerTests {
 		String roles = ds.connect("https://jyrkio2.databox.me/profile/card#me", "https://architect.local.org/protected/musiikkitalo").stream()
 			     .collect(Collectors.joining(","));
 		System.out.println("Roles:"+roles);
+		assertEquals("READ", roles);
 	}
 
 }

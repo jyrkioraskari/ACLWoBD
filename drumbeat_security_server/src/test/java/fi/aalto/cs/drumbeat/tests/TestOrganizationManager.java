@@ -15,7 +15,7 @@ import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.security.OrganizationManager;
 import junit.framework.TestCase;
 
-public class OrganizationManagerTests extends TestCase {
+public class TestOrganizationManager extends TestCase {
 	Optional<OrganizationManager> organization = Optional.empty();
 
 	//  Initial setup before any test

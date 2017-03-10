@@ -16,8 +16,6 @@
 
 
 	<dependencies>
-
-
 		<!-- Jersey -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
@@ -91,12 +89,7 @@
 	<groupId>fi.ni.drumbeat</groupId>
 	<modules>
 		<module>../drumbeat_security_commons</module>
-		
-
 		<module>../drumbeat_security_webid_creator</module>
-
-		
-		
 		<module>../drumbeat_security_server</module>
 	</modules>
 </project>

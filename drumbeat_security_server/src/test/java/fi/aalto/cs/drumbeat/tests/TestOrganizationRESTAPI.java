@@ -27,7 +27,7 @@ import org.junit.Test;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.rest.SecurityServer;
 
-public class JerseyTests_OrganizationRESTAPI extends JerseyTest {
+public class TestOrganizationRESTAPI extends JerseyTest {
 
 	private Model parseInput(String msg) {
 		final Model json_input_model = ModelFactory.createDefaultModel();
