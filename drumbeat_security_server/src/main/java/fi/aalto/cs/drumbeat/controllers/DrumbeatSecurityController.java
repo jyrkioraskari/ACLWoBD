@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -75,7 +76,10 @@ public class DrumbeatSecurityController {
 	}
 	private boolean validatePath(Resource previous_node,String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(webid_uri,System.currentTimeMillis()));
+		List<String> rulepath_strlist=new ArrayList<>();
+		
+		for(Resource r:rulepath) rulepath_strlist.add(r.getURI());
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("validatePath: "+webid_uri+" "+rulepath_strlist.stream().collect(Collectors.joining("-")),System.currentTimeMillis()));
 		Resource current_node = root;
 		if(previous_node!=null)
 		  current_node=previous_node;
@@ -123,7 +127,7 @@ public class DrumbeatSecurityController {
 	}
 
 	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("v-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
 
 		final Model query_model = ModelFactory.createDefaultModel();
 		System.out.println("Next step URL is: " + nextStepURL);

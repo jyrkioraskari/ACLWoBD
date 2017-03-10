@@ -77,7 +77,7 @@ public class DataProtectionController {
 	}
 
 	public List<String> autenticate(String webid, String request_uri) {
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(webid,System.currentTimeMillis()));
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("autenticate: "+webid,System.currentTimeMillis()));
 		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + webid);
@@ -121,7 +121,7 @@ public class DataProtectionController {
 							if(node.toString().equals(webid))
 							{
 								System.out.println("Equals");
-								DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+" found here",System.currentTimeMillis()));
+								DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("a-->"+webid+" found here",System.currentTimeMillis()));
 
 								log.info("Equals");
 								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
