@@ -14,8 +14,8 @@ import org.glassfish.jersey.server.mvc.Viewable;
 public class ProtectedDataServer {
 	
 	@Path("/musiikkitalo")
-	@Produces({"text/html"})
 	@GET
+	@Produces({"text/html"})
 	
 	public  Viewable   getMusiikkitalo(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 		request.setAttribute("name", sc.getUserPrincipal().getName() );

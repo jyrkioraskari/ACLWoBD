@@ -28,6 +28,14 @@ import fi.aalto.drumbeat.security.OrganizationManager;
 @Path("/")
 public class Organization extends RESTfulAPI {
 	
+
+	
+	@GET
+	@Produces({"text/html"})
+	public  Viewable   getIndexJSP(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+			return new Viewable("/index.jsp", null);
+	}
+
 	
 	@Path("/hello")
 	@GET
@@ -68,7 +76,7 @@ public class Organization extends RESTfulAPI {
 	@Produces({"text/html"})
 	@GET
 	
-	public  Viewable   getMusiikkitalo(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
+	public  Viewable   getListOfUsers(@Context SecurityContext sc, @Context HttpServletRequest request, @Context HttpServletResponse response) {
 			return new Viewable("/list.jsp", null);
 	}
 
