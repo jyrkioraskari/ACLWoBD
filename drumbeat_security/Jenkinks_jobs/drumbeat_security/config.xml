@@ -77,6 +77,11 @@
           <passwordScrambled>MTk5MTY2MW5uc3N1dTk=</passwordScrambled>
           <url>http://fabricator.local.org</url>
         </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
+        <hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
+          <userName>admin</userName>
+          <passwordScrambled>MTk5MTY2MW5uc3N1dTk=</passwordScrambled>
+          <url>http://localhost</url>
+        </hudson.plugins.deploy.tomcat.Tomcat7xAdapter>
       </adapters>
       <contextPath>/</contextPath>
       <war>**/drumbeat_security_server-1.0-SNAPSHOT.war</war>
