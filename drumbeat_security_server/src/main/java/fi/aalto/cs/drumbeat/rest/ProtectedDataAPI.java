@@ -45,8 +45,7 @@ public class ProtectedDataAPI {
 
 		return new Viewable("/hello.jsp", null);
 	}
-	/*
-	@RolesAllowed("admin")	
+	
 	@Path("/sanomatalo")
 	@GET
 	
@@ -78,5 +77,5 @@ public class ProtectedDataAPI {
 
 		
 		return new Viewable("/hello.jsp", null);
-	} */
+	} 
 }
