@@ -1,14 +1,14 @@
-package fi.aalto.drumbeat.resource;
+package fi.aalto.drumbeat.vo;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ServiceQuery {
+public class DrumbeatSecurityQuery {
 	@XmlElement(name="alt_name")
 	public String alt_name;
 	@XmlElement(name="requestURL")
 	public String  requestURL;
 	
-	public ServiceQuery() {
+	public DrumbeatSecurityQuery() {
 		
 	}
 	

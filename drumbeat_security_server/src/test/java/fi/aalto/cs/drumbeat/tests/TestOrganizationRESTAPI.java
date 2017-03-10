@@ -25,7 +25,7 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.rest.SecurityServer;
+import fi.aalto.drumbeat.rest.DrumbeatSecurityAPI;
 
 public class TestOrganizationRESTAPI extends JerseyTest {
 
@@ -37,7 +37,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 
 	@Override
 	protected Application configure() {
-		return new ResourceConfig(SecurityServer.class);
+		return new ResourceConfig(DrumbeatSecurityAPI.class);
 	}
 
 	

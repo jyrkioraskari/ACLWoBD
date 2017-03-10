@@ -25,13 +25,13 @@ import org.apache.jena.vocabulary.RDF;
 import org.glassfish.jersey.server.mvc.Viewable;
 
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.resource.ServiceQuery;
-import fi.aalto.drumbeat.resource.ServiceResponce;
-import fi.aalto.drumbeat.security.DataServer;
-import fi.aalto.drumbeat.security.OrganizationManager;
+import fi.aalto.drumbeat.controllers.DataProtectionController;
+import fi.aalto.drumbeat.controllers.DrumbeatSecurityController;
+import fi.aalto.drumbeat.vo.DrumbeatSecurityQuery;
+import fi.aalto.drumbeat.vo.DrumbeatSecurityResponce;
 
 @Path("/")
-public class SecurityServer extends RESTfulAPI {
+public class DrumbeatSecurityAPI extends RESTfulAPI {
 	
 	@GET
 	@Produces({"text/html"})
@@ -90,11 +90,11 @@ public class SecurityServer extends RESTfulAPI {
 	@Path("/authenticate")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ServiceResponce createTrackInJSON(ServiceQuery query) {
-		DataServer ds=DataServer.getDataServer(query.requestURL);
-		String roles = ds.connect(query.alt_name, query.requestURL).stream()
+	public DrumbeatSecurityResponce createTrackInJSON(DrumbeatSecurityQuery query) {
+		DataProtectionController ds=DataProtectionController.getDataServer(query.requestURL);
+		String roles = ds.autenticate(query.alt_name, query.requestURL).stream()
 			     .collect(Collectors.joining(","));
-		ServiceResponce response=new ServiceResponce();
+		DrumbeatSecurityResponce response=new DrumbeatSecurityResponce();
 		response.setRoles(roles);
 		response.setStatus("OK");
 		return response;
@@ -204,12 +204,12 @@ public class SecurityServer extends RESTfulAPI {
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 
-	Optional<OrganizationManager> organization = Optional.empty();
+	Optional<DrumbeatSecurityController> organization = Optional.empty();
 
 	@Override
 	public void setBaseURI(UriInfo uriInfo) {
 		super.setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
-			this.organization = Optional.of(OrganizationManager.getOrganizationManager(getBase_url()));
+			this.organization = Optional.of(DrumbeatSecurityController.getOrganizationManager(getBase_url()));
 	}
 }

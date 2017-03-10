@@ -1,4 +1,4 @@
-package fi.aalto.drumbeat.security;
+package fi.aalto.drumbeat.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
@@ -30,7 +30,7 @@ import org.utils.Tuple;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 
-public class OrganizationManager {
+public class DrumbeatSecurityController {
 	final static private List<Tuple<String,Resource>> unseen_locals=new ArrayList<>();
 	final static private List<Tuple<String,Long>> access_list=new ArrayList<>();
 	
@@ -48,16 +48,16 @@ public class OrganizationManager {
 	private final Model datamodel;
 	private final Resource root;
 
-	private static OrganizationManager singleton = null;
+	private static DrumbeatSecurityController singleton = null;
 
-	public static OrganizationManager getOrganizationManager(URI uri) {
+	public static DrumbeatSecurityController getOrganizationManager(URI uri) {
 		if (singleton == null)
-			singleton = new OrganizationManager(uri);
+			singleton = new DrumbeatSecurityController(uri);
 		return singleton;
 
 	}
 
-	private OrganizationManager(URI uri) {
+	private DrumbeatSecurityController(URI uri) {
 		super();
 		rootURI = uri;
 		rdf_datastore = new RDFDataStore(rootURI, "organization");
@@ -67,29 +67,13 @@ public class OrganizationManager {
 		registerWebID("https://jyrkio2.databox.me/profile/card#me", "1234");
 	}
 
-	/*
-	public Model getWebID(String webid) {
-		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
-		// @formatter:off
-		String queryString =	 "CONSTRUCT { \n" +
-								"	?webid ?p ?o \n" + 
-								"} WHERE { \n" + 
-								"     ?webid ?p ?o . \n" + 
-								"} \n";
-		// @formatter:on
-		ParameterizedSparqlString ps = new ParameterizedSparqlString(queryString);
-		
-		ps.setIri("webid", webid);
-		Query query=ps.asQuery();
-		Model result = QueryExecutionFactory.create(query, datamodel).execConstruct();
-		return result;
-	}*/
+
 
 	private RDFDataStore rdf_datastore = null;
 	public boolean checkRDFPath(String webid_uri, Resource path) {
-		return checkRDFPath(null,webid_uri, path);
+		return validatePath(null,webid_uri, path);
 	}
-	private boolean checkRDFPath(Resource previous_node,String webid_uri, Resource path) {
+	private boolean validatePath(Resource previous_node,String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
 		access_list.add(new Tuple<String, Long>(webid_uri,System.currentTimeMillis()));
 		Resource current_node = root;
@@ -113,7 +97,7 @@ public class OrganizationManager {
 					else
 					{
 						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
-						return checkRDFPath(current_node,webid_uri, new_path.get(0));
+						return validatePath(current_node,webid_uri, new_path.get(0));
 					}
 				} else {
 					System.out.println("located somewhere else. current node was: " + current_node);
@@ -208,4 +192,22 @@ public class OrganizationManager {
 
 		return ret;
 	}
+	
+	/*
+	public Model getWebID(String webid) {
+		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
+		// @formatter:off
+		String queryString =	 "CONSTRUCT { \n" +
+								"	?webid ?p ?o \n" + 
+								"} WHERE { \n" + 
+								"     ?webid ?p ?o . \n" + 
+								"} \n";
+		// @formatter:on
+		ParameterizedSparqlString ps = new ParameterizedSparqlString(queryString);
+		
+		ps.setIri("webid", webid);
+		Query query=ps.asQuery();
+		Model result = QueryExecutionFactory.create(query, datamodel).execConstruct();
+		return result;
+	}*/
 }

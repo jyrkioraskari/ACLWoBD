@@ -12,11 +12,11 @@ import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.security.OrganizationManager;
+import fi.aalto.drumbeat.controllers.DrumbeatSecurityController;
 import junit.framework.TestCase;
 
 public class TestOrganizationManager extends TestCase {
-	Optional<OrganizationManager> organization = Optional.empty();
+	Optional<DrumbeatSecurityController> organization = Optional.empty();
 
 	//  Initial setup before any test
 	
@@ -24,7 +24,7 @@ public class TestOrganizationManager extends TestCase {
 		 organization = Optional.empty();
 		 try {
 				organization = Optional
-						.of(OrganizationManager.getOrganizationManager(new URI("http://testing.org/p1/p2/p2")));
+						.of(DrumbeatSecurityController.getOrganizationManager(new URI("http://testing.org/p1/p2/p2")));
 			} catch (URISyntaxException e) {
 				fail("The URL should be in a correct format.");
 			}

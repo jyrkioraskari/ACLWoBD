@@ -11,7 +11,7 @@ import javax.ws.rs.core.SecurityContext;
 import org.glassfish.jersey.server.mvc.Viewable;
 
 @Path("/protected")
-public class ProtectedDataServer {
+public class ProtectedDataAPI {
 	
 	@Path("/musiikkitalo")
 	@GET

@@ -1,14 +1,14 @@
-package fi.aalto.drumbeat.resource;
+package fi.aalto.drumbeat.vo;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ServiceResponce {
+public class DrumbeatSecurityResponce {
 	@XmlElement(name="roles")
 	public String roles="";
 	@XmlElement(name="status")
 	public String  status="";
 	
-	public ServiceResponce() {
+	public DrumbeatSecurityResponce() {
 		
 	}
 

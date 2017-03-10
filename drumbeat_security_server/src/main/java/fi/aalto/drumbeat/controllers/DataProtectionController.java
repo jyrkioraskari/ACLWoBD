@@ -1,4 +1,4 @@
-package fi.aalto.drumbeat.security;
+package fi.aalto.drumbeat.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
@@ -34,23 +34,23 @@ import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 
 
-public class DataServer {
-	private static final Log log = LogFactory.getLog(DataServer.class);
+public class DataProtectionController {
+	private static final Log log = LogFactory.getLog(DataProtectionController.class);
 
 	private Optional<URI> uri = Optional.empty();;
 	// at the time
 	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
 
-	private static Optional<DataServer> singleton = Optional.empty();
+	private static Optional<DataProtectionController> singleton = Optional.empty();
 
-	public static DataServer getDataServer(String uri_str) {
+	public static DataProtectionController getDataServer(String uri_str) {
 		if (!singleton.isPresent()) {
 			URI uri;
 			try {
 				uri = new URI(uri_str);
 				URI service_root = new URIBuilder(uri).setScheme("https").setPath("/").build();
 				System.out.println("DataServer root: "+service_root.toString());
-				singleton = Optional.of(new DataServer(service_root.toString()));
+				singleton = Optional.of(new DataProtectionController(service_root.toString()));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -58,7 +58,7 @@ public class DataServer {
 		return singleton.get();
 	}
 
-	private DataServer(String host_uri) {
+	private DataProtectionController(String host_uri) {
 		try {
 			uri = Optional.of(new URI(host_uri));
 
@@ -75,7 +75,7 @@ public class DataServer {
 
 	}
 
-	public List<String> connect(String webid, String request_uri) {
+	public List<String> autenticate(String webid, String request_uri) {
 		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + webid);
