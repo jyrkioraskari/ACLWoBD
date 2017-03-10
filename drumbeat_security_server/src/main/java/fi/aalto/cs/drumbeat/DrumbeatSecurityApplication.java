@@ -84,7 +84,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
     }
 	
 	public DrumbeatSecurityApplication() {
-		packages("fi.aalto.drumbeat.rest");
+		packages("fi.aalto.cs.drumbeat");
 		register(LoggingFeature.class);
         register(JspMvcFeature.class);
         property("jersey.config.server.mvc.templateBasePath", "/WEB-INF/jsp");
