@@ -77,7 +77,7 @@ public class DataProtectionController {
 	}
 
 	public List<String> autenticate(String webid, String request_uri) {
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("autenticate: "+webid,System.currentTimeMillis()));
+		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("autenticate: "+webid+" req uri: "+request_uri,System.currentTimeMillis()));
 		List<String> ret=new ArrayList<String>();
 		URI canonizted_requestURI = canonizateURI(request_uri);
 		System.out.println("DRUMBEAT WebID oli:" + webid);
