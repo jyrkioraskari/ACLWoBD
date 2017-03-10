@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import fi.aalto.drumbeat.controllers.DataProtectionController;
+import fi.aalto.cs.drumbeat.controllers.DataProtectionController;
 
 public class DataServer {
 

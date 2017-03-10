@@ -24,8 +24,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
+import fi.aalto.cs.drumbeat.rest.DrumbeatSecurityAPI;
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.rest.DrumbeatSecurityAPI;
 
 public class TestOrganizationRESTAPI extends JerseyTest {
 

@@ -11,8 +11,8 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
+import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
 import fi.aalto.drumbeat.RDFConstants;
-import fi.aalto.drumbeat.controllers.DrumbeatSecurityController;
 import junit.framework.TestCase;
 
 public class TestOrganizationManager extends TestCase {
