@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.tests;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.jena.ontology.DatatypeProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntClass;
@@ -22,9 +23,9 @@ public class Ontologiatestit {
 		OntModel m = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM );
 		
 		OntClass DrumbeatDataStore = m.createClass( NS + "#DrumbeatDataStore" );
-		OntClass Collection = m.createClass( NS + "#Collection" );
-		OntClass DataSource = m.createClass( NS + "#DataSource" );
-		OntClass DataSet = m.createClass( NS + "#DataSet" );
+		OntClass Collection = m.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection");
+		OntClass DataSource = m.createClass( "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource");
+		OntClass DataSet = m.createClass( "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet" );
 		
 		ObjectProperty hasCollection = m.createObjectProperty( NS + "#hasCollection" );
 		hasCollection.addDomain( DrumbeatDataStore );
@@ -47,7 +48,7 @@ public class Ontologiatestit {
 		OntClass Project = m.createClass( NS + "#Project" );
 		OntClass Contractor = m.createClass( NS + "#Contractor" );
 		OntClass MainContractor = m.createClass( NS + "#MainContractor" );
-		OntClass WebID = m.createClass( NS + "#WebID" );
+		OntClass Person = m.createClass("http://xmlns.com/foaf/0.1/Person");
 		
 		ProtectedResource.addSubClass(Collection);
 		Collection.addSuperClass(ProtectedResource);
@@ -61,7 +62,7 @@ public class Ontologiatestit {
 		
 		ObjectProperty knowsPerson = m.createObjectProperty( NS + "#knowsPerson" );
 		knowsPerson.addDomain( Contractor );
-		knowsPerson.addRange( WebID );
+		knowsPerson.addRange( Person );
 		
 		
 		ObjectProperty hasAuthorizationRule = m.createObjectProperty( NS + "#hasAuthorizationRule" );
@@ -117,10 +118,18 @@ public class Ontologiatestit {
 		DrumbeatSecurityResponse.addSuperClass(DrumbeatSecurityMessage);
 		
 		
-		ObjectProperty hasTimeStamp = m.createObjectProperty( NS + "#hasTimeStamp" );
+		DatatypeProperty hasTimeStamp = m.createDatatypeProperty(NS + "#hasTimeStamp" );
 		hasTimeStamp.addDomain( DrumbeatSecurityMessage );
 		hasTimeStamp.addRange( XSD.dateTime );
 		
+		DatatypeProperty status = m.createDatatypeProperty(NS + "#status" );
+		status.addDomain( DrumbeatSecurityResponse );
+		status.addRange( XSD.xstring );
+		
+		hasRulePath.addDomain( DrumbeatSecurityQuery );
+		ObjectProperty hasWebID = m.createObjectProperty( NS + "#hasWebID" );
+		hasWebID.addDomain( DrumbeatSecurityQuery );
+		hasWebID.addRange( Person );
 		
 		
 		Individual thisSite = m.createIndividual( NS + "#thisSite", DrumbeatDataStore );
