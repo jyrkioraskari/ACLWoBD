@@ -26,7 +26,7 @@ public class RDFConstants {
 	public RDFConstants() {
 	}
 
-	// Ontolohy classes
+	// Ontology classes
 	static public Resource Query = create(resource,"Query");
 	static public Resource Response = create(resource,"Response");
 	
