@@ -47,7 +47,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		assertEquals("Hello OK!", hello);
 	}
 	
-    
+    //TODO use new RulePath
 	@Test
 	public void test_postHello() {
 		Model model = ModelFactory.createDefaultModel();
@@ -82,9 +82,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 
 	}
 
-	// @formatter:off
-    /*
-	
+	//TODO use new RulePath
 	private String call_registerWebID() {
 		Model model = ModelFactory.createDefaultModel();
 		try {
@@ -98,7 +96,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			query.addProperty(RDF.type, RDFConstants.Message.SecurityQuery);
 			query.addLiteral(RDFConstants.Message.hasTimeStamp, time_inMilliseconds);
 			query.addLiteral(RDFConstants.Message.hasWebID, "https:/joku#me");
-			//query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
+			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -175,8 +173,8 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			Resource rest_response = null;
 			if (iter.hasNext())
 				rest_response = iter.next();
-			//String pk=rest_response.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
-			//assertNotNull(pk);
+			String pk=rest_response.getProperty(RDFConstants.property_hasPublicKey).getObject().asLiteral().getLexicalForm();
+			assertNotNull(pk);
 			
 			response.close();
 		} catch (Exception e) {
@@ -187,7 +185,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	}
 	
 
-	
+	//TODO create test data and use new style RulePath, not RDFList
 	@Test
 	public void test_CheckPath_CreateAndFind() {
 		String webid_url = registerWebID();
@@ -218,14 +216,14 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			Resource response = null;
 			if (iter.hasNext())
 				response = iter.next();
-			boolean status = response.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
-			assertEquals(true, status);
+			
+			//boolean status = response.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
+			//assertEquals(true, status);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
 	}
-*/
-//@formatter:on
+
 }

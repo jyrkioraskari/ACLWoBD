@@ -25,6 +25,7 @@ public class JenaTests extends TestCase {
 		super();
 	}
 
+	//TODO use new RulePath
 	public void test_JenaReadWrite() {
 		Property knowsPerson = model.getProperty(Constants.security_ontology_base + "#knowsPerson");
 		Resource query_resource = model.getResource(Constants.security_ontology_base + "#CheckUser_query");
@@ -65,6 +66,7 @@ public class JenaTests extends TestCase {
 		System.out.println(writeModel(output_model));
 	}
 
+	//TODO use new RulePath
 	public void test_checkUser_parameters() {
 		Model model = ModelFactory.createDefaultModel();
 		String webid = "http://user.com/user#me";

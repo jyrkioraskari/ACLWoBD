@@ -147,16 +147,14 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
 
-		/*RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());*/
+		RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
+		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());
 
 		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}
-	// @formatter:off
-/*
- * 
+	
 	@POST
 	@Path("/registerWebID")
 	@Consumes("application/ld+json")
@@ -174,8 +172,8 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.Messages.hasTimeStamp).getObject();
-		RDFNode webid = query.getProperty(RDFConstants.Messages.hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
+		RDFNode webid = query.getProperty(RDFConstants.Message.hasWebID).getObject();
 		
 		//TODO Exponent+modulus
 		
@@ -185,15 +183,13 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Messages.SecurityResponse);
-		response.addLiteral(RDFConstants.Messages.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
+		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
-		response.addProperty(RDFConstants.Messages.hasWebID, output_model.getResource(wc.toString()));
+		response.addProperty(RDFConstants.Message.hasWebID, output_model.getResource(wc.toString()));
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
-	*/
-	// @formatter:on
 
 	Optional<DrumbeatSecurityController> organization = Optional.empty();
 

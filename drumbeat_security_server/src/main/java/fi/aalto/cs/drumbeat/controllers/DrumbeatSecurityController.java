@@ -140,6 +140,7 @@ public class DrumbeatSecurityController {
 			for (int i = 0; i < new_path.size(); i++) {
 				rulepath_list[i] = new_path.get(i);
 			}
+			//TODO use new RulePath
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
 			query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);
@@ -188,7 +189,7 @@ public class DrumbeatSecurityController {
 		rdf_datastore.saveRDFData();
 		Resource widr = datamodel.getResource(webidURI);
 		root.addProperty(RDFConstants.Contractor.trusts, widr);
-		//widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
 		return widr;
 	}
 

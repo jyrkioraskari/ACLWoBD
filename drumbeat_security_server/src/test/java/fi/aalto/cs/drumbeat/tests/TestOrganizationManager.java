@@ -38,7 +38,7 @@ public class TestOrganizationManager extends TestCase {
 		
 	}
 	
-
+	//TODO replace RDFList with new RulePath
 	@Test
 	public void testCreateAndTestPath() {
 		Model model = ModelFactory.createDefaultModel();

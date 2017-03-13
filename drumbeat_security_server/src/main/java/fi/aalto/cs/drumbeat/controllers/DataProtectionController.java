@@ -198,6 +198,7 @@ public class DataProtectionController {
 			{
 			   rulepath_list[i] = new_path.get(i);
 			}
+			//TODO use new RULEPATH!
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
 			query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);

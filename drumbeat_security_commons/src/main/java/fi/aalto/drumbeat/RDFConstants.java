@@ -7,9 +7,14 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
+
+import fi.aalto.drumbeat.RDFConstantsORG.PropertyOperation;
+import fi.aalto.drumbeat.RDFConstantsORG.ResourceOperation;
 
 public class RDFConstants {
 	static private OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
@@ -277,10 +282,14 @@ public class RDFConstants {
 		}
 
 	}
-	/*
-	 * static public Property property_hasName = create(property, "hasName");
-	 * static public Property property_hasPublicKey = create(property,
-	 * "hasPublicKey");
-	 */
-
+	static PropertyOperation property = (a) -> ResourceFactory.createProperty(Constants.security_ontology_base + "#"+a);
+	interface PropertyOperation {
+		Property create(String name);
+	   }
+	static private Property create(PropertyOperation operation,String name){
+	      return operation.create(name);
+	   }
+	 static public Property property_hasName = create(property, "hasName");
+	 static public Property property_hasPublicKey = create(property,"hasPublicKey");
+	
 }
