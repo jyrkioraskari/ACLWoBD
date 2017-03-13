@@ -1,0 +1,326 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasSubcontractor>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:allValuesFrom  rdf:Property ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasFirst>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Project>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasPermissionStatus>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityResponse> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#PermissionStatus> .
+
+<http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#UPDATE>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Permission> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#Project> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasProject>
+] .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasRulePath>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasTimeStamp>
+        a            owl:DatatypeProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityMessage> ;
+        rdfs:range   xsd:dateTime .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasFirst>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+        rdfs:range   rdf:Property .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasPermittedRole>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#PermittedRole> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Permission>
+        a       owl:Class .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasNext>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Status>
+        a       owl:Class .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#READ>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Permission> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor>
+        a       owl:Class .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasContractor>
+] .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasPath>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#DENIED>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Status> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasNext>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath>
+        a       owl:Class .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#trusts>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+        rdfs:range   <http://xmlns.com/foaf/0.1/Person> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasContractor>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasMainContractor>
+] .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasSubcontractor>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#CREATE>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Permission> .
+
+<http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode>
+        a       owl:Class .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#Site> ;
+  owl:allValuesFrom  <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasCollection>
+] .
+
+[ a                owl:Restriction ;
+  rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:cardinality  "1"^^xsd:int ;
+  owl:onProperty   <https://drumbeat.cs.hut.fi/owl/security.ttl#hasFirst>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasWebID>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityQuery> ;
+        rdfs:range   <http://xmlns.com/foaf/0.1/Person> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasNext>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityResponse>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityMessage> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+  owl:allValuesFrom  <http://xmlns.com/foaf/0.1/Person> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#trusts>
+] .
+
+[ a                   owl:Restriction ;
+  rdfs:subClassOf     <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+  owl:minCardinality  "1"^^xsd:int ;
+  owl:onProperty      <https://drumbeat.cs.hut.fi/owl/security.ttl#hasPermittedRole>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasPath>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasDataSource>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> ;
+        rdfs:range   <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasCollection>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#Site> ;
+        rdfs:range   <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityQuery>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityMessage> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection> ;
+  owl:allValuesFrom  <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasDataSource>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasRulePath>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityQuery> , <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath> .
+
+[ a                   owl:Restriction ;
+  rdfs:subClassOf     <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:minCardinality  "0"^^xsd:int ;
+  owl:onProperty      <https://drumbeat.cs.hut.fi/owl/security.ttl#hasNext>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#thisSite>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Site> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasProject>
+        a                   owl:ObjectProperty ;
+        rdfs:domain         <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+        rdfs:range          <https://drumbeat.cs.hut.fi/owl/security.ttl#Project> ;
+        rdfs:subPropertyOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#hasOccupation> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource>
+        a       owl:Class .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasDataSet>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> ;
+        rdfs:range   <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#ACCEPTED>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Status> .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#DELETE>
+        a       <https://drumbeat.cs.hut.fi/owl/security.ttl#Permission> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityResponse> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#PermissionStatus> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasPermissionStatus>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation>
+        a       owl:Class .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasAuthorizationRule>
+] .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#PermittedRole> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasPermittedRole>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasMainContractor>
+        a                   owl:ObjectProperty ;
+        rdfs:domain         <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> ;
+        rdfs:range          <https://drumbeat.cs.hut.fi/owl/security.ttl#Contractor> ;
+        rdfs:subPropertyOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#hasContractor> .
+
+<http://xmlns.com/foaf/0.1/Person>
+        a       owl:Class .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource> ;
+  owl:allValuesFrom  <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasDataSet>
+] .
+
+<http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection>
+        a                owl:Class ;
+        rdfs:subClassOf  <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> .
+
+[ a                   owl:Restriction ;
+  rdfs:subClassOf     <https://drumbeat.cs.hut.fi/owl/security.ttl#ListNode> ;
+  owl:maxCardinality  "1"^^xsd:int ;
+  owl:onProperty      <https://drumbeat.cs.hut.fi/owl/security.ttl#hasNext>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasOccupation>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityQuery> ;
+  owl:allValuesFrom  <http://xmlns.com/foaf/0.1/Person> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasWebID>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#PermittedRole>
+        a          owl:Class ;
+        owl:oneOf  ( <https://drumbeat.cs.hut.fi/owl/security.ttl#DELETE> <https://drumbeat.cs.hut.fi/owl/security.ttl#UPDATE> <https://drumbeat.cs.hut.fi/owl/security.ttl#READ> <https://drumbeat.cs.hut.fi/owl/security.ttl#CREATE> ) .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityQuery> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#RulePath> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasRulePath>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#SecurityMessage>
+        a       owl:Class .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#hasAuthorizationRule>
+        a            owl:ObjectProperty ;
+        rdfs:domain  <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+        rdfs:range   <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> .
+
+[ a                  owl:Restriction ;
+  rdfs:subClassOf    <https://drumbeat.cs.hut.fi/owl/security.ttl#ProtectedResource> ;
+  owl:allValuesFrom  <https://drumbeat.cs.hut.fi/owl/security.ttl#Occupation> ;
+  owl:onProperty     <https://drumbeat.cs.hut.fi/owl/security.ttl#hasOccupation>
+] .
+
+[ a                   owl:Restriction ;
+  rdfs:subClassOf     <https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule> ;
+  owl:minCardinality  "1"^^xsd:int ;
+  owl:onProperty      <https://drumbeat.cs.hut.fi/owl/security.ttl#hasRulePath>
+] .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#Site>
+        a       owl:Class .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#PermissionStatus>
+        a          owl:Class ;
+        owl:oneOf  ( <https://drumbeat.cs.hut.fi/owl/security.ttl#DENIED> <https://drumbeat.cs.hut.fi/owl/security.ttl#ACCEPTED> ) .
+
+<https://drumbeat.cs.hut.fi/owl/security.ttl#AuthorizationRule>
+        a       owl:Class .

@@ -90,7 +90,8 @@ public class DataProtectionController {
 
 		final List<RDFNode> matched_paths = new ArrayList<>();
 		rdf_datastore.ifPresent(x -> x.match(matched_paths, canonizted_requestURI.toString()));
-		
+		// We select only the longest path that has a matching rules
+		int longest_matching_url_length=0;
 		for (RDFNode r : matched_paths) {
 			System.out.println("match: " + r.toString());
 			//rdf_datastore.ifPresent(x -> 
@@ -105,9 +106,16 @@ public class DataProtectionController {
 					Resource path_root=rule_path.getPropertyResourceValue(RDFConstants.property_hasPath);
 					rulepath_list = x.parseRulePath(path_root); 
 				}
+				else
+					continue;
+				if(longest_matching_url_length<r.toString().length())
+				{
+					ret.clear();  // Only longest wins
+				}
 				
 				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral()).collect(Collectors.toList());
 				ListIterator<Resource> iterator = rulepath_list.listIterator();
+				
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();
 					Property p = x.getModel().getProperty(step.getURI());
