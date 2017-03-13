@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 
 import fi.aalto.drumbeat.Constants;
+import fi.aalto.drumbeat.RDFConstants;
 
 public class DataSource extends ProtectedPath {
 	private Map<String,DataSet>  datasets=new HashMap<String,DataSet>();
@@ -21,8 +22,8 @@ public class DataSource extends ProtectedPath {
 	
 
 	public DataSet addDataSet(String name) throws URISyntaxException {
-		Property hasDataSet = model.getProperty(Constants.security_ontology_base + "#hasDataSet");
-
+		Property hasDataSet = RDFConstants.hasDataSet;
+		
 		DataSet d = new DataSet(new URI(self.getURI()), name, model);
 		self.addProperty(hasDataSet, d.self);
 		datasets.put(name,d);

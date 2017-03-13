@@ -53,13 +53,13 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		Model model = ModelFactory.createDefaultModel();
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 
 			StringWriter writer = new StringWriter();
@@ -88,13 +88,13 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		Model model = ModelFactory.createDefaultModel();
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addLiteral(RDFConstants.property_hasWebID, "https:/joku#me");
 			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
@@ -149,13 +149,13 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		Model model = ModelFactory.createDefaultModel();
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid_url));
 
@@ -194,13 +194,13 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid_url));
 

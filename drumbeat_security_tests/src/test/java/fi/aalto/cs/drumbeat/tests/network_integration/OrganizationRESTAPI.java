@@ -76,7 +76,7 @@ public class OrganizationRESTAPI {
 
 			Resource query = model.createResource();
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 
 			StringWriter writer = new StringWriter();
@@ -143,13 +143,13 @@ public class OrganizationRESTAPI {
 		try {
 
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
 			query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
@@ -184,13 +184,13 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
 
@@ -229,13 +229,13 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFConstants.property_knowsPerson;
+			rulepath_list[0] = RDFConstants.property_trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
 

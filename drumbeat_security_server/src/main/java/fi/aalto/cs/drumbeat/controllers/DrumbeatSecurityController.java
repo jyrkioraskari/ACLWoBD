@@ -145,7 +145,7 @@ public class DrumbeatSecurityController {
 			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Query);
+			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
 			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
 			query.addProperty(RDFConstants.property_hasWebID, query_model.getResource(webid));
 
@@ -187,7 +187,7 @@ public class DrumbeatSecurityController {
 	public Resource registerWebID(String webidURI, String public_key) {
 		rdf_datastore.saveRDFData();
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(RDFConstants.property_knowsPerson, widr);
+		root.addProperty(RDFConstants.property_trusts, widr);
 		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
 		return widr;
 	}

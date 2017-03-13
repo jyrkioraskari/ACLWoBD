@@ -26,10 +26,6 @@ abstract class ProtectedPath extends AbstractData {
 		self.addProperty(hasProject, this.project.self);
 		Resource contractor= this.model.createResource("http://fabricator.local.org/");
 		this.project.self.addProperty(RDFConstants.property_hasContractor, contractor);
-		//Resource jyrkio= this.model.createResource("https://jyrkio2.databox.me/profile/card#me");
-		//contractor.addProperty(RDFConstants.property_knowsPerson,jyrkio);
-		
-		
 		return this.project;
 	}
 

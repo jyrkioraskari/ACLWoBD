@@ -68,7 +68,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 		response.addLiteral(RDFConstants.property_information, "base was: " + getBase_url());
 
@@ -108,7 +108,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
 		Literal result_code = output_model.createTypedLiteral(new Boolean(result));
@@ -146,7 +146,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		
 		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());
 
@@ -179,7 +179,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 				public_key.asLiteral().getLexicalForm());
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Response);
+		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
 		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
 		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.toString()));

@@ -45,7 +45,7 @@ public class TestOrganizationManager extends TestCase {
 		Resource wc = organization.get().registerWebID("http://person#i","1234");
 		
 		RDFNode[] rulepath_list = new RDFNode[1];
-		rulepath_list[0] = RDFConstants.property_knowsPerson;
+		rulepath_list[0] = RDFConstants.property_trusts;
 		RDFList rulepath = model.createList(rulepath_list);
 		
 		boolean result_true = organization.get().checkRDFPath(wc.toString(), rulepath.asResource());
