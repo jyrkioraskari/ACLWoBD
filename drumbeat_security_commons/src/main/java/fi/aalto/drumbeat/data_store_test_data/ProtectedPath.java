@@ -3,9 +3,9 @@ package fi.aalto.drumbeat.data_store_test_data;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 
 import fi.aalto.drumbeat.RDFConstants;
 
@@ -14,7 +14,7 @@ abstract class ProtectedPath extends AbstractData {
 	private AuthenticationRule  rule;
 
 
-	public ProtectedPath(URI root,String name, Model model) {
+	public ProtectedPath(URI root,String name, OntModel model) {
 		super(root, name, model);
 	}
 
@@ -24,7 +24,8 @@ abstract class ProtectedPath extends AbstractData {
 
 		this.project = new Project(new URI(self.getURI()), name, model);
 		self.addProperty(hasProject, this.project.self);
-		Resource contractor= this.model.createResource("http://fabricator.local.org/");
+		//Resource contractor= this.model.createResource("http://fabricator.local.org/");
+		Individual contractor = this.model.createIndividual( "http://fabricator.local.org/", RDFConstants.Contractor);
 		this.project.self.addProperty(RDFConstants.property_hasContractor, contractor);
 		return this.project;
 	}

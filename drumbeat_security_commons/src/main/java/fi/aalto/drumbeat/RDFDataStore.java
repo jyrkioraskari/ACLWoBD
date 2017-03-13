@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -37,7 +38,7 @@ public class RDFDataStore {
 	private final URI rootURI;
 	private final String rdf_filename;
 
-	final private Model model= ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM);
+	final private OntModel model= ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM);
 
 	public RDFDataStore(URI rootURI,String type) {
 		super();

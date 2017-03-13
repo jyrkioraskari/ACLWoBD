@@ -3,7 +3,7 @@ package fi.aalto.drumbeat.data_store_test_data;
 import java.net.URI;
 import java.util.UUID;
 
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
@@ -13,7 +13,7 @@ import fi.aalto.drumbeat.Constants;
 
 public class RulePath extends AbstractData {
 
-	public RulePath(URI root,Model model) {
+	public RulePath(URI root,OntModel model) {
 		super(root, UUID.randomUUID().toString(), model);  // uudeelleenkäyttöä varten!, muuten olisi blank node
 		RDFProperties property = new RDFProperties();
 		Resource person1 = model.getResource("http://company1/mats");

@@ -5,16 +5,15 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
 
-import fi.aalto.drumbeat.Constants;
 import fi.aalto.drumbeat.RDFConstants;
 
 public class Collection extends ProtectedPath {
 	private Map<String,DataSource>  datasources=new HashMap<String,DataSource>();
 
-	public Collection(URI root,String name, Model model) {
+	public Collection(URI root,String name, OntModel model) {
 		super(root, name, model);
 	}
 

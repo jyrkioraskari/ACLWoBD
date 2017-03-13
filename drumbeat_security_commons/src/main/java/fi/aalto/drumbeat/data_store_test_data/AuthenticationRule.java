@@ -7,10 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
+import org.apache.jena.ontology.OntModel;
 
-import fi.aalto.drumbeat.Constants;
 import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.data_store_test_data.PermittedRoles.Right;
 
@@ -19,7 +17,7 @@ public class AuthenticationRule extends AbstractData {
 	private Map<Right,PermittedRoles> permissions= new HashMap<Right,PermittedRoles>();
 	private Set<RulePath> rulepaths= new HashSet<RulePath>();
 
-	public AuthenticationRule(URI root,String name, Model model) {
+	public AuthenticationRule(URI root,String name, OntModel model) {
 		super(root, name, model);
 		//DEFAULT
 		try {

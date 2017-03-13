@@ -4,7 +4,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jena.rdf.model.Model;
+import org.apache.jena.ontology.OntModel;
 
 public class PermittedRoles extends AbstractData {
 	public enum Right{
@@ -12,7 +12,7 @@ public class PermittedRoles extends AbstractData {
 	}
 
 	static Map<Right,PermittedRoles> permissions= new HashMap<Right,PermittedRoles>();
-	static PermittedRoles getPermission(Right right, Model model)
+	static PermittedRoles getPermission(Right right, OntModel model)
 	{
 		PermittedRoles p=permissions.get(right);
 		if(p==null)
@@ -27,7 +27,7 @@ public class PermittedRoles extends AbstractData {
 	
 	
 	
-	public PermittedRoles(String name, Model model) throws URISyntaxException {
+	public PermittedRoles(String name, OntModel model) throws URISyntaxException {
 			super(name, model);
 	}
 

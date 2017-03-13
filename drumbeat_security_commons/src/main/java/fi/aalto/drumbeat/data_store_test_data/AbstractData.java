@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
@@ -12,9 +13,9 @@ import fi.aalto.drumbeat.Constants;
 
 public abstract class AbstractData {
 	protected final Resource  self;
-	protected final Model model;
+	protected final OntModel model;
 
-	public AbstractData(URI uri,String name, Model model) {
+	public AbstractData(URI uri,String name, OntModel model) {
 		self=model.getResource(appendSlash(uri.toString())+name);
 		Resource type=model.getResource(Constants.security_ontology_base+"#"+this.getClass().getSimpleName());
 		self.addProperty(RDF.type, type);
@@ -22,7 +23,7 @@ public abstract class AbstractData {
 	}
 
 	// The base root is a global one 
-	public AbstractData(String name, Model model) throws URISyntaxException {
+	public AbstractData(String name, OntModel model) throws URISyntaxException {
 		self=model.getResource(getRoot(new URI(Constants.security_ontology_base))+this.getClass().getSimpleName()+"/"+name);
 		Resource type=model.getResource(Constants.security_ontology_base+"#"+this.getClass().getSimpleName());
 		self.addProperty(RDF.type, type);

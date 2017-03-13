@@ -81,6 +81,8 @@ public class RDFConstants {
 		Occupation.addSubClass(Project);
 		Project.addSuperClass(Occupation);
 	}
+	static public OntClass Contractor = m.createClass( Constants.security_ontology_base + "#Contractor" );
+
 
 	static public Property property_hasTimeStamp = create(property, "hasTimeStamp");
 
