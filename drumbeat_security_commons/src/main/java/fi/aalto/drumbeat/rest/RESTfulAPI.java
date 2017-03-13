@@ -11,7 +11,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.RDFOntology;
 
 
 public class RESTfulAPI {
@@ -26,7 +26,7 @@ public class RESTfulAPI {
 
 
 	protected Resource getQuery(Model model) {
-		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();

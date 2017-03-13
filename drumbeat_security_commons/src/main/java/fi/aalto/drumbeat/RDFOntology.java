@@ -16,7 +16,7 @@ import org.apache.jena.vocabulary.XSD;
 import fi.aalto.drumbeat.RDFConstantsORG.PropertyOperation;
 import fi.aalto.drumbeat.RDFConstantsORG.ResourceOperation;
 
-public class RDFConstants {
+public class RDFOntology {
 	static private OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 	
@@ -126,23 +126,23 @@ public class RDFConstants {
 			RulePath.addSubClass(m.createAllValuesFromRestriction(null, hasPath, ListNode));
 		}
 
-		static public ObjectProperty hasFirst = m.createObjectProperty(Constants.security_ontology_base + "#hasFirst");
+		static public ObjectProperty first = m.createObjectProperty(Constants.security_ontology_base + "#first");
 		static {
-			hasFirst.addDomain(ListNode);
-			hasFirst.addRange(RDF.Property);
-			ListNode.addSubClass(m.createAllValuesFromRestriction(null, hasFirst, RDF.Property));
-			ListNode.addSubClass(m.createCardinalityRestriction(null, hasFirst, 1));
+			first.addDomain(ListNode);
+			first.addRange(RDF.Property);
+			ListNode.addSubClass(m.createAllValuesFromRestriction(null, first, RDF.Property));
+			ListNode.addSubClass(m.createCardinalityRestriction(null, first, 1));
 
 		}
 
-		static public ObjectProperty hasNext = m.createObjectProperty(Constants.security_ontology_base + "#hasNext");
+		static public ObjectProperty rest = m.createObjectProperty(Constants.security_ontology_base + "#rest");
 		static {
-			hasNext.addDomain(ListNode);
-			hasNext.addRange(ListNode);
+			rest.addDomain(ListNode);
+			rest.addRange(ListNode);
 
-			ListNode.addSubClass(m.createAllValuesFromRestriction(null, hasNext, ListNode));
-			ListNode.addSubClass(m.createMinCardinalityRestriction(null, hasNext, 0));
-			ListNode.addSubClass(m.createMaxCardinalityRestriction(null, hasNext, 1));
+			ListNode.addSubClass(m.createAllValuesFromRestriction(null, rest, ListNode));
+			ListNode.addSubClass(m.createMinCardinalityRestriction(null, rest, 0));
+			ListNode.addSubClass(m.createMaxCardinalityRestriction(null, rest, 1));
 		}
 		static {
 
@@ -292,4 +292,6 @@ public class RDFConstants {
 	 static public Property property_hasName = create(property, "hasName");
 	 static public Property property_hasPublicKey = create(property,"hasPublicKey");
 	
+	 
+	 
 }

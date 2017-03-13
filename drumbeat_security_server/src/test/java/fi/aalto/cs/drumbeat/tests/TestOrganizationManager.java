@@ -12,7 +12,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
-import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.RDFOntology;
 import junit.framework.TestCase;
 
 public class TestOrganizationManager extends TestCase {
@@ -45,7 +45,7 @@ public class TestOrganizationManager extends TestCase {
 		Resource wc = organization.get().registerWebID("http://person#i","1234");
 		
 		RDFNode[] rulepath_list = new RDFNode[1];
-		rulepath_list[0] = RDFConstants.Contractor.trusts;
+		rulepath_list[0] = RDFOntology.Contractor.trusts;
 		RDFList rulepath = model.createList(rulepath_list);
 		
 		boolean result_true = organization.get().checkRDFPath(wc.toString(), rulepath.asResource());

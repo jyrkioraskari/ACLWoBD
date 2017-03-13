@@ -31,7 +31,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
 import org.utils.Tuple;
 
-import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.RDFOntology;
 import fi.aalto.drumbeat.RDFDataStore;
 
 public class DrumbeatSecurityController {
@@ -143,12 +143,12 @@ public class DrumbeatSecurityController {
 			//TODO use new RulePath
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
-			query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);
+			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Message.SecurityQuery);
-			query.addLiteral(RDFConstants.Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.Message.hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
+			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFOntology.Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -165,15 +165,15 @@ public class DrumbeatSecurityController {
 			final Model response_model = ModelFactory.createDefaultModel();
 			response_model.read(new ByteArrayInputStream(response_txt.getBytes()), null, "JSON-LD");
 
-			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
 
 			@SuppressWarnings("unused")
-			RDFNode time_stamp = result.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
+			RDFNode time_stamp = result.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 			// TODO check the time_stamp
-			return result.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
+			return result.getProperty(RDFOntology.Message.hasPermissionStatus).getObject().asResource() == RDFOntology.Message.accepted;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -188,8 +188,8 @@ public class DrumbeatSecurityController {
 	public Resource registerWebID(String webidURI, String public_key) {
 		rdf_datastore.saveRDFData();
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(RDFConstants.Contractor.trusts, widr);
-		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+		root.addProperty(RDFOntology.Contractor.trusts, widr);
+		widr.addLiteral(RDFOntology.property_hasPublicKey, public_key);
 		return widr;
 	}
 

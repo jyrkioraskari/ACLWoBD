@@ -31,7 +31,7 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.utils.Tuple;
 
-import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.RDFOntology;
 import fi.aalto.drumbeat.RDFDataStore;
 
 
@@ -100,10 +100,10 @@ public class DataProtectionController {
 				Resource current_node = x.getModel().getResource(r.toString());
 				
 				List<Resource> rulepath_list = null;
-				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFConstants.Authorization.hasAuthorizationRule);
+				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFOntology.Authorization.hasAuthorizationRule);
 				if(authorizationRule!=null) {
-					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFConstants.Authorization.hasRulePath);
-					Resource path_root=rule_path.getPropertyResourceValue(RDFConstants.Authorization.hasPath);
+					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFOntology.Authorization.hasRulePath);
+					Resource path_root=rule_path.getPropertyResourceValue(RDFOntology.Authorization.hasPath);
 					rulepath_list = x.parseRulePath(path_root); 
 				}
 				else
@@ -201,12 +201,12 @@ public class DataProtectionController {
 			//TODO use new RULEPATH!
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
-			query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);
+			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.Message.SecurityQuery);
-			query.addLiteral(RDFConstants.Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.Message.hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
+			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFOntology.Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -232,7 +232,7 @@ public class DataProtectionController {
 			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
 			
 			
-			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
 			
 			
 			
@@ -240,8 +240,8 @@ public class DataProtectionController {
 			if (iter.hasNext())
 				result = iter.next();
 			
-			RDFNode time_stamp = result.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
-			return result.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
+			RDFNode time_stamp = result.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
+			return result.getProperty(RDFOntology.Message.hasPermissionStatus).getObject().asResource() == RDFOntology.Message.accepted;
 			
 		} catch (Exception e) {
 			e.printStackTrace();

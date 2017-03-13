@@ -28,7 +28,7 @@ import fi.aalto.cs.drumbeat.controllers.DataProtectionController;
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
 import fi.aalto.cs.drumbeat.vo.DrumbeatSecurityQuery;
 import fi.aalto.cs.drumbeat.vo.DrumbeatSecurityResponce;
-import fi.aalto.drumbeat.RDFConstants;
+import fi.aalto.drumbeat.RDFOntology;
 import fi.aalto.drumbeat.rest.RESTfulAPI;
 
 @Path("/")
@@ -65,14 +65,14 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
+		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
-		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(RDFConstants.Message.hasMessage, "base was: " + getBase_url());
+		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);
+		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(RDFOntology.Message.hasMessage, "base was: " + getBase_url());
 
-		response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.accepted);
+		response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.accepted);
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 
@@ -101,20 +101,20 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(RDFConstants.Message.hasWebID).getObject();
-		RDFNode path = query.getProperty(RDFConstants.Authorization.hasRulePath).getObject();
+		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
+		RDFNode path = query.getProperty(RDFOntology.Authorization.hasRulePath).getObject();
 		
 		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
-		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);
+		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
 		if(result)
-			response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.accepted);
+			response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.accepted);
 		else
-			response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.denied);
+			response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.denied);
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}
@@ -138,19 +138,19 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(RDFConstants.Message.hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
 		Resource wp = organization.get().getWebIDProfile(webid_url.toString());
 		if (wp == null)
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
+		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);
 
-		RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());
+		RDFNode public_key=wp.getProperty(RDFOntology.property_hasPublicKey).getObject();
+		response.addLiteral(RDFOntology.property_hasPublicKey, public_key.asLiteral().toString());
 
-		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}
@@ -172,21 +172,21 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
-		RDFNode webid = query.getProperty(RDFConstants.Message.hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
+		RDFNode webid = query.getProperty(RDFOntology.Message.hasWebID).getObject();
 		
 		//TODO Exponent+modulus
 		
-		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
+		RDFNode public_key = query.getProperty(RDFOntology.property_hasPublicKey).getObject();
 		Resource wc = organization.get().registerWebID(webid.toString(),
 				public_key.asLiteral().getLexicalForm());
 
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
-		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);
+		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
-		response.addProperty(RDFConstants.Message.hasWebID, output_model.getResource(wc.toString()));
+		response.addProperty(RDFOntology.Message.hasWebID, output_model.getResource(wc.toString()));
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
