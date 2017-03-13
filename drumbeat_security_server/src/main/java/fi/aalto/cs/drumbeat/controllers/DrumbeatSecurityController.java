@@ -142,12 +142,12 @@ public class DrumbeatSecurityController {
 			}
 			RDFList rulepath = query_model.createList(rulepath_list);
 			Resource query = query_model.createResource();
-			query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+			query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFConstants.SecurityQuery);
-			query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFConstants.property_hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, RDFConstants.Message.SecurityQuery);
+			query.addLiteral(RDFConstants.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDFConstants.Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -164,15 +164,15 @@ public class DrumbeatSecurityController {
 			final Model response_model = ModelFactory.createDefaultModel();
 			response_model.read(new ByteArrayInputStream(response_txt.getBytes()), null, "JSON-LD");
 
-			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
 
 			@SuppressWarnings("unused")
-			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+			RDFNode time_stamp = result.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
 			// TODO check the time_stamp
-			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
+			return result.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,8 +187,8 @@ public class DrumbeatSecurityController {
 	public Resource registerWebID(String webidURI, String public_key) {
 		rdf_datastore.saveRDFData();
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(RDFConstants.property_trusts, widr);
-		widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
+		root.addProperty(RDFConstants.Contractor.trusts, widr);
+		//widr.addLiteral(RDFConstants.property_hasPublicKey, public_key);
 		return widr;
 	}
 

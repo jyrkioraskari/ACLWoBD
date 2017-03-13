@@ -48,19 +48,19 @@ public class JenaTests extends TestCase {
 		Model output_model = ModelFactory.createDefaultModel();
 		input_model.write(System.out, "TTL");
 
-		ResIterator iter = input_model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+		ResIterator iter = input_model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();
 		else
 			return;
-		System.out.println(query.hasProperty(RDFConstants.property_hasTimeStamp));
+		System.out.println(query.hasProperty(RDFConstants.Message.hasTimeStamp));
 
-		RDFNode ts = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+		RDFNode ts = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
 		System.out.println(ts);
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, ts);
+		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
+		response.addLiteral(RDFConstants.Message.hasTimeStamp, ts);
 
 		System.out.println(writeModel(output_model));
 	}
@@ -70,15 +70,15 @@ public class JenaTests extends TestCase {
 		String webid = "http://user.com/user#me";
 
 		RDFNode[] rulepath_list = new RDFNode[1];
-		rulepath_list[0] = RDFConstants.property_trusts;
+		rulepath_list[0] = RDFConstants.Contractor.trusts;
 		RDFList rulepath = model.createList(rulepath_list);
 		Resource query = model.createResource();
-		query.addProperty(RDFConstants.property_hasRulePath, rulepath);
+		query.addProperty(RDFConstants.Authorization.hasRulePath, rulepath);
 
 		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-		query.addProperty(RDF.type, RDFConstants.SecurityQuery);
-		query.addLiteral(RDFConstants.property_hasTimeStamp, time_inMilliseconds);
-		query.addProperty(RDFConstants.property_hasWebID, model.getResource(webid));
+		query.addProperty(RDF.type, RDFConstants.Message.SecurityQuery);
+		query.addLiteral(RDFConstants.Message.hasTimeStamp, time_inMilliseconds);
+		query.addProperty(RDFConstants.Message.hasWebID, model.getResource(webid));
 
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");

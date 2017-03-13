@@ -13,17 +13,20 @@ import org.apache.jena.rdf.model.Resource;
 
 import fi.aalto.drumbeat.RDFConstants;
 
+
 public class RESTfulAPI {
 	private URI base_url;
 
 	protected Model parseInput(String msg) {
 		final Model json_input_model = ModelFactory.createDefaultModel();
 		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
+		
 		return json_input_model;
 	}
 
+
 	protected Resource getQuery(Model model) {
-		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.property_hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(RDFConstants.Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();

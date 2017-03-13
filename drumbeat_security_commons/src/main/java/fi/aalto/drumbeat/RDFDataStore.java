@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,10 +28,6 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
-
-import fi.aalto.drumbeat.data_store_test_data.Collection;
-import fi.aalto.drumbeat.data_store_test_data.DataSet;
-import fi.aalto.drumbeat.data_store_test_data.DataSource;
 
 public class RDFDataStore {
 	private final URI rootURI;
@@ -99,27 +94,7 @@ public class RDFDataStore {
 	}
 
 	private void createDemoData() {
-		try {
-			Collection c_smc= new Collection(new URI("https://architect.local.org/"), "turva", model);
-			c_smc.addProject("fix1");
-			c_smc.addRule("contractors_allowed_read");
-			
-			
-			Collection c= new Collection(new URI("https://architect.local.org/"), "musiikkitalo", model);
-			c.addProject("fix2");
-			c.addRule("maincontractor_allowed_read");
-			
-			DataSource ds=c.addDataSource("architectural");
-			ds.addRule("rule2");
-			
-			
-			DataSet dset=ds.addDataSet("20151125");
-			dset.addRule("rule32");
-			
-			//model.write(System.out,"TURTLE");
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		
 	}
 	
 	public void match(List<RDFNode> ret,String request_url)
@@ -127,7 +102,7 @@ public class RDFDataStore {
 		System.out.println("etsitty: "+request_url);
 		StringBuilder sb=new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <"+RDFConstants.property_hasAuthorizationRule.getURI()+"> ?x");
+		sb.append(" ?path  <"+RDFConstants.Authorization.hasAuthorizationRule.getURI()+"> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString()) ;
 		  try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -148,8 +123,8 @@ public class RDFDataStore {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + RDFConstants.property_hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + RDFConstants.property_hasPermittedRole.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + RDFConstants.Authorization.hasAuthorizationRule.getURI() + "> ?x .");
+		sb.append(" ?x  <" + RDFConstants.Authorization.hasPermittedRole.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {

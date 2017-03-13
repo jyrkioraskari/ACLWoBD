@@ -65,14 +65,14 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
+		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(RDFConstants.property_information, "base was: " + getBase_url());
+		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
+		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(RDFConstants.Message.hasMessage, "base was: " + getBase_url());
 
-		response.addLiteral(RDFConstants.property_status, "HELLO");
+		response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.accepted);
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 
@@ -101,18 +101,20 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
-		RDFNode path = query.getProperty(RDFConstants.property_hasRulePath).getObject();
+		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(RDFConstants.Message.hasWebID).getObject();
+		RDFNode path = query.getProperty(RDFConstants.Authorization.hasRulePath).getObject();
 		
 		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
+		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
-		Literal result_code = output_model.createTypedLiteral(new Boolean(result));
-		response.addLiteral(RDFConstants.property_status, result_code);
+		if(result)
+			response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.accepted);
+		else
+			response.addProperty(RDFConstants.Message.hasPermissionStatus, RDFConstants.Message.denied);
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}
@@ -136,24 +138,25 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(RDFConstants.property_hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(RDFConstants.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(RDFConstants.Message.hasWebID).getObject();
 		Resource wp = organization.get().getWebIDProfile(webid_url.toString());
 		if (wp == null)
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		
-		RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
-		
-		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());
+		response.addProperty(RDF.type, RDFConstants.Message.SecurityResponse);
 
+		/*RDFNode public_key=wp.getProperty(RDFConstants.property_hasPublicKey).getObject();
+		response.addLiteral(RDFConstants.property_hasPublicKey, public_key.asLiteral().toString());*/
+
+		response.addLiteral(RDFConstants.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 		return Response.status(200).entity(writeModel(output_model)).build();
 
 	}
-
+	// @formatter:off
+/*
+ * 
 	@POST
 	@Path("/registerWebID")
 	@Consumes("application/ld+json")
@@ -171,21 +174,26 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-		RDFNode webid = query.getProperty(RDFConstants.property_hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(RDFConstants.Messages.hasTimeStamp).getObject();
+		RDFNode webid = query.getProperty(RDFConstants.Messages.hasWebID).getObject();
+		
 		//TODO Exponent+modulus
+		
 		RDFNode public_key = query.getProperty(RDFConstants.property_hasPublicKey).getObject();
 		Resource wc = organization.get().registerWebID(webid.toString(),
 				public_key.asLiteral().getLexicalForm());
 
-		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, RDFConstants.SecurityResponse);
-		response.addLiteral(RDFConstants.property_hasTimeStamp, time_stamp.asLiteral().toString());
 
-		response.addProperty(RDFConstants.property_hasWebID, output_model.getResource(wc.toString()));
+		Resource response = output_model.createResource();
+		response.addProperty(RDF.type, RDFConstants.Messages.SecurityResponse);
+		response.addLiteral(RDFConstants.Messages.hasTimeStamp, time_stamp.asLiteral().toString());
+
+		response.addProperty(RDFConstants.Messages.hasWebID, output_model.getResource(wc.toString()));
 
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
+	*/
+	// @formatter:on
 
 	Optional<DrumbeatSecurityController> organization = Optional.empty();
 
