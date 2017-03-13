@@ -3,10 +3,12 @@ package fi.aalto.cs.drumbeat.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
@@ -15,6 +17,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -32,10 +35,9 @@ import fi.aalto.drumbeat.RDFConstants;
 import fi.aalto.drumbeat.RDFDataStore;
 
 public class DrumbeatSecurityController {
-	final static private List<Tuple<String,Resource>> unseen_locals=new ArrayList<>();
-	final static private List<Tuple<String,Long>> access_list=new ArrayList<>();
-	
-	
+	final static private List<Tuple<String, Resource>> unseen_locals = new ArrayList<>();
+	final static private List<Tuple<String, Long>> access_list = new ArrayList<>();
+
 	public static List<Tuple<String, Resource>> getUnseenLocals() {
 		return unseen_locals;
 	}
@@ -44,45 +46,48 @@ public class DrumbeatSecurityController {
 		return access_list;
 	}
 
-
-	private URI rootURI;
+	private Optional<URI> rootURI = Optional.empty();;
 	private final Model datamodel;
 	private final Resource root;
 
-	private static DrumbeatSecurityController singleton = null;
+	private static Optional<DrumbeatSecurityController> singleton = Optional.empty();
 
 	public static DrumbeatSecurityController getOrganizationManager(URI uri) {
-		if (singleton == null)
-			singleton = new DrumbeatSecurityController(uri);
-		return singleton;
-
+		if (!singleton.isPresent()) {
+			singleton = Optional.of(new DrumbeatSecurityController(uri));
+		}
+		return singleton.get();
 	}
 
 	private DrumbeatSecurityController(URI uri) {
 		super();
-		rootURI = uri;
-		rdf_datastore = new RDFDataStore(rootURI, "organization");
+		rootURI =  Optional.of(uri);
+		rdf_datastore = new RDFDataStore(rootURI.get(), "organization");
 		datamodel = rdf_datastore.getModel();
 		// rdf_datastore.readRDFData();
 		root = datamodel.getResource(rootURI.toString());
 		registerWebID("https://jyrkio2.databox.me/profile/card#me", "1234");
 	}
 
-
-
 	private RDFDataStore rdf_datastore = null;
+
 	public boolean checkRDFPath(String webid_uri, Resource path) {
-		return validatePath(null,webid_uri, path);
+		return validatePath(null, webid_uri, path);
 	}
-	private boolean validatePath(Resource previous_node,String webid_uri, Resource path) {
+
+	private boolean validatePath(Resource previous_node, String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
-		List<String> rulepath_strlist=new ArrayList<>();
-		
-		for(Resource r:rulepath) rulepath_strlist.add(r.getURI());
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("validatePath: "+webid_uri+" "+rulepath_strlist.stream().collect(Collectors.joining("-")),System.currentTimeMillis()));
+		List<String> rulepath_strlist = new ArrayList<>();
+
+		for (Resource r : rulepath)
+			rulepath_strlist.add(r.getURI());
+		DrumbeatSecurityController.getAccessList()
+				.add(new Tuple<String, Long>(
+						"validatePath: " + webid_uri + " " + rulepath_strlist.stream().collect(Collectors.joining("-")),
+						System.currentTimeMillis()));
 		Resource current_node = root;
-		if(previous_node!=null)
-		  current_node=previous_node;
+		if (previous_node != null)
+			current_node = previous_node;
 		ListIterator<Resource> iterator = rulepath.listIterator();
 		while (iterator.hasNext()) {
 			Resource step = iterator.next();
@@ -95,16 +100,14 @@ public class DrumbeatSecurityController {
 					System.out.println("from local store:" + node);
 					current_node = node;
 					if (!iterator.hasNext()) {
-						if (current_node.toString().equals(webid_uri))
-						{
-							DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid_uri+" found here",System.currentTimeMillis()));
+						if (current_node.toString().equals(webid_uri)) {
+							DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(
+									"-->" + webid_uri + " found here", System.currentTimeMillis()));
 							return true;
 						}
-					}
-					else
-					{
+					} else {
 						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
-						return validatePath(current_node,webid_uri, new_path.get(0));
+						return validatePath(current_node, webid_uri, new_path.get(0));
 					}
 				} else {
 					System.out.println("located somewhere else. current node was: " + current_node);
@@ -121,13 +124,14 @@ public class DrumbeatSecurityController {
 	}
 
 	private void saveUnsucceeLocal(String webid_uri, Resource path) {
-        System.out.println("unsuccessful webid: "+webid_uri);
-        unseen_locals.add(new Tuple<String, Resource>(webid_uri,path));
-        
+		System.out.println("unsuccessful webid: " + webid_uri);
+		unseen_locals.add(new Tuple<String, Resource>(webid_uri, path));
+
 	}
 
 	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {
-		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("v-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
+		DrumbeatSecurityController.getAccessList()
+				.add(new Tuple<String, Long>("v-->" + webid + "-->" + nextStepURL, System.currentTimeMillis()));
 
 		final Model query_model = ModelFactory.createDefaultModel();
 		System.out.println("Next step URL is: " + nextStepURL);
@@ -167,9 +171,8 @@ public class DrumbeatSecurityController {
 
 			@SuppressWarnings("unused")
 			RDFNode time_stamp = result.getProperty(RDFConstants.property_hasTimeStamp).getObject();
-			//TODO check the time_stamp
+			// TODO check the time_stamp
 			return result.getProperty(RDFConstants.property_status).getObject().asLiteral().getBoolean();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -201,7 +204,7 @@ public class DrumbeatSecurityController {
 
 		return ret;
 	}
-	
+
 	/*
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
