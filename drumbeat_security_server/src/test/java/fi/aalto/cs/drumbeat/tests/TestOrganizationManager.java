@@ -66,7 +66,7 @@ public class TestOrganizationManager extends TestCase {
 		for (Resource r : rulepath_list)
 			rulepath_strlist.add(r.getURI());
 		
-		boolean result_true = organization.get().check("https://jyrkio2.databox.me/profile/card#me", rulepath_strlist);
+		boolean result_true = organization.get().validate("https://jyrkio2.databox.me/profile/card#me", rulepath_strlist);
 		assertEquals(true, result_true);
 		
 		//boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());

@@ -71,7 +71,7 @@ public class DrumbeatSecurityController {
 
 	private RDFDataStore rdf_datastore = null;
 
-	public boolean check(String webid_uri, List<String> rulepath_list) {
+	public boolean validate(String webid_uri, List<String> rulepath_list) {
 		return validatePath(null, webid_uri, rulepath_list);
 	}
 

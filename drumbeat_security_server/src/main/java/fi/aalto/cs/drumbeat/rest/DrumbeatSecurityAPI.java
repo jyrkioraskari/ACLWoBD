@@ -86,7 +86,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 	@POST
 	@Consumes("application/ld+json")	
 	@Produces("application/ld+json")
-	public Response checkPath(@Context UriInfo uriInfo, String msg) {
+	public Response validatePath(@Context UriInfo uriInfo, String msg) {
 		setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
@@ -108,7 +108,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		for (Resource r : rulepath)
 			rulepath_list.add(r.getURI());
 		
-		boolean result = organization.get().check(webid_url.toString(), rulepath_list);
+		boolean result = organization.get().validate(webid_url.toString(), rulepath_list);
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);

@@ -135,7 +135,7 @@ public class DataProtectionController {
 								log.info("Equals");
 								List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
-									int i=sy.lastIndexOf("/");
+									int i=sy.lastIndexOf("#");
 									sy=sy.substring(i+1);
 									return sy;
 								}).collect(Collectors.toCollection(ArrayList::new));
@@ -172,7 +172,7 @@ public class DataProtectionController {
 							log.info("remote "+current_node.getURI()+" says OK");
 							List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
 								String sy=y.asResource().getURI();
-								int i=sy.lastIndexOf("/");
+								int i=sy.lastIndexOf("#");
 								sy=sy.substring(i+1);
 								return sy;
 							}).collect(Collectors.toCollection(ArrayList::new));
