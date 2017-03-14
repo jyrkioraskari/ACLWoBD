@@ -14,33 +14,33 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
 
 public class RDFOntology {
-	static private OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+	static private OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 	
 	static public class LBD {
-		static public OntClass Site = m.createClass(Constants.security_ontology_base + "#Site");
-		static public OntClass Collection = m.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection");
-		static public OntClass DataSource = m.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource");
-		static public OntClass DataSet = m.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet");
+		static public OntClass Site = schema.createClass(Constants.security_ontology_base + "#Site");
+		static public OntClass Collection = schema.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#Collection");
+		static public OntClass DataSource = schema.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSource");
+		static public OntClass DataSet = schema.createClass("http://drumbeat.cs.hut.fi/owl/lbdho.ttl#DataSet");
 
-		static public ObjectProperty hasCollection = m
+		static public ObjectProperty hasCollection = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasCollection");
 		static {
 			hasCollection.addDomain(Site);
 			hasCollection.addRange(Collection);
-			Site.addSubClass(m.createAllValuesFromRestriction(null, hasCollection, Collection));
+			Site.addSubClass(schema.createAllValuesFromRestriction(null, hasCollection, Collection));
 		}
 
-		static public ObjectProperty hasDataSource = m
+		static public ObjectProperty hasDataSource = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasDataSource");
 		static {
 			hasDataSource.addDomain(Collection);
 			hasDataSource.addRange(DataSource);
 
-			Collection.addSubClass(m.createAllValuesFromRestriction(null, hasDataSource, DataSource));
+			Collection.addSubClass(schema.createAllValuesFromRestriction(null, hasDataSource, DataSource));
 		}
 
-		static public ObjectProperty hasDataSet = m
+		static public ObjectProperty hasDataSet = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasDataSet");
 		static {
 			hasDataSet.addDomain(DataSource);
@@ -49,25 +49,25 @@ public class RDFOntology {
 	}
 
 	static public class Authorization {
-		static public OntClass ProtectedResource = m
+		static public OntClass ProtectedResource = schema
 				.createClass(Constants.security_ontology_base + "#ProtectedResource");
-		static public OntClass AuthorizationRule = m
+		static public OntClass AuthorizationRule = schema
 				.createClass(Constants.security_ontology_base + "#AuthorizationRule");
-		static public OntClass RulePath = m.createClass(Constants.security_ontology_base + "#RulePath");
+		static public OntClass RulePath = schema.createClass(Constants.security_ontology_base + "#RulePath");
 
-		static public OntClass Permission = m.createClass(Constants.security_ontology_base + "#Permission");
-		static public Individual create = m.createIndividual(Constants.security_ontology_base + "#CREATE", Permission);
-		static public Individual read = m.createIndividual(Constants.security_ontology_base + "#READ", Permission);
-		static public Individual update = m.createIndividual(Constants.security_ontology_base + "#UPDATE", Permission);
-		static public Individual delete = m.createIndividual(Constants.security_ontology_base + "#DELETE", Permission);
-		static private RDFList enums = m.createList();
+		static public OntClass Permission = schema.createClass(Constants.security_ontology_base + "#Permission");
+		static public Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE", Permission);
+		static public Individual read = schema.createIndividual(Constants.security_ontology_base + "#READ", Permission);
+		static public Individual update = schema.createIndividual(Constants.security_ontology_base + "#UPDATE", Permission);
+		static public Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE", Permission);
+		static private RDFList enums = schema.createList();
 		static {
 			enums = enums.cons(create);
 			enums = enums.cons(read);
 			enums = enums.cons(update);
 			enums = enums.cons(delete);
 		}
-		static public OntClass PermittedRole = m
+		static public OntClass PermittedRole = schema
 				.createEnumeratedClass(Constants.security_ontology_base + "#PermittedRole", enums);
 
 		static {
@@ -80,7 +80,7 @@ public class RDFOntology {
 
 		}
 
-		static public ObjectProperty hasAuthorizationRule = m
+		static public ObjectProperty hasAuthorizationRule = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasAuthorizationRule");
 		static {
 			hasAuthorizationRule.addDomain(ProtectedResource);
@@ -89,50 +89,50 @@ public class RDFOntology {
 
 		static {
 			ProtectedResource
-					.addSubClass(m.createAllValuesFromRestriction(null, hasAuthorizationRule, AuthorizationRule));
-			ProtectedResource.addSubClass(m.createMinCardinalityRestriction(null, hasAuthorizationRule, 0));
+					.addSubClass(schema.createAllValuesFromRestriction(null, hasAuthorizationRule, AuthorizationRule));
+			ProtectedResource.addSubClass(schema.createMinCardinalityRestriction(null, hasAuthorizationRule, 0));
 		}
 
-		static public ObjectProperty hasPermittedRole = m
+		static public ObjectProperty hasPermittedRole = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasPermittedRole");
 		static {
 			hasPermittedRole.addDomain(AuthorizationRule);
 			hasPermittedRole.addRange(PermittedRole);
-			AuthorizationRule.addSubClass(m.createMinCardinalityRestriction(null, hasPermittedRole, 1));
-			AuthorizationRule.addSubClass(m.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
+			AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasPermittedRole, 1));
+			AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
 		}
 
-		static public ObjectProperty hasRulePath = m
+		static public ObjectProperty hasRulePath = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
 		static {
 			hasRulePath.addDomain(AuthorizationRule);
 			hasRulePath.addRange(RulePath);
 
-			AuthorizationRule.addSubClass(m.createMinCardinalityRestriction(null, hasRulePath, 1));
-			AuthorizationRule.addSubClass(m.createAllValuesFromRestriction(null, hasRulePath, RulePath));
+			AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasRulePath, 1));
+			AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasRulePath, RulePath));
 			
 
 		}
 
-		static public OntClass ListNode = m.createClass(Constants.security_ontology_base + "#ListNode");
-		static public ObjectProperty first = m.createObjectProperty(Constants.security_ontology_base + "#first");
+		static public OntClass ListNode = schema.createClass(Constants.security_ontology_base + "#ListNode");
+		static public ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
 		static {
 			first.addDomain(ListNode);
 			first.addRange(RDF.Property);
-			ListNode.addSubClass(m.createAllValuesFromRestriction(null, first, RDF.Property));
-			ListNode.addSubClass(m.createCardinalityRestriction(null, first, 1));
+			ListNode.addSubClass(schema.createAllValuesFromRestriction(null, first, RDF.Property));
+			ListNode.addSubClass(schema.createCardinalityRestriction(null, first, 1));
 
 		}
 
-		static public ObjectProperty rest = m.createObjectProperty(Constants.security_ontology_base + "#rest");
+		static public ObjectProperty rest = schema.createObjectProperty(Constants.security_ontology_base + "#rest");
 		static {
 			rest.addDomain(RulePath);
 			rest.addDomain(ListNode);
 			rest.addRange(ListNode);
 
-			ListNode.addSubClass(m.createAllValuesFromRestriction(null, rest, ListNode));
-			ListNode.addSubClass(m.createMinCardinalityRestriction(null, rest, 0));
-			ListNode.addSubClass(m.createMaxCardinalityRestriction(null, rest, 1));
+			ListNode.addSubClass(schema.createAllValuesFromRestriction(null, rest, ListNode));
+			ListNode.addSubClass(schema.createMinCardinalityRestriction(null, rest, 0));
+			ListNode.addSubClass(schema.createMaxCardinalityRestriction(null, rest, 1));
 		}
 		static {
 
@@ -140,24 +140,24 @@ public class RDFOntology {
 	}
 
 	static public class Occupation {
-		static public OntClass Occupation = m.createClass(Constants.security_ontology_base + "#Occupation");
-		static public OntClass Project = m.createClass(Constants.security_ontology_base + "#Project");
+		static public OntClass Occupation = schema.createClass(Constants.security_ontology_base + "#Occupation");
+		static public OntClass Project = schema.createClass(Constants.security_ontology_base + "#Project");
 
 		static {
 			Occupation.addSubClass(Project);
 			Project.addSuperClass(Occupation);
 		}
-		static public ObjectProperty hasOccupation = m
+		static public ObjectProperty hasOccupation = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasOccupation");
 		static {
 			hasOccupation.addDomain(Authorization.ProtectedResource);
 			hasOccupation.addRange(Occupation);
 
 			Authorization.ProtectedResource
-					.addSubClass(m.createAllValuesFromRestriction(null, hasOccupation, Occupation));
+					.addSubClass(schema.createAllValuesFromRestriction(null, hasOccupation, Occupation));
 		}
 
-		static public ObjectProperty hasProject = m
+		static public ObjectProperty hasProject = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasProject");
 		static {
 			hasProject.addDomain(Authorization.ProtectedResource);
@@ -165,106 +165,106 @@ public class RDFOntology {
 
 			hasProject.addSuperProperty(hasOccupation);
 			hasOccupation.addSubProperty(hasProject);
-			Authorization.ProtectedResource.addSubClass(m.createAllValuesFromRestriction(null, hasProject, Project));
+			Authorization.ProtectedResource.addSubClass(schema.createAllValuesFromRestriction(null, hasProject, Project));
 		}
 
 		
 	}
 	
 	static public class Contractor {
-		static public OntClass Contractor = m.createClass(Constants.security_ontology_base + "#Contractor");
+		static public OntClass Contractor = schema.createClass(Constants.security_ontology_base + "#Contractor");
 		// WebID profile ontology class:
-		static public OntClass Person = m.createClass("http://xmlns.com/foaf/0.1/Person");
+		static public OntClass Person = schema.createClass("http://xmlns.com/foaf/0.1/Person");
 
 
-		static public ObjectProperty trusts = m.createObjectProperty(Constants.security_ontology_base + "#trusts");
+		static public ObjectProperty trusts = schema.createObjectProperty(Constants.security_ontology_base + "#trusts");
 		static {
 			trusts.addDomain(Contractor);
 			trusts.addRange(Person);
-			Contractor.addSubClass(m.createAllValuesFromRestriction(null, trusts, Person));
+			Contractor.addSubClass(schema.createAllValuesFromRestriction(null, trusts, Person));
 		}
 
-		static public ObjectProperty hasContractor = m
+		static public ObjectProperty hasContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasContractor");
 		static {
 			hasContractor.addDomain(Occupation.Occupation);
 			hasContractor.addRange(Contractor);
-			Occupation.Occupation.addSubClass(m.createAllValuesFromRestriction(null, hasContractor, Contractor));
+			Occupation.Occupation.addSubClass(schema.createAllValuesFromRestriction(null, hasContractor, Contractor));
 		}
 
-		static public ObjectProperty hasMainContractor = m
+		static public ObjectProperty hasMainContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasMainContractor");
 		static {
 			hasMainContractor.addDomain(Occupation.Occupation);
 			hasMainContractor.addRange(Contractor);
-			Occupation.Occupation.addSubClass(m.createAllValuesFromRestriction(null, hasMainContractor, Contractor));
+			Occupation.Occupation.addSubClass(schema.createAllValuesFromRestriction(null, hasMainContractor, Contractor));
 			hasContractor.addSubProperty(hasMainContractor);
 			hasMainContractor.addSuperProperty(hasContractor);
 		}
 
-		static public ObjectProperty hasSubContractor = m
+		static public ObjectProperty hasSubContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasSubcontractor");
 		static {
 			hasSubContractor.addDomain(Contractor);
 			hasSubContractor.addRange(Contractor);
-			Contractor.addSubClass(m.createAllValuesFromRestriction(null, hasSubContractor, Contractor));
+			Contractor.addSubClass(schema.createAllValuesFromRestriction(null, hasSubContractor, Contractor));
 		}
 
 	}
 
 	static public class Message {
-		static public OntClass SecurityMessage = m.createClass(Constants.security_ontology_base + "#SecurityMessage");
-		static public OntClass SecurityQuery = m.createClass(Constants.security_ontology_base + "#SecurityQuery");
-		static public OntClass SecurityResponse = m.createClass(Constants.security_ontology_base + "#SecurityResponse");
+		static public OntClass SecurityMessage = schema.createClass(Constants.security_ontology_base + "#SecurityMessage");
+		static public OntClass SecurityQuery = schema.createClass(Constants.security_ontology_base + "#SecurityQuery");
+		static public OntClass SecurityResponse = schema.createClass(Constants.security_ontology_base + "#SecurityResponse");
 		static {
 			SecurityMessage.addSubClass(SecurityQuery);
 			SecurityMessage.addSubClass(SecurityResponse);
 			SecurityQuery.addSuperClass(SecurityMessage);
 			SecurityResponse.addSuperClass(SecurityMessage);
 		}
-		static public DatatypeProperty hasTimeStamp = m
+		static public DatatypeProperty hasTimeStamp = schema
 				.createDatatypeProperty(Constants.security_ontology_base + "#hasTimeStamp");
 		static {
 			hasTimeStamp.addDomain(SecurityMessage);
 			hasTimeStamp.addRange(XSD.dateTime);
 		}
 
-		static public OntClass Status = m.createClass(Constants.security_ontology_base + "#Status");
-		static public Individual accepted = m.createIndividual(Constants.security_ontology_base + "#ACCEPTED", Status);
-		static public Individual denied = m.createIndividual(Constants.security_ontology_base + "#DENIED", Status);
+		static public OntClass Status = schema.createClass(Constants.security_ontology_base + "#Status");
+		static public Individual accepted = schema.createIndividual(Constants.security_ontology_base + "#ACCEPTED", Status);
+		static public Individual denied = schema.createIndividual(Constants.security_ontology_base + "#DENIED", Status);
 
-		static private RDFList status_enums = m.createList();
+		static private RDFList status_enums = schema.createList();
 		static {
 			status_enums = status_enums.cons(accepted);
 			status_enums = status_enums.cons(denied);
 		}
 
-		static public OntClass PermissionStatus = m
+		static public OntClass PermissionStatus = schema
 				.createEnumeratedClass(Constants.security_ontology_base + "#PermissionStatus", status_enums);
 		
-		static public ObjectProperty hasPermissionStatus = m.createObjectProperty(Constants.security_ontology_base  + "#hasPermissionStatus" );
+		static public ObjectProperty hasPermissionStatus = schema.createObjectProperty(Constants.security_ontology_base  + "#hasPermissionStatus" );
 		static {
 			hasPermissionStatus.addDomain( SecurityResponse );
 			hasPermissionStatus.addRange( PermissionStatus);
 			
-			SecurityResponse.addSubClass( m.createAllValuesFromRestriction( null, hasPermissionStatus, PermissionStatus ));
+			SecurityResponse.addSubClass( schema.createAllValuesFromRestriction( null, hasPermissionStatus, PermissionStatus ));
 		}
 		
 		static {
 			Authorization.hasRulePath.addDomain( SecurityQuery );
-			SecurityQuery.addSubClass( m.createAllValuesFromRestriction( null, Authorization.hasRulePath, Authorization.RulePath));
+			SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, Authorization.hasRulePath, Authorization.RulePath));
 
 		}
 		
-		static public ObjectProperty hasWebID = m.createObjectProperty( Constants.security_ontology_base + "#hasWebID" );
+		static public ObjectProperty hasWebID = schema.createObjectProperty( Constants.security_ontology_base + "#hasWebID" );
 		static {
 			hasWebID.addDomain( SecurityQuery );
 			hasWebID.addRange( Contractor.Person );
-			SecurityQuery.addSubClass( m.createAllValuesFromRestriction( null, hasWebID, Contractor.Person));
+			SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, hasWebID, Contractor.Person));
 			
 		}
 		
-		static public DatatypeProperty hasMessage = m
+		static public DatatypeProperty hasMessage = schema
 				.createDatatypeProperty(Constants.security_ontology_base + "#hasMessage");
 		static {
 			hasMessage.addDomain(SecurityResponse);
@@ -281,6 +281,10 @@ public class RDFOntology {
 	   }
 	 static public Property property_hasName = create(property, "hasName");
 	 static public Property property_hasPublicKey = create(property,"hasPublicKey");
+	 
+	public static OntModel getSchema() {
+		return schema;
+	}
 	
 	 
 	 

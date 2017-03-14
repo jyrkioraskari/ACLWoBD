@@ -3,7 +3,6 @@ package fi.aalto.drumbeat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -14,6 +13,7 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -50,7 +50,7 @@ public class Dumbeat_JenaLibrary {
 	
 
 
-	static public List<RDFNode> getPermissions(OntModel model,String uri) {
+	static public List<RDFNode> getPermissions(InfModel model,String uri) {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
@@ -70,7 +70,7 @@ public class Dumbeat_JenaLibrary {
 
 	}
 
-	static public void match(OntModel model,List<RDFNode> ret, String request_url) {
+	static public void match(InfModel model,List<RDFNode> ret, String request_url) {
 		System.out.println("etsitty: " + request_url);
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");

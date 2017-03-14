@@ -63,7 +63,7 @@ public class DrumbeatSecurityController {
 		super();
 		rootURI =  Optional.of(uri);
 		rdf_datastore = new RDFDataStore(rootURI.get(), "organization");
-		datamodel = rdf_datastore.getModel();
+		datamodel = rdf_datastore.getInferenceModel();
 		// rdf_datastore.readRDFData();
 		root = datamodel.getResource(rootURI.toString());
 		registerWebID("https://jyrkio2.databox.me/profile/card#me", "1234");
@@ -89,7 +89,7 @@ public class DrumbeatSecurityController {
 		while (iterator.hasNext()) {
 			String step = iterator.next();
 			stepper_inx++;
-			Property p = rdf_datastore.getModel().getProperty(step);
+			Property p = rdf_datastore.getInferenceModel().getProperty(step);
 			StmtIterator connected_triples = current_node.listProperties(p);
 			while (connected_triples.hasNext()) {
 				Statement triple = connected_triples.next();

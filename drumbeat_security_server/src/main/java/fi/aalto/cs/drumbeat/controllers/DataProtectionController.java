@@ -91,7 +91,7 @@ public class DataProtectionController {
 		log.info("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 
 		final List<RDFNode> matched_paths = new ArrayList<>();
-		rdf_datastore.ifPresent(x -> Dumbeat_JenaLibrary.match(x.getModel(),matched_paths, canonizted_requestURI.toString()));
+		rdf_datastore.ifPresent(x -> Dumbeat_JenaLibrary.match(x.getInferenceModel(),matched_paths, canonizted_requestURI.toString()));
 		// We select only the longest path that has a matching rules
 		int longest_matching_url_length=0;
 		for (RDFNode r : matched_paths) {
@@ -99,13 +99,13 @@ public class DataProtectionController {
 			//rdf_datastore.ifPresent(x -> 
 			RDFDataStore x=rdf_datastore.get();
 			{
-				Resource current_node = x.getModel().getResource(r.toString());
+				Resource current_node = x.getInferenceModel().getResource(r.toString());
 				
 				List<Resource> rulepath_list = null;
 				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFOntology.Authorization.hasAuthorizationRule);
 				if(authorizationRule!=null) {
 					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFOntology.Authorization.hasRulePath);
-					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getModel(),rule_path); 
+					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getInferenceModel(),rule_path); 
 				}
 				else
 					continue;
@@ -120,7 +120,7 @@ public class DataProtectionController {
 				//tästä kutsumalla sitä (eli ei tarvitse olla etäkutsu)
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();
-					Property p = x.getModel().getProperty(step.getURI());
+					Property p = x.getInferenceModel().getProperty(step.getURI());
 					Resource node = current_node.getPropertyResourceValue(p); //TODO Huomaa  URL ei voi olla Literal!
 					if (node != null) {
 						System.out.println("DRUMBEAT from local store:" + node);
@@ -134,7 +134,7 @@ public class DataProtectionController {
 								DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("a-->"+webid+" found here",System.currentTimeMillis()));
 
 								log.info("Equals");
-								List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
+								List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getInferenceModel(),r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
 									int i=sy.lastIndexOf("#");
 									sy=sy.substring(i+1);
@@ -171,7 +171,7 @@ public class DataProtectionController {
 						if(validatePath_HTTP(current_node.getURI(),webid,new_path)) {
 							System.out.println("remote "+current_node.getURI()+" says OK");
 							log.info("remote "+current_node.getURI()+" says OK");
-							List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
+							List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getInferenceModel(),r.toString()).stream().map(y->{
 								String sy=y.asResource().getURI();
 								int i=sy.lastIndexOf("#");
 								sy=sy.substring(i+1);
@@ -195,6 +195,7 @@ public class DataProtectionController {
 		
 		return ret;
 	}
+	
 	private boolean validatePath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
 		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: "+nextStepURL);
