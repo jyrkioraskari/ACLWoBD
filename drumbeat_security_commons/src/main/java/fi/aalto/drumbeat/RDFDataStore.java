@@ -109,7 +109,8 @@ public class RDFDataStore {
 		musiikkitalo_authorizationRule.addProperty(RDFOntology.Authorization.hasPermittedRole, RDFOntology.Authorization.read);
 		
 		Individual occupation1 = this.model.createIndividual(null, RDFOntology.Occupation.Occupation);
-		Individual main_contractor = this.model.createIndividual("https://fabricator.local.org/", RDFOntology.Contractor.Contractor);
+		// HTTP since local virtual hosts need a new configuration
+		Individual main_contractor = this.model.createIndividual("http://fabricator.local.org/", RDFOntology.Contractor.Contractor);
 		musiikkitalo.addProperty(RDFOntology.Occupation.hasOccupation, occupation1);
 		occupation1.addProperty(RDFOntology.Contractor.hasMainContractor, main_contractor);
 		//this.model.write(System.out,"TURTLE");
