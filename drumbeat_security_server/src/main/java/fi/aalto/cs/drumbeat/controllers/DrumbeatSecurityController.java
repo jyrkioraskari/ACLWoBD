@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -75,6 +76,7 @@ public class DrumbeatSecurityController {
 	private boolean validatePath(Resource previous_node, String webid_uri, Resource path) {
 		LinkedList<Resource> rulepath = parseRulePath(path);
 		List<String> rulepath_strlist = new ArrayList<>();
+		
 
 		for (Resource r : rulepath)
 			rulepath_strlist.add(r.getURI());
@@ -190,16 +192,15 @@ public class DrumbeatSecurityController {
 		return widr;
 	}
 
+	//TODO only one copy... 
 	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
-
 		Resource current = node;
-		while (current != null && current.asResource().hasProperty(RDF.rest)) {
-			if (current.hasProperty(RDF.first))
-				ret.add(current.getPropertyResourceValue(RDF.first));
-			current = current.getPropertyResourceValue(RDF.rest);
+		while (current != null && current.asResource().hasProperty(RDFOntology.Authorization.rest)) {
+			if (current.hasProperty(RDFOntology.Authorization.first))
+				ret.add(current.getPropertyResourceValue(RDFOntology.Authorization.first));
+			current = current.getPropertyResourceValue(RDFOntology.Authorization.rest);
 		}
-
 		return ret;
 	}
 

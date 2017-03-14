@@ -36,22 +36,22 @@ public class TestOrganizationManager extends TestCase {
 	   }
 	
 
-	public void testSimpleWCRegistration() {
+	/*public void testSimpleWCRegistration() {
 		Resource wc = organization.get().registerWebID("http://person#i","1234");
 		//TODO hae PK
 		assertNotNull(wc);
 		
-	}
+	}*/
 	
 	
 	@Test
-	public void testCreateAndTestPath() {
+	public void testTestPath() {
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		Resource wc = organization.get().registerWebID("http://person#i","1234");
+		//Resource wc = organization.get().registerWebID("http://person#i","1234");
 		
 		RDFDataStore store=null;
 		try {
-			store = new RDFDataStore(new URI("https://test.org"), "datastore");
+			store = new RDFDataStore(new URI("https://test.org/"), "datastore");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -61,10 +61,10 @@ public class TestOrganizationManager extends TestCase {
 		Resource rulepath=store.createRulePath(lista);
 		
 		//TODO tulisiko olla totta?
-		boolean result_true = organization.get().checkRDFPath(wc.toString(), rulepath.asResource());
-		//assertEquals(true, result_true);
+		boolean result_true = organization.get().checkRDFPath("https://jyrkio2.databox.me/profile/card#me", rulepath.asResource());
+		assertEquals(true, result_true);
 		
-		boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());
+		//boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());
 		//assertEquals(false, result_false);
 
 	}
