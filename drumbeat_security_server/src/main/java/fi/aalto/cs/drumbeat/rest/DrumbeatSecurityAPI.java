@@ -109,7 +109,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		for (Resource r : rulepath)
 			rulepath_list.add(r.getURI());
 		
-		boolean result = organization.get().checkRDFPath(webid_url.toString(), rulepath_list);
+		boolean result = organization.get().check(webid_url.toString(), rulepath_list);
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);

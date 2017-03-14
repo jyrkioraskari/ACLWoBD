@@ -71,7 +71,7 @@ public class DrumbeatSecurityController {
 
 	private RDFDataStore rdf_datastore = null;
 
-	public boolean checkRDFPath(String webid_uri, List<String> rulepath_list) {
+	public boolean check(String webid_uri, List<String> rulepath_list) {
 		return validatePath(null, webid_uri, rulepath_list);
 	}
 
@@ -127,7 +127,7 @@ public class DrumbeatSecurityController {
 
 	}
 
-	public boolean checkPath_HTTP(String nextStepURL, String webid, List<String> new_path) {
+	private boolean checkPath_HTTP(String nextStepURL, String webid, List<String> new_path) {
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>("v-->" + webid + "-->" + nextStepURL, System.currentTimeMillis()));
 

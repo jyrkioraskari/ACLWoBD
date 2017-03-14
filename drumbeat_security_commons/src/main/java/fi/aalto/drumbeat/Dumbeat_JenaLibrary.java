@@ -67,7 +67,51 @@ public class Dumbeat_JenaLibrary {
 		return ret;
 	}
 
-	
+	static public void match(OntModel model,List<RDFNode> ret, String request_url) {
+		System.out.println("etsitty: " + request_url);
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ?path WHERE {");
+		sb.append(" ?path  <" + RDFOntology.Authorization.hasAuthorizationRule.getURI() + "> ?x");
+		sb.append("}");
+		Query query = QueryFactory.create(sb.toString());
+		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+			ResultSet results = qexec.execSelect();
+			for (; results.hasNext();) {
+				QuerySolution soln = results.nextSolution();
+				RDFNode x = soln.get("path");
+				System.out.println("path: " + x.toString());
+				if (request_url.startsWith(x.toString()))
+					ret.add(x);
+			}
+		}
+	}
 
+	static public  void createDemoData(OntModel model,String rootURI) {
+		
+		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", RDFOntology.Authorization.ProtectedResource);
+		Individual musiikkitalo_authorizationRule = model.createIndividual(null, RDFOntology.Authorization.AuthorizationRule);
+		musiikkitalo.addProperty(RDFOntology.Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
+		
+		List<String> lista=new ArrayList<>();
+		lista.add(RDFOntology.Occupation.hasOccupation.toString());
+		lista.add(RDFOntology.Contractor.hasMainContractor.toString());
+		lista.add(RDFOntology.Contractor.trusts.toString());
+		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
+		musiikkitalo_authorizationRule.addProperty(RDFOntology.Authorization.hasRulePath, rlista);
+		musiikkitalo_authorizationRule.addProperty(RDFOntology.Authorization.hasPermittedRole, RDFOntology.Authorization.read);
+		
+		Individual occupation1 = model.createIndividual(null, RDFOntology.Occupation.Occupation);
+		// HTTP since local virtual hosts need a new configuration
+		Individual main_contractor = model.createIndividual("http://fabricator.local.org/", RDFOntology.Contractor.Contractor);
+		musiikkitalo.addProperty(RDFOntology.Occupation.hasOccupation, occupation1);
+		occupation1.addProperty(RDFOntology.Contractor.hasMainContractor, main_contractor);
+		//this.model.write(System.out,"TURTLE");
 
+		//Me
+		Individual company=model.createIndividual(rootURI, RDFOntology.Contractor.Contractor);
+		Individual test_person = model.createIndividual("https://jyrkio2.databox.me/profile/card#me", RDFOntology.Contractor.Person);
+		company.addProperty(RDFOntology.Contractor.trusts, test_person);
+		
+		
+	}
 }

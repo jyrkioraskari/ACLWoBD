@@ -91,7 +91,7 @@ public class DataProtectionController {
 		log.info("DRUMBEAT canonized uri oli:" + canonizted_requestURI);
 
 		final List<RDFNode> matched_paths = new ArrayList<>();
-		rdf_datastore.ifPresent(x -> x.match(matched_paths, canonizted_requestURI.toString()));
+		rdf_datastore.ifPresent(x -> Dumbeat_JenaLibrary.match(x.getModel(),matched_paths, canonizted_requestURI.toString()));
 		// We select only the longest path that has a matching rules
 		int longest_matching_url_length=0;
 		for (RDFNode r : matched_paths) {
@@ -188,7 +188,7 @@ public class DataProtectionController {
 		
 		return ret;
 	}
-	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
+	private boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
 		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: "+nextStepURL);
 		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
@@ -254,7 +254,7 @@ public class DataProtectionController {
 	
 
 
-	public URI canonizateURI(String uri_txt) {
+	private URI canonizateURI(String uri_txt) {
 		URI uri;
 		try {
 			uri = new URI(uri_txt);
