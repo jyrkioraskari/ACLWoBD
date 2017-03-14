@@ -31,6 +31,7 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.rest.DrumbeatSecurityAPI;
+import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.RDFOntology;
 
@@ -66,9 +67,9 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 				e.printStackTrace();
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
-			List<Resource> lista=new ArrayList<>();
-			lista.add(RDFOntology.Contractor.trusts);
-			Resource rulepath=store.createRulePath(lista);
+			List<String> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts.toString());
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
 			
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
@@ -108,9 +109,9 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 				e.printStackTrace();
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
-			List<Resource> lista=new ArrayList<>();
-			lista.add(RDFOntology.Contractor.trusts);
-			Resource rulepath=store.createRulePath(lista);
+			List<String> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts.toString());
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -177,9 +178,9 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 				e.printStackTrace();
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
-			List<Resource> lista=new ArrayList<>();
-			lista.add(RDFOntology.Contractor.trusts);
-			Resource rulepath=store.createRulePath(lista);
+			List<String> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts.toString());
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -229,9 +230,9 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 				e.printStackTrace();
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
-			List<Resource> lista=new ArrayList<>();
-			lista.add(RDFOntology.Contractor.trusts);
-			Resource rulepath=store.createRulePath(lista);
+			List<String> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts.toString());
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));

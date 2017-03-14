@@ -3,19 +3,18 @@ package fi.aalto.cs.drumbeat.tests;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFList;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
+import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.RDFOntology;
 import junit.framework.TestCase;
@@ -56,12 +55,18 @@ public class TestOrganizationManager extends TestCase {
 			e.printStackTrace();
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
-		List<Resource> lista=new ArrayList<>();
-		lista.add(RDFOntology.Contractor.trusts);
-		Resource rulepath=store.createRulePath(lista);
+		List<String> lista=new ArrayList<>();
+		lista.add(RDFOntology.Contractor.trusts.toString());
+		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
 		
 		//TODO tulisiko olla totta?
-		boolean result_true = organization.get().checkRDFPath("https://jyrkio2.databox.me/profile/card#me", rulepath.asResource());
+		LinkedList<Resource> rulepath_list = Dumbeat_JenaLibrary.parseRulePath(store.getModel(),rulepath);
+		List<String> rulepath_strlist = new ArrayList<>();
+		
+		for (Resource r : rulepath_list)
+			rulepath_strlist.add(r.getURI());
+		
+		boolean result_true = organization.get().checkRDFPath("https://jyrkio2.databox.me/profile/card#me", rulepath_strlist);
 		assertEquals(true, result_true);
 		
 		//boolean result_false = organization.get().checkRDFPath("http://unknown/person", rulepath.asResource());

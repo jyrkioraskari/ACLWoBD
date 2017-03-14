@@ -22,10 +22,8 @@ import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
@@ -34,8 +32,9 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.utils.Tuple;
 
-import fi.aalto.drumbeat.RDFOntology;
+import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
+import fi.aalto.drumbeat.RDFOntology;
 
 
 public class DataProtectionController {
@@ -106,7 +105,7 @@ public class DataProtectionController {
 				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFOntology.Authorization.hasAuthorizationRule);
 				if(authorizationRule!=null) {
 					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFOntology.Authorization.hasRulePath);
-					rulepath_list = x.parseRulePath(rule_path); 
+					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getModel(),rule_path); 
 				}
 				else
 					continue;
@@ -134,7 +133,7 @@ public class DataProtectionController {
 								DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("a-->"+webid+" found here",System.currentTimeMillis()));
 
 								log.info("Equals");
-								List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+								List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
 									String sy=y.asResource().getURI();
 									int i=sy.lastIndexOf("/");
 									sy=sy.substring(i+1);
@@ -170,7 +169,7 @@ public class DataProtectionController {
 						if(checkPath_HTTP(current_node.getURI(),webid,new_path)) {
 							System.out.println("remote "+current_node.getURI()+" says OK");
 							log.info("remote "+current_node.getURI()+" says OK");
-							List<String> perms=x.getPermissions(r.toString()).stream().map(y->{
+							List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
 								String sy=y.asResource().getURI();
 								int i=sy.lastIndexOf("/");
 								sy=sy.substring(i+1);
@@ -197,11 +196,11 @@ public class DataProtectionController {
 			return false;
 		try {
 			
-			List<Resource> rulepath_lista=new ArrayList<Resource>();
+			List<String> rulepath_lista=new ArrayList<>();
 			for (int i = 0; i < new_path.size(); i++) {
-				rulepath_lista.add(new_path.get(i));
+				rulepath_lista.add(new_path.get(i).toString());
 			}
-			Resource rulepath=rdf_datastore.get().createRulePath(rulepath_lista);
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(query_model,rulepath_lista);
 			
 			Individual query = query_model.createIndividual(null, RDFOntology.Message.SecurityQuery);
 			

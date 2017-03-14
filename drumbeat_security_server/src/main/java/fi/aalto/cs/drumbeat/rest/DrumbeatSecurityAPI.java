@@ -1,7 +1,9 @@
 package fi.aalto.cs.drumbeat.rest;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,25 +13,20 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.glassfish.jersey.server.mvc.Viewable;
 
-import fi.aalto.cs.drumbeat.controllers.DataProtectionController;
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
-import fi.aalto.cs.drumbeat.vo.DrumbeatSecurityQuery;
-import fi.aalto.cs.drumbeat.vo.DrumbeatSecurityResponce;
+import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFOntology;
 import fi.aalto.drumbeat.rest.RESTfulAPI;
 
@@ -105,9 +102,15 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
-		RDFNode path = query.getProperty(RDFOntology.Authorization.hasRulePath).getObject();
+		Resource path = query.getProperty(RDFOntology.Authorization.hasRulePath).getObject().asResource();
 		
-		boolean result = organization.get().checkRDFPath(webid_url.toString(), path.asResource());
+		LinkedList<Resource> rulepath = Dumbeat_JenaLibrary.parseRulePath(input_model,path);
+		List<String> rulepath_list = new ArrayList<>();
+		
+		for (Resource r : rulepath)
+			rulepath_list.add(r.getURI());
+		
+		boolean result = organization.get().checkRDFPath(webid_url.toString(), rulepath_list);
 
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);

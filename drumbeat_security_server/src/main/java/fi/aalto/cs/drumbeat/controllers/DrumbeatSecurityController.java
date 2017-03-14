@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,6 +16,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -29,14 +30,15 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
 import org.utils.Tuple;
 
+import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.RDFOntology;
 
 public class DrumbeatSecurityController {
-	final static private List<Tuple<String, Resource>> unseen_locals = new ArrayList<>();
+	final static private List<Tuple<String, String>> unseen_locals = new ArrayList<>();
 	final static private List<Tuple<String, Long>> access_list = new ArrayList<>();
 
-	public static List<Tuple<String, Resource>> getUnseenLocals() {
+	public static List<Tuple<String, String>> getUnseenLocals() {
 		return unseen_locals;
 	}
 
@@ -69,28 +71,25 @@ public class DrumbeatSecurityController {
 
 	private RDFDataStore rdf_datastore = null;
 
-	public boolean checkRDFPath(String webid_uri, Resource path) {
-		return validatePath(null, webid_uri, path);
+	public boolean checkRDFPath(String webid_uri, List<String> rulepath_list) {
+		return validatePath(null, webid_uri, rulepath_list);
 	}
 
-	private boolean validatePath(Resource previous_node, String webid_uri, Resource path) {
-		LinkedList<Resource> rulepath = parseRulePath(path);
-		List<String> rulepath_strlist = new ArrayList<>();
+	private boolean validatePath(Resource previous_node, String webid_uri, List<String> rulepath_strlist) {
 		
-
-		for (Resource r : rulepath)
-			rulepath_strlist.add(r.getURI());
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>(
-						"validatePath: " + webid_uri + " " + rulepath_strlist.stream().collect(Collectors.joining("-")),
+						"validatePath: " + webid_uri + " path: " + rulepath_strlist.stream().collect(Collectors.joining("-")),
 						System.currentTimeMillis()));
 		Resource current_node = root;
 		if (previous_node != null)
 			current_node = previous_node;
-		ListIterator<Resource> iterator = rulepath.listIterator();
+		ListIterator<String> iterator = rulepath_strlist.listIterator();
+		int stepper_inx=0;
 		while (iterator.hasNext()) {
-			Resource step = iterator.next();
-			Property p = rdf_datastore.getModel().getProperty(step.getURI());
+			String step = iterator.next();
+			stepper_inx++;
+			Property p = rdf_datastore.getModel().getProperty(step);
 			StmtIterator connected_triples = current_node.listProperties(p);
 			while (connected_triples.hasNext()) {
 				Statement triple = connected_triples.next();
@@ -105,41 +104,41 @@ public class DrumbeatSecurityController {
 							return true;
 						}
 					} else {
-						List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
-						return validatePath(current_node, webid_uri, new_path.get(0));
+						List<String> new_path = rulepath_strlist.subList(stepper_inx, rulepath_strlist.size());
+						return validatePath(current_node, webid_uri, new_path);
 					}
 				} else {
 					System.out.println("located somewhere else. current node was: " + current_node);
 
-					List<Resource> new_path = rulepath.subList(rulepath.indexOf(step), rulepath.size());
+					List<String> new_path = rulepath_strlist.subList(stepper_inx, rulepath_strlist.size());
 					System.out.println("Path for the rest is:" + new_path);
 					return checkPath_HTTP(current_node.toString(), webid_uri, new_path);
 				}
 			}
 		}
 
-		saveUnsucceeLocal(webid_uri, path);
+		saveUnsucceeLocal(webid_uri, rulepath_strlist.toString());
 		return false;
 	}
 
-	private void saveUnsucceeLocal(String webid_uri, Resource path) {
+	private void saveUnsucceeLocal(String webid_uri, String path_url) {
 		System.out.println("unsuccessful webid: " + webid_uri);
-		unseen_locals.add(new Tuple<String, Resource>(webid_uri, path));
+		unseen_locals.add(new Tuple<String, String>(webid_uri, path_url));
 
 	}
 
-	public boolean checkPath_HTTP(String nextStepURL, String webid, List<Resource> new_path) {
+	public boolean checkPath_HTTP(String nextStepURL, String webid, List<String> new_path) {
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>("v-->" + webid + "-->" + nextStepURL, System.currentTimeMillis()));
 
-		final Model query_model = ModelFactory.createDefaultModel();
+		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: " + nextStepURL);
 		try {
-			List<Resource> rulepath_lista=new ArrayList<Resource>();
+			List<String> rulepath_lista=new ArrayList<>();
 			for (int i = 0; i < new_path.size(); i++) {
 				rulepath_lista.add(new_path.get(i));
 			}
-			Resource rulepath=rdf_datastore.createRulePath(rulepath_lista);
+			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(query_model,rulepath_lista);
 			
 			Resource query = query_model.createResource();
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
@@ -192,18 +191,7 @@ public class DrumbeatSecurityController {
 		return widr;
 	}
 
-	//TODO only one copy... 
-	public LinkedList<Resource> parseRulePath(Resource node) {
-		LinkedList<Resource> ret = new LinkedList<Resource>();
-		Resource current = node;
-		while (current != null && current.asResource().hasProperty(RDFOntology.Authorization.rest)) {
-			if (current.hasProperty(RDFOntology.Authorization.first))
-				ret.add(current.getPropertyResourceValue(RDFOntology.Authorization.first));
-			current = current.getPropertyResourceValue(RDFOntology.Authorization.rest);
-		}
-		return ret;
-	}
-
+	
 	/*
 	public Model getWebID(String webid) {
 		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
