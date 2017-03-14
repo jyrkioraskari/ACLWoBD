@@ -114,6 +114,15 @@ public class RDFDataStore {
 		musiikkitalo.addProperty(RDFOntology.Occupation.hasOccupation, occupation1);
 		occupation1.addProperty(RDFOntology.Contractor.hasMainContractor, main_contractor);
 		//this.model.write(System.out,"TURTLE");
+		
+		
+		
+		//Me
+		Individual company=this.model.createIndividual(rootURI.toString(), RDFOntology.Contractor.Contractor);
+		Individual test_person = this.model.createIndividual("https://jyrkio2.databox.me/profile/card#me", RDFOntology.Contractor.Person);
+		company.addProperty(RDFOntology.Contractor.trusts, test_person);
+		
+		
 	}
 
 	public void match(List<RDFNode> ret, String request_url) {
