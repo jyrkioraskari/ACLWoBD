@@ -182,11 +182,11 @@ public class DrumbeatSecurityController {
 		return datamodel.getResource(webid_uri.toString());
 	}
 
-	public Resource registerWebID(String webidURI, String public_key) {
-		rdf_datastore.saveRDFData();
+	public Resource registerWebID(String webidURI, String public_key) {		
 		Resource widr = datamodel.getResource(webidURI);
 		root.addProperty(RDFOntology.Contractor.trusts, widr);
 		widr.addLiteral(RDFOntology.property_hasPublicKey, public_key);
+		rdf_datastore.saveRDFData();
 		return widr;
 	}
 
