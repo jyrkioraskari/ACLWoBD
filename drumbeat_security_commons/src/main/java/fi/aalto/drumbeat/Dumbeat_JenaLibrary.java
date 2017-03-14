@@ -66,7 +66,6 @@ public class Dumbeat_JenaLibrary {
 				ret.add(x);
 			}
 		}
-		System.out.println(ret.stream().map(x->x.toString()).collect(Collectors.joining(",")));
 		return ret;
 
 	}

@@ -145,6 +145,7 @@ public class DataProtectionController {
 							{
 								System.out.println("Not Equals: "+node.toString());
 								log.info("Not Equals: "+node.toString());
+								ret.add("localguest"); 
 							}
 						}
 						
@@ -176,6 +177,11 @@ public class DataProtectionController {
 								return sy;
 							}).collect(Collectors.toCollection(ArrayList::new));
 							ret.addAll(perms); 
+						} else 
+						{
+							System.out.println("remote "+current_node.getURI()+" says NOT");
+							log.info("remote "+current_node.getURI()+" says NOT");
+							ret.add("remoteguest"); 
 						}
 						break;
 					}
