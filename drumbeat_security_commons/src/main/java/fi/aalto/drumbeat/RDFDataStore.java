@@ -94,7 +94,7 @@ public class RDFDataStore {
 	}
 
 	private void createDemoData() {
-		Individual musiikkitalo = this.model.createIndividual(rootURI.toString()+"/protected/musiikkitalo", RDFOntology.Authorization.ProtectedResource);
+		Individual musiikkitalo = this.model.createIndividual(rootURI.toString()+"/musiikkitalo", RDFOntology.Authorization.ProtectedResource);
 		Individual musiikkitalo_authorizationRule = this.model.createIndividual(null, RDFOntology.Authorization.AuthorizationRule);
 		musiikkitalo.addProperty(RDFOntology.Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
 		
