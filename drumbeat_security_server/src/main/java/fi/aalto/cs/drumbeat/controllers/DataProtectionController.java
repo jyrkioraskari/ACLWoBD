@@ -116,7 +116,8 @@ public class DataProtectionController {
 				
 				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral()).collect(Collectors.toList());
 				ListIterator<Resource> iterator = rulepath_list.listIterator();
-				
+				//TODO toteuta sama kuin organisaatiopuolella  eli rekursiivinen haku.. voidaan toteuttaa 
+				//tästä kutsumalla sitä (eli ei tarvitse olla etäkutsu)
 				while (iterator.hasNext()) {
 					Resource step = iterator.next();
 					Property p = x.getModel().getProperty(step.getURI());

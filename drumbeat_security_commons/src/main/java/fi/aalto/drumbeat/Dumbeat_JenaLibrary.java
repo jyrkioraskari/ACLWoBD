@@ -107,7 +107,7 @@ public class Dumbeat_JenaLibrary {
 		// HTTP since local virtual hosts need a new configuration
 		Individual main_contractor = model.createIndividual("http://fabricator.local.org/", RDFOntology.Contractor.Contractor);
 		musiikkitalo.addProperty(RDFOntology.Occupation.hasOccupation, occupation1);
-		occupation1.addProperty(RDFOntology.Contractor.hasMainContractor, main_contractor);
+		occupation1.addProperty(RDFOntology.Contractor.hasContractor, main_contractor);
 		//this.model.write(System.out,"TURTLE");
 
 		//Me
