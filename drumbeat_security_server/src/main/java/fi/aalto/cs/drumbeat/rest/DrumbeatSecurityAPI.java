@@ -16,6 +16,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -58,12 +60,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		Model input_model = parseInput(msg);
+		OntModel input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
+		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 
@@ -94,12 +96,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		Model input_model = parseInput(msg);
+		OntModel input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
+		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
@@ -131,12 +133,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		Model input_model = parseInput(msg);
+		OntModel input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
+		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
@@ -161,22 +163,22 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 	@Produces("application/ld+json")
 	public Response registerWebID(@Context UriInfo uriInfo, String msg) {
 		setBaseURI(uriInfo);
-
 		if (!this.organization.isPresent())
+		{
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		Model input_model = parseInput(msg);
+		}
+		OntModel input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
+		{
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
-
-		Model output_model = ModelFactory.createDefaultModel();
-
+		}
+		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid = query.getProperty(RDFOntology.Message.hasWebID).getObject();
 		
 		//TODO Exponent+modulus
-		
 		RDFNode public_key = query.getProperty(RDFOntology.property_hasPublicKey).getObject();
 		Resource wc = organization.get().registerWebID(webid.toString(),
 				public_key.asLiteral().getLexicalForm());
@@ -187,7 +189,6 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
 		response.addProperty(RDFOntology.Message.hasWebID, output_model.getResource(wc.toString()));
-
 		return Response.status(200).entity(writeModel(output_model)).build();
 	}
 

@@ -6,6 +6,8 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
@@ -17,10 +19,13 @@ import fi.aalto.drumbeat.RDFOntology;
 public class RESTfulAPI {
 	private URI base_url;
 
-	protected Model parseInput(String msg) {
-		final Model json_input_model = ModelFactory.createDefaultModel();
-		json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
-		
+	protected OntModel  parseInput(String msg) {
+		final OntModel  json_input_model =ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		try{
+			json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return json_input_model;
 	}
 

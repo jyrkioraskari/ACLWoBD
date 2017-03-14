@@ -94,7 +94,23 @@ public class RDFDataStore {
 	}
 
 	private void createDemoData() {
-
+		Individual musiikkitalo = this.model.createIndividual(rootURI.toString()+"/protected/musiikkitalo", RDFOntology.Authorization.ProtectedResource);
+		Individual musiikkitalo_authorizationRule = this.model.createIndividual(null, RDFOntology.Authorization.AuthorizationRule);
+		musiikkitalo.addProperty(RDFOntology.Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
+		
+		List<Resource> lista=new ArrayList<>();
+		lista.add(RDFOntology.Occupation.hasOccupation);
+		lista.add(RDFOntology.Contractor.hasMainContractor);
+		lista.add(RDFOntology.Contractor.trusts);
+		Resource rlista=createRulePath(lista);
+		musiikkitalo_authorizationRule.addProperty(RDFOntology.Authorization.hasRulePath, rlista);
+		musiikkitalo_authorizationRule.addProperty(RDFOntology.Authorization.hasPermittedRole, RDFOntology.Authorization.read);
+		
+		Individual occupation1 = this.model.createIndividual(null, RDFOntology.Occupation.Occupation);
+		Individual main_contractor = this.model.createIndividual("https://fabricator.local.org/", RDFOntology.Contractor.Contractor);
+		musiikkitalo.addProperty(RDFOntology.Occupation.hasOccupation, occupation1);
+		occupation1.addProperty(RDFOntology.Contractor.hasMainContractor, main_contractor);
+		//this.model.write(System.out,"TURTLE");
 	}
 
 	public void match(List<RDFNode> ret, String request_url) {
@@ -136,46 +152,29 @@ public class RDFDataStore {
 
 	}
 
-	//TODO use this
-	public Resource createRulePath(List<Property> lista) {
+	public Resource createRulePath(List<Resource> lista) {
 		Individual rule_path = this.model.createIndividual(null, RDFOntology.Authorization.RulePath);
-		boolean first=true;
-		for (Property p : lista) {
+
+		Individual current = rule_path;
+		for (Resource p : lista) {
 			Individual node = this.model.createIndividual(null, RDFOntology.Authorization.ListNode);
-			if(first)
-			{
-				first=false;
-				rule_path.addProperty(RDFOntology.Authorization.hasPath, node);
-			}else {
-				rule_path.addProperty(RDFOntology.Authorization.rest, node);
-			}
-			node.addProperty(RDFOntology.Authorization.first, p);
+			current.addProperty(RDFOntology.Authorization.rest, node);
+			current.addProperty(RDFOntology.Authorization.first, p);
+			current = node;
 		}
 
 		return rule_path.asResource();
 	}
+	
 
 	public LinkedList<Resource> parseRulePath(Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
-
 		Resource current = node;
 		while (current != null && current.asResource().hasProperty(RDFOntology.Authorization.rest)) {
 			if (current.hasProperty(RDFOntology.Authorization.first))
 				ret.add(current.getPropertyResourceValue(RDFOntology.Authorization.first));
 			current = current.getPropertyResourceValue(RDFOntology.Authorization.rest);
 		}
-
-		if (ret.size() == 0) {
-			// Resource
-			// rr=node.getPropertyResourceValue(RDFConstants.property_hasAuthorizationRule);
-			System.out.println("properties... ");
-			Iterator i = node.listProperties();
-			while (i.hasNext()) {
-				System.out.println("property was:" + i.next().toString());
-			}
-		} else
-			System.out.println("rule path: " + ret);
-
 		return ret;
 	}
 

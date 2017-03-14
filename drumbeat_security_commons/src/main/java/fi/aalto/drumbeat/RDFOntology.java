@@ -13,9 +13,6 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
 
-import fi.aalto.drumbeat.RDFConstantsORG.PropertyOperation;
-import fi.aalto.drumbeat.RDFConstantsORG.ResourceOperation;
-
 public class RDFOntology {
 	static private OntModel m = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
@@ -118,14 +115,6 @@ public class RDFOntology {
 		}
 
 		static public OntClass ListNode = m.createClass(Constants.security_ontology_base + "#ListNode");
-		static public ObjectProperty hasPath = m.createObjectProperty(Constants.security_ontology_base + "#hasPath");
-		static {
-			hasPath.addDomain(RulePath);
-			hasPath.addRange(ListNode);
-
-			RulePath.addSubClass(m.createAllValuesFromRestriction(null, hasPath, ListNode));
-		}
-
 		static public ObjectProperty first = m.createObjectProperty(Constants.security_ontology_base + "#first");
 		static {
 			first.addDomain(ListNode);
@@ -137,6 +126,7 @@ public class RDFOntology {
 
 		static public ObjectProperty rest = m.createObjectProperty(Constants.security_ontology_base + "#rest");
 		static {
+			rest.addDomain(RulePath);
 			rest.addDomain(ListNode);
 			rest.addRange(ListNode);
 

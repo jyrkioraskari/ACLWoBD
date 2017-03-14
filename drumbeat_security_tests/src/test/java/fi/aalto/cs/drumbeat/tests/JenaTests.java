@@ -2,38 +2,48 @@ package fi.aalto.cs.drumbeat.tests;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
-import fi.aalto.drumbeat.Constants;
+import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.RDFOntology;
 import junit.framework.TestCase;
 
 public class JenaTests extends TestCase {
 
-	final private Model model = ModelFactory.createDefaultModel();
+	final private OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 	public JenaTests() {
 		super();
 	}
-
-	//TODO use new RulePath
 	public void test_JenaReadWrite() {
-		Property knowsPerson = model.getProperty(Constants.security_ontology_base + "#knowsPerson");
-		Resource query_resource = model.getResource(Constants.security_ontology_base + "#CheckUser_query");
-		RDFNode[] rulepath_list = new RDFNode[1];
-		rulepath_list[0] = knowsPerson;
-		RDFList rulepath = model.createList(rulepath_list);
-		Property hasPath = model.getProperty(Constants.security_ontology_base + "#hasRulePath");
-		query_resource.addProperty(hasPath, rulepath);
+		RDFDataStore store=null;
+		try {
+			store = new RDFDataStore(new URI("https://test.org"), "datastore");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		assertNotNull("RDFDataStore store should not be null", store);
+		List<Resource> lista=new ArrayList<>();
+		lista.add(RDFOntology.Contractor.trusts);
+		Resource rulepath=store.createRulePath(lista);
+		
+		Individual query_resource = this.model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+		query_resource.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
 
@@ -59,22 +69,31 @@ public class JenaTests extends TestCase {
 
 		RDFNode ts = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		System.out.println(ts);
-		Resource response = output_model.createResource();
+		Individual response = this.model.createIndividual(null, RDFOntology.Message.SecurityResponse);
+
 		response.addProperty(RDF.type, RDFOntology.Message.SecurityResponse);
 		response.addLiteral(RDFOntology.Message.hasTimeStamp, ts);
 
 		System.out.println(writeModel(output_model));
 	}
 
-	//TODO use new RulePath
+	
 	public void test_checkUser_parameters() {
 		Model model = ModelFactory.createDefaultModel();
 		String webid = "http://user.com/user#me";
 
-		RDFNode[] rulepath_list = new RDFNode[1];
-		rulepath_list[0] = RDFOntology.Contractor.trusts;
-		RDFList rulepath = model.createList(rulepath_list);
-		Resource query = model.createResource();
+		RDFDataStore store=null;
+		try {
+			store = new RDFDataStore(new URI("https://test.org"), "datastore");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		assertNotNull("RDFDataStore store should not be null", store);
+		List<Resource> lista=new ArrayList<>();
+		lista.add(RDFOntology.Contractor.trusts);
+		Resource rulepath=store.createRulePath(lista);
+		
+		Individual query = this.model.createIndividual(null, RDFOntology.Message.SecurityQuery);
 		query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));

@@ -3,7 +3,6 @@ package fi.aalto.cs.drumbeat.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,12 +16,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
@@ -31,8 +28,8 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
 import org.utils.Tuple;
 
-import fi.aalto.drumbeat.RDFOntology;
 import fi.aalto.drumbeat.RDFDataStore;
+import fi.aalto.drumbeat.RDFOntology;
 
 public class DrumbeatSecurityController {
 	final static private List<Tuple<String, Resource>> unseen_locals = new ArrayList<>();
@@ -136,12 +133,12 @@ public class DrumbeatSecurityController {
 		final Model query_model = ModelFactory.createDefaultModel();
 		System.out.println("Next step URL is: " + nextStepURL);
 		try {
-			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
+			List<Resource> rulepath_lista=new ArrayList<Resource>();
 			for (int i = 0; i < new_path.size(); i++) {
-				rulepath_list[i] = new_path.get(i);
+				rulepath_lista.add(new_path.get(i));
 			}
-			//TODO use new RulePath
-			RDFList rulepath = query_model.createList(rulepath_list);
+			Resource rulepath=rdf_datastore.createRulePath(rulepath_lista);
+			
 			Resource query = query_model.createResource();
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 

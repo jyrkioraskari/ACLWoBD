@@ -18,6 +18,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -103,8 +106,7 @@ public class DataProtectionController {
 				Resource authorizationRule=r.asResource().getPropertyResourceValue(RDFOntology.Authorization.hasAuthorizationRule);
 				if(authorizationRule!=null) {
 					Resource rule_path=authorizationRule.getPropertyResourceValue(RDFOntology.Authorization.hasRulePath);
-					Resource path_root=rule_path.getPropertyResourceValue(RDFOntology.Authorization.hasPath);
-					rulepath_list = x.parseRulePath(path_root); 
+					rulepath_list = x.parseRulePath(rule_path); 
 				}
 				else
 					continue;
@@ -188,19 +190,21 @@ public class DataProtectionController {
 		return ret;
 	}
 	public boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
-		final Model query_model = ModelFactory.createDefaultModel();
+		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: "+nextStepURL);
 		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
-
+		if(!rdf_datastore.isPresent())
+			return false;
 		try {
-			RDFNode[] rulepath_list = new RDFNode[new_path.size()];
-			for(int i=0;i<new_path.size();i++)
-			{
-			   rulepath_list[i] = new_path.get(i);
+			
+			List<Resource> rulepath_lista=new ArrayList<Resource>();
+			for (int i = 0; i < new_path.size(); i++) {
+				rulepath_lista.add(new_path.get(i));
 			}
-			//TODO use new RULEPATH!
-			RDFList rulepath = query_model.createList(rulepath_list);
-			Resource query = query_model.createResource();
+			Resource rulepath=rdf_datastore.get().createRulePath(rulepath_lista);
+			
+			Individual query = query_model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+			
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -228,7 +232,7 @@ public class DataProtectionController {
 				
 			}
 
-			final Model response_model = ModelFactory.createDefaultModel();
+			final OntModel response_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
 			
 			

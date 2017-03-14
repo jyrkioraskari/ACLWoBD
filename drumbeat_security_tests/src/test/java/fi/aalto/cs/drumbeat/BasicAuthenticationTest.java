@@ -41,7 +41,7 @@ import org.junit.Test;
  * This is here for the consideration of using a filtering to update the role list
  *
  */
-//TODO test if this has good ideas 
+//TODO test if this is a  good idea
 
 public class BasicAuthenticationTest extends JerseyTest {
 

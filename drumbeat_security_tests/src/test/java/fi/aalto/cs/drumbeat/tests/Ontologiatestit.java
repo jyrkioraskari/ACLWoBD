@@ -155,29 +155,23 @@ public class Ontologiatestit {
 		
 		OntClass ListNode = m.createClass( NS + "#ListNode" );
 		
+		ObjectProperty rest = m.createObjectProperty( NS + "#rerst" );
+		rest.addDomain( RulePath );
+		rest.addDomain( ListNode );
+		rest.addRange( ListNode );
 		
-		ObjectProperty hasPath = m.createObjectProperty( NS + "#hasPath" );
-		hasPath.addDomain( RulePath );
-		hasPath.addRange( ListNode );
+		ListNode.addSubClass( m.createAllValuesFromRestriction( null, rest, ListNode ));
 		
-		RulePath.addSubClass( m.createAllValuesFromRestriction( null, hasPath, ListNode ));
+		ObjectProperty first = m.createObjectProperty( NS + "#first" );
+		first.addDomain( ListNode );
+		first.addRange( RDF.Property );
 		
-		ObjectProperty hasNext = m.createObjectProperty( NS + "#hasNext" );
-		hasNext.addDomain( ListNode );
-		hasNext.addRange( ListNode );
+		ListNode.addSubClass( m.createCardinalityRestriction( null, first, 1 ));
+		ListNode.addSubClass( m.createMinCardinalityRestriction(null, rest, 0 ));
+		ListNode.addSubClass( m.createMaxCardinalityRestriction(null, rest, 1 ));
 		
-		ListNode.addSubClass( m.createAllValuesFromRestriction( null, hasNext, ListNode ));
-		
-		ObjectProperty hasFirst = m.createObjectProperty( NS + "#hasFirst" );
-		hasFirst.addDomain( ListNode );
-		hasFirst.addRange( RDF.Property );
-		
-		ListNode.addSubClass( m.createCardinalityRestriction( null, hasFirst, 1 ));
-		ListNode.addSubClass( m.createMinCardinalityRestriction(null, hasNext, 0 ));
-		ListNode.addSubClass( m.createMaxCardinalityRestriction(null, hasNext, 1 ));
-		
-		ListNode.addSubClass( m.createAllValuesFromRestriction( null, hasFirst, RDF.Property ));
-		ListNode.addSubClass( m.createAllValuesFromRestriction( null, hasNext, ListNode ));
+		ListNode.addSubClass( m.createAllValuesFromRestriction( null, first, RDF.Property ));
+		ListNode.addSubClass( m.createAllValuesFromRestriction( null, rest, ListNode ));
 
 		OntClass SecurityMessage = m.createClass( NS + "#SecurityMessage" );
 		OntClass SecurityQuery = m.createClass( NS + "#SecurityQuery" );

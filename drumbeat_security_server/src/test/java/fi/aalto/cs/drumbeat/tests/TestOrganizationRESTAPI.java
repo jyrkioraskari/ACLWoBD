@@ -6,16 +6,22 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
+import org.apache.jena.ontology.Individual;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
@@ -25,6 +31,7 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 
 import fi.aalto.cs.drumbeat.rest.DrumbeatSecurityAPI;
+import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.RDFOntology;
 
 public class TestOrganizationRESTAPI extends JerseyTest {
@@ -47,15 +54,22 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		assertEquals("Hello OK!", hello);
 	}
 	
-    //TODO use new RulePath
 	@Test
 	public void test_postHello() {
-		Model model = ModelFactory.createDefaultModel();
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
+			Individual query = model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+			RDFDataStore store=null;
+			try {
+				store = new RDFDataStore(new URI("https://test.org"), "datastore");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			assertNotNull("RDFDataStore store should not be null", store);
+			List<Resource> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts);
+			Resource rulepath=store.createRulePath(lista);
+			
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -82,20 +96,28 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 
 	}
 
-	//TODO use new RulePath
+
 	private String call_registerWebID() {
-		Model model = ModelFactory.createDefaultModel();
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
+			Individual query = model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+			RDFDataStore store=null;
+			try {
+				store = new RDFDataStore(new URI("https://test.org"), "datastore");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			assertNotNull("RDFDataStore store should not be null", store);
+			List<Resource> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts);
+			Resource rulepath=store.createRulePath(lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
 			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
-			query.addLiteral(RDFOntology.Message.hasWebID, "https:/joku#me");
+			Individual person = model.createIndividual("https:/joku#me", RDFOntology.Contractor.Person);
+			query.addProperty(RDFOntology.Message.hasWebID, person);
 			query.addLiteral(RDFOntology.property_hasPublicKey, "1234");
 
 			StringWriter writer = new StringWriter();
@@ -145,12 +167,19 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	@Test
 	public void test_getWebIDProfile() {
 		String webid_url = registerWebID();
-		Model model = ModelFactory.createDefaultModel();
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
+			Individual query = model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+			RDFDataStore store=null;
+			try {
+				store = new RDFDataStore(new URI("https://test.org"), "datastore");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			assertNotNull("RDFDataStore store should not be null", store);
+			List<Resource> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts);
+			Resource rulepath=store.createRulePath(lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
@@ -189,13 +218,20 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	@Test
 	public void test_CheckPath_CreateAndFind() {
 		String webid_url = registerWebID();
-		Model model = ModelFactory.createDefaultModel();
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 		try {
-			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
-			RDFList rulepath = model.createList(rulepath_list);
-			Resource query = model.createResource();
+			Individual query = model.createIndividual(null, RDFOntology.Message.SecurityQuery);
+			RDFDataStore store=null;
+			try {
+				store = new RDFDataStore(new URI("https://test.org"), "datastore");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			assertNotNull("RDFDataStore store should not be null", store);
+			List<Resource> lista=new ArrayList<>();
+			lista.add(RDFOntology.Contractor.trusts);
+			Resource rulepath=store.createRulePath(lista);
 			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
