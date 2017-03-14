@@ -13,29 +13,22 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
 public class Dumbeat_JenaLibrary {
 
-	static public List<RDFNode> getPermissions(OntModel model,String uri) {
-		List<RDFNode> ret = new ArrayList<RDFNode>();
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + RDFOntology.Authorization.hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + RDFOntology.Authorization.hasPermittedRole.getURI() + "> ?p .");
-		sb.append("}");
-		Query query = QueryFactory.create(sb.toString());
-		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
-			ResultSet results = qexec.execSelect();
-			for (; results.hasNext();) {
-				QuerySolution soln = results.nextSolution();
-				RDFNode x = soln.get("p");
-				ret.add(x);
-			}
+
+	static public LinkedList<Resource> parseRulePath(Model model,Resource node) {
+		LinkedList<Resource> ret = new LinkedList<Resource>();
+		Resource current = node;
+		while (current != null && current.asResource().hasProperty(RDFOntology.Authorization.rest)) {
+			if (current.hasProperty(RDFOntology.Authorization.first))
+				ret.add(current.getPropertyResourceValue(RDFOntology.Authorization.first));
+			current = current.getPropertyResourceValue(RDFOntology.Authorization.rest);
 		}
 		return ret;
-
 	}
 
 	static public Resource createRulePath(OntModel model,List<String> lista) {
@@ -55,16 +48,25 @@ public class Dumbeat_JenaLibrary {
 	}
 	
 
-	
-	static public LinkedList<Resource> parseRulePath(OntModel model,Resource node) {
-		LinkedList<Resource> ret = new LinkedList<Resource>();
-		Resource current = node;
-		while (current != null && current.asResource().hasProperty(RDFOntology.Authorization.rest)) {
-			if (current.hasProperty(RDFOntology.Authorization.first))
-				ret.add(current.getPropertyResourceValue(RDFOntology.Authorization.first));
-			current = current.getPropertyResourceValue(RDFOntology.Authorization.rest);
+
+	static public List<RDFNode> getPermissions(OntModel model,String uri) {
+		List<RDFNode> ret = new ArrayList<RDFNode>();
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ?p WHERE {");
+		sb.append(" <" + uri + ">  <" + RDFOntology.Authorization.hasAuthorizationRule.getURI() + "> ?x .");
+		sb.append(" ?x  <" + RDFOntology.Authorization.hasPermittedRole.getURI() + "> ?p .");
+		sb.append("}");
+		Query query = QueryFactory.create(sb.toString());
+		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+			ResultSet results = qexec.execSelect();
+			for (; results.hasNext();) {
+				QuerySolution soln = results.nextSolution();
+				RDFNode x = soln.get("p");
+				ret.add(x);
+			}
 		}
 		return ret;
+
 	}
 
 	static public void match(OntModel model,List<RDFNode> ret, String request_url) {

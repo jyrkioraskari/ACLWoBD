@@ -17,8 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -56,12 +55,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		OntModel input_model = parseInput(msg);
+		Model input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 
@@ -71,7 +70,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		response.addLiteral(RDFOntology.Message.hasMessage, "base was: " + getBase_url());
 
 		response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.accepted);
-		return Response.status(200).entity(writeModel(output_model)).build();
+		return Response.status(200).entity(modelToString(output_model)).build();
 	}
 
 	@Path("/list")
@@ -92,12 +91,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		OntModel input_model = parseInput(msg);
+		Model input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
@@ -119,7 +118,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 			response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.accepted);
 		else
 			response.addProperty(RDFOntology.Message.hasPermissionStatus, RDFOntology.Message.denied);
-		return Response.status(200).entity(writeModel(output_model)).build();
+		return Response.status(200).entity(modelToString(output_model)).build();
 
 	}
 
@@ -135,12 +134,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
-		OntModel input_model = parseInput(msg);
+		Model input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid_url = query.getProperty(RDFOntology.Message.hasWebID).getObject();
@@ -155,7 +154,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		response.addLiteral(RDFOntology.property_hasPublicKey, public_key.asLiteral().toString());
 
 		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
-		return Response.status(200).entity(writeModel(output_model)).build();
+		return Response.status(200).entity(modelToString(output_model)).build();
 
 	}
 	
@@ -170,13 +169,13 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
 		}
-		OntModel input_model = parseInput(msg);
+		Model input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 		{
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		}
-		OntModel output_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode time_stamp = query.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
 		RDFNode webid = query.getProperty(RDFOntology.Message.hasWebID).getObject();
 		
@@ -191,7 +190,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		response.addLiteral(RDFOntology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
 		response.addProperty(RDFOntology.Message.hasWebID, output_model.getResource(wc.toString()));
-		return Response.status(200).entity(writeModel(output_model)).build();
+		return Response.status(200).entity(modelToString(output_model)).build();
 	}
 
 	Optional<DrumbeatSecurityController> organization = Optional.empty();

@@ -19,8 +19,8 @@ import fi.aalto.drumbeat.RDFOntology;
 public class RESTfulAPI {
 	private URI base_url;
 
-	protected OntModel  parseInput(String msg) {
-		final OntModel  json_input_model =ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+	protected Model  parseInput(String msg) {
+		final Model  json_input_model =ModelFactory.createDefaultModel();
 		try{
 			json_input_model.read(new ByteArrayInputStream(msg.getBytes()), null, "JSON-LD");
 		}catch (Exception e) {
@@ -38,7 +38,7 @@ public class RESTfulAPI {
 		return query;
 	}
 
-	protected String writeModel(Model model) {
+	protected String modelToString(Model model) {
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
 		return writer.toString();
@@ -50,7 +50,7 @@ public class RESTfulAPI {
 	}
 
 
-	public void setBaseURI(UriInfo uriInfo) {
+	protected void setBaseURI(UriInfo uriInfo) {
 		this.base_url = uriInfo.getRequestUri();
 		
 	}
