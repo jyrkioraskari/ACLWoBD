@@ -43,7 +43,6 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 	@Path("/hello")
 	@GET
 	public String getHello() {
-		
 		return "Hello OK!";
 	}
 	
