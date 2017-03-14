@@ -3,6 +3,7 @@ package fi.aalto.drumbeat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
@@ -65,6 +66,7 @@ public class Dumbeat_JenaLibrary {
 				ret.add(x);
 			}
 		}
+		System.out.println(ret.stream().map(x->x.toString()).collect(Collectors.joining(",")));
 		return ret;
 
 	}
