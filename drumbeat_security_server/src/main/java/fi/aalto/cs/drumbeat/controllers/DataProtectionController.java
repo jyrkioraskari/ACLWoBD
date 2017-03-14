@@ -167,7 +167,7 @@ public class DataProtectionController {
 						log.info("Path for the rest is:" + new_path);
 						
 						
-						if(checkPath_HTTP(current_node.getURI(),webid,new_path)) {
+						if(validatePath_HTTP(current_node.getURI(),webid,new_path)) {
 							System.out.println("remote "+current_node.getURI()+" says OK");
 							log.info("remote "+current_node.getURI()+" says OK");
 							List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getModel(),r.toString()).stream().map(y->{
@@ -194,7 +194,7 @@ public class DataProtectionController {
 		
 		return ret;
 	}
-	private boolean checkPath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
+	private boolean validatePath_HTTP(String nextStepURL,String webid,List<Resource> new_path ) {
 		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: "+nextStepURL);
 		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>("-->"+webid+"-->"+nextStepURL,System.currentTimeMillis()));
@@ -240,17 +240,13 @@ public class DataProtectionController {
 			final OntModel response_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
 			
-			
-			ResIterator iter = response_model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
-			
-			
-			
 			Resource result = null;
+			ResIterator iter = response_model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);			
 			if (iter.hasNext())
 				result = iter.next();
 			
 			RDFNode time_stamp = result.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
-			return result.getProperty(RDFOntology.Message.hasPermissionStatus).getObject().asResource() == RDFOntology.Message.accepted;
+			return result.getPropertyResourceValue(RDFOntology.Message.hasPermissionStatus).toString().equals(RDFOntology.Message.accepted.toString());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
