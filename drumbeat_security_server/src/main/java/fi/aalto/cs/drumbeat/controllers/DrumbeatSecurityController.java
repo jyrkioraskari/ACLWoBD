@@ -78,8 +78,7 @@ public class DrumbeatSecurityController {
 	}
 
 	public boolean validatePath(Resource start_node, String webid_uri, List<String> rulepath_strlist) {
-		System.out.println("validatePath: node "+start_node+" path: "+rulepath_strlist);
-		log.info("validatePath: node"+start_node+" path: "+rulepath_strlist);
+		log.info("validatePath: node "+start_node+" path: "+rulepath_strlist);
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>(
 						"validatePath: " + webid_uri + " path: " + rulepath_strlist.stream().collect(Collectors.joining("-")),
