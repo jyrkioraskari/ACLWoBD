@@ -51,7 +51,7 @@ public class DrumbeatSecurityController {
 
 	private static Optional<DrumbeatSecurityController> singleton = Optional.empty();
 
-	public static DrumbeatSecurityController getOrganizationManager(URI uri) {
+	public static DrumbeatSecurityController getDrumbeatSecurityController(URI uri) {
 		if (!singleton.isPresent()) {
 			singleton = Optional.of(new DrumbeatSecurityController(uri));
 		}
@@ -74,15 +74,15 @@ public class DrumbeatSecurityController {
 		return validatePath(null, webid_uri, rulepath_list);
 	}
 
-	private boolean validatePath(Resource previous_node, String webid_uri, List<String> rulepath_strlist) {
+	public boolean validatePath(Resource start_node, String webid_uri, List<String> rulepath_strlist) {
 		
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>(
 						"validatePath: " + webid_uri + " path: " + rulepath_strlist.stream().collect(Collectors.joining("-")),
 						System.currentTimeMillis()));
 		Resource current_node = root;
-		if (previous_node != null)
-			current_node = previous_node;
+		if (start_node != null)
+			current_node = start_node;
 		ListIterator<String> iterator = rulepath_strlist.listIterator();
 		int stepper_inx=0;
 		while (iterator.hasNext()) {

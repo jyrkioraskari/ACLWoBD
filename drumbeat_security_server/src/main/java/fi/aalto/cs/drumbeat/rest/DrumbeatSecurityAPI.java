@@ -199,6 +199,6 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 	public void setBaseURI(UriInfo uriInfo) {
 		super.setBaseURI(uriInfo);
 		if (!this.organization.isPresent())
-			this.organization = Optional.of(DrumbeatSecurityController.getOrganizationManager(getBase_url()));
+			this.organization = Optional.of(DrumbeatSecurityController.getDrumbeatSecurityController(getBase_url()));
 	}
 }

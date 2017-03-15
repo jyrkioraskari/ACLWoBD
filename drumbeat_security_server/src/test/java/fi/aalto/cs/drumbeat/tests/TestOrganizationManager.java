@@ -28,7 +28,7 @@ public class TestOrganizationManager extends TestCase {
 		 organization = Optional.empty();
 		 try {
 				organization = Optional
-						.of(DrumbeatSecurityController.getOrganizationManager(new URI("http://testing.org/p1/p2/p2")));
+						.of(DrumbeatSecurityController.getDrumbeatSecurityController(new URI("http://testing.org/p1/p2/p2")));
 			} catch (URISyntaxException e) {
 				fail("The URL should be in a correct format.");
 			}

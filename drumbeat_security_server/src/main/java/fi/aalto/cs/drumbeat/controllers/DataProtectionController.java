@@ -115,7 +115,30 @@ public class DataProtectionController {
 				}
 				
 				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral()).collect(Collectors.toList());
-				ListIterator<Resource> iterator = rulepath_list.listIterator();
+				List<String> rulepath_list_str=new ArrayList<>(); 
+				for(Resource s:rulepath_list)
+					rulepath_list_str.toString();
+				if(uri.isPresent())
+				{
+					DrumbeatSecurityController dsc=DrumbeatSecurityController.getDrumbeatSecurityController(uri.get());
+					if(dsc.validatePath(current_node,webid, rulepath_list_str))
+					{
+						System.out.println("validation "+current_node.getURI()+" says OK");
+						log.info("validation "+current_node.getURI()+" says OK");
+						List<String> perms=Dumbeat_JenaLibrary.getPermissions(x.getInferenceModel(),r.toString()).stream().map(y->{
+							String sy=y.asResource().getURI();
+							int i=sy.lastIndexOf("#");
+							sy=sy.substring(i+1);
+							return sy;
+						}).collect(Collectors.toCollection(ArrayList::new));
+						ret.addAll(perms); 
+					}
+				
+				}
+				
+				
+				// @formatter:off
+				/*ListIterator<Resource> iterator = rulepath_list.listIterator();
 				//TODO toteuta sama kuin organisaatiopuolella  eli rekursiivinen haku.. voidaan toteuttaa 
 				//tästä kutsumalla sitä (eli ei tarvitse olla etäkutsu)
 				while (iterator.hasNext()) {
@@ -188,8 +211,8 @@ public class DataProtectionController {
 						}
 						break;
 					}
-				}
-	
+				}*/
+				// @formatter:on
 			//});
 			}
 
