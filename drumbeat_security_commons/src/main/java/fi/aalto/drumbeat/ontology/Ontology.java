@@ -31,7 +31,7 @@ public class Ontology {
 		static {
 			hasCollection.addDomain(DataSpaceNode);
 			hasCollection.addRange(Collection);
-			DataSpaceNode.addSubClass(schema.createAllValuesFromRestriction(null, hasCollection, Collection));
+			//DataSpaceNode.addSubClass(schema.createAllValuesFromRestriction(null, hasCollection, Collection));
 		}
 
 		static public ObjectProperty hasDataSource = schema
@@ -39,8 +39,7 @@ public class Ontology {
 		static {
 			hasDataSource.addDomain(Collection);
 			hasDataSource.addRange(DataSource);
-
-			Collection.addSubClass(schema.createAllValuesFromRestriction(null, hasDataSource, DataSource));
+			//Collection.addSubClass(schema.createAllValuesFromRestriction(null, hasDataSource, DataSource));
 		}
 
 		static public ObjectProperty hasDataSet = schema
@@ -66,7 +65,7 @@ public class Ontology {
 			hasClub.addDomain(Authorization.ProtectedResource);
 			hasClub.addRange(Club);
 
-			Authorization.ProtectedResource.addSubClass(schema.createAllValuesFromRestriction(null, hasClub, Club));
+			//Authorization.ProtectedResource.addSubClass(schema.createAllValuesFromRestriction(null, hasClub, Club));
 		}
 
 		static public ObjectProperty hasProject = schema
@@ -77,8 +76,8 @@ public class Ontology {
 
 			hasProject.addSuperProperty(hasClub);
 			hasClub.addSubProperty(hasProject);
-			Authorization.ProtectedResource
-					.addSubClass(schema.createAllValuesFromRestriction(null, hasProject, Project));
+			//Authorization.ProtectedResource
+			//		.addSubClass(schema.createAllValuesFromRestriction(null, hasProject, Project));
 		}
 
 	}
@@ -94,7 +93,7 @@ public class Ontology {
 		static {
 			trusts.addDomain(Contractor);
 			trusts.addRange(Person);
-			Contractor.addSubClass(schema.createAllValuesFromRestriction(null, trusts, Person));
+			//Contractor.addSubClass(schema.createAllValuesFromRestriction(null, trusts, Person));
 		}
 
 		static public ObjectProperty hasContractor = schema
@@ -102,7 +101,7 @@ public class Ontology {
 		static {
 			hasContractor.addDomain(Club.Club);
 			hasContractor.addRange(Contractor);
-			Club.Club.addSubClass(schema.createAllValuesFromRestriction(null, hasContractor, Contractor));
+			//Club.Club.addSubClass(schema.createAllValuesFromRestriction(null, hasContractor, Contractor));
 		}
 
 		static public ObjectProperty hasMainContractor = schema
@@ -110,7 +109,7 @@ public class Ontology {
 		static {
 			hasMainContractor.addDomain(Club.Club);
 			hasMainContractor.addRange(Contractor);
-			Club.Club.addSubClass(schema.createAllValuesFromRestriction(null, hasMainContractor, Contractor));
+			//Club.Club.addSubClass(schema.createAllValuesFromRestriction(null, hasMainContractor, Contractor));
 			hasContractor.addSubProperty(hasMainContractor);
 			hasMainContractor.addSuperProperty(hasContractor);
 		}
@@ -120,7 +119,7 @@ public class Ontology {
 		static {
 			hasSubContractor.addDomain(Contractor);
 			hasSubContractor.addRange(Contractor);
-			Contractor.addSubClass(schema.createAllValuesFromRestriction(null, hasSubContractor, Contractor));
+			//Contractor.addSubClass(schema.createAllValuesFromRestriction(null, hasSubContractor, Contractor));
 		}
 
 	}
@@ -170,9 +169,9 @@ public class Ontology {
 		}
 
 		static {
-			ProtectedResource
+			/*ProtectedResource
 					.addSubClass(schema.createAllValuesFromRestriction(null, hasAuthorizationRule, AuthorizationRule));
-			ProtectedResource.addSubClass(schema.createMinCardinalityRestriction(null, hasAuthorizationRule, 0));
+			ProtectedResource.addSubClass(schema.createMinCardinalityRestriction(null, hasAuthorizationRule, 0));*/
 		}
 
 		static public ObjectProperty hasPermittedRole = schema
@@ -180,8 +179,8 @@ public class Ontology {
 		static {
 			hasPermittedRole.addDomain(AuthorizationRule);
 			hasPermittedRole.addRange(PermittedRole);
-			AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasPermittedRole, 1));
-			AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
+			//AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasPermittedRole, 1));
+			//AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
 		}
 
 		static public ObjectProperty hasRulePath = schema
@@ -190,8 +189,8 @@ public class Ontology {
 			hasRulePath.addDomain(AuthorizationRule);
 			hasRulePath.addRange(RulePath);
 
-			AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasRulePath, 1));
-			AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasRulePath, RulePath));
+			//AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasRulePath, 1));
+			//AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasRulePath, RulePath));
 
 		}
 
@@ -200,8 +199,8 @@ public class Ontology {
 		static {
 			first.addDomain(ListNode);
 			first.addRange(RDF.Property);
-			ListNode.addSubClass(schema.createAllValuesFromRestriction(null, first, RDF.Property));
-			ListNode.addSubClass(schema.createCardinalityRestriction(null, first, 1));
+			/*ListNode.addSubClass(schema.createAllValuesFromRestriction(null, first, RDF.Property));
+			ListNode.addSubClass(schema.createCardinalityRestriction(null, first, 1));*/
 
 		}
 
@@ -211,9 +210,9 @@ public class Ontology {
 			rest.addDomain(ListNode);
 			rest.addRange(ListNode);
 
-			ListNode.addSubClass(schema.createAllValuesFromRestriction(null, rest, ListNode));
+			/*ListNode.addSubClass(schema.createAllValuesFromRestriction(null, rest, ListNode));
 			ListNode.addSubClass(schema.createMinCardinalityRestriction(null, rest, 0));
-			ListNode.addSubClass(schema.createMaxCardinalityRestriction(null, rest, 1));
+			ListNode.addSubClass(schema.createMaxCardinalityRestriction(null, rest, 1));*/
 		}
 		static {
 
@@ -257,12 +256,12 @@ public class Ontology {
 			hasPermissionStatus.addDomain( SecurityResponse );
 			hasPermissionStatus.addRange( PermissionStatus);
 			
-			SecurityResponse.addSubClass( schema.createAllValuesFromRestriction( null, hasPermissionStatus, PermissionStatus ));
+			//SecurityResponse.addSubClass( schema.createAllValuesFromRestriction( null, hasPermissionStatus, PermissionStatus ));
 		}
 		
 		static {
 			Authorization.hasRulePath.addDomain( SecurityQuery );
-			SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, Authorization.hasRulePath, Authorization.RulePath));
+			//SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, Authorization.hasRulePath, Authorization.RulePath));
 
 		}
 		
@@ -270,7 +269,7 @@ public class Ontology {
 		static {
 			hasWebID.addDomain( SecurityQuery );
 			hasWebID.addRange( Contractor.Person );
-			SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, hasWebID, Contractor.Person));
+			//SecurityQuery.addSubClass( schema.createAllValuesFromRestriction( null, hasWebID, Contractor.Person));
 			
 		}
 		
@@ -301,11 +300,10 @@ public class Ontology {
 	static public OntModel getSchema() {
 		if (schema == null) {
 			schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-			schema.add(LBD.schema); // Can be read from the net, but this is
-									// more safe
-			schema.add(Authorization.schema);
+			schema.add(LBD.schema); 		
 			schema.add(Club.schema);
 			schema.add(Contractor.schema);
+			schema.add(Authorization.schema);
 			schema.add(Message.schema);
 		}
 		return schema;

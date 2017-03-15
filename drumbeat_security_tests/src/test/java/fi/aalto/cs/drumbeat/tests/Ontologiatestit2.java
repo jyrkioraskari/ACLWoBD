@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 
@@ -16,7 +18,10 @@ public class Ontologiatestit2 {
 	
 	public Ontologiatestit2() {
 		String NS= Constants.security_ontology_base;
-		OntModel schema = Ontology.getSchema();
+		//OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF);
+		OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM_RULE_INF);
+		schema.add(Ontology.getSchema());
+
 		
 		Individual project = schema.createIndividual( null, Ontology.Club.Project );
 		Individual maincontractor= schema.createIndividual( null, Ontology.Contractor.Contractor );
