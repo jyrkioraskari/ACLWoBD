@@ -19,7 +19,7 @@ public class Ontologiatestit2 {
 	public Ontologiatestit2() {
 		String NS= Constants.security_ontology_base;
 		//OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF);
-		OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM);
+		OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM_RULE_INF);
 		schema.add(Ontology.getSchema());
 
 		

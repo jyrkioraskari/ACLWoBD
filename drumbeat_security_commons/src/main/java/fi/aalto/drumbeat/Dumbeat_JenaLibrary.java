@@ -106,11 +106,11 @@ public class Dumbeat_JenaLibrary {
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasRulePath, rlista);
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermittedRole, Ontology.Authorization.read);
 		
-		Individual occupation1 = model.createIndividual(null, Club.Club);
+		Individual club1 = model.createIndividual(null, Club.Club);
 		// HTTP since local virtual hosts need a new configuration
 		Individual main_contractor = model.createIndividual("http://fabricator.local.org/", Contractor.Contractor);
-		musiikkitalo.addProperty(Club.hasClub, occupation1);
-		occupation1.addProperty(Contractor.hasContractor, main_contractor);
+		musiikkitalo.addProperty(Club.hasClub, club1);
+		club1.addProperty(Contractor.hasContractor, main_contractor);
 		//this.model.write(System.out,"TURTLE");
 
 		//Me

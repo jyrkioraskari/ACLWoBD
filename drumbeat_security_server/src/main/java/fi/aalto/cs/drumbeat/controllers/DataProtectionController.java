@@ -167,6 +167,8 @@ public class DataProtectionController {
 						System.out.println("Path for the rest is:" + new_path);
 						log.info("Path for the rest is:" + new_path);
 						
+						System.out.println("Next step uri>>:" + current_node.getURI());
+						log.info("Next step uri>>:" + current_node.getURI());
 						
 						if(validatePath_HTTP(current_node.getURI(),webid,new_path)) {
 							System.out.println("remote "+current_node.getURI()+" says OK");
