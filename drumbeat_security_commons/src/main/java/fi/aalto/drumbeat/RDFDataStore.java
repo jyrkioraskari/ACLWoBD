@@ -23,6 +23,8 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.util.FileManager;
 
+import fi.aalto.drumbeat.ontology.Ontology;
+
 public class RDFDataStore {
 
 	private final URI rootURI;
@@ -95,11 +97,11 @@ public class RDFDataStore {
 		return data_model;
 	}
 	
-	public InfModel getInferenceModel() {
-		Model schema = RDFOntology.getSchema();
-		Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
-		reasoner = reasoner.bindSchema(schema);
-		return ModelFactory.createInfModel(reasoner, data_model);
+	public Model getInferenceModel() {
+		OntModel model = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF);
+		model.add(Ontology.getSchema());
+		model.add(data_model);
+		return model;
 	}
 
 }

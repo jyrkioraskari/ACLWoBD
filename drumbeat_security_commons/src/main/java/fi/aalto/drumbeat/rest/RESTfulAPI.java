@@ -6,14 +6,12 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.RDFOntology;
+import fi.aalto.drumbeat.ontology.Message;
 
 
 public class RESTfulAPI {
@@ -31,7 +29,7 @@ public class RESTfulAPI {
 
 
 	protected Resource getQuery(Model model) {
-		ResIterator iter = model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();

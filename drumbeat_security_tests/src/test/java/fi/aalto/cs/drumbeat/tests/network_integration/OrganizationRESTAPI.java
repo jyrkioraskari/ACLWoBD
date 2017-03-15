@@ -1,7 +1,6 @@
 package fi.aalto.cs.drumbeat.tests.network_integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
@@ -29,9 +28,10 @@ import org.apache.jena.vocabulary.RDF;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-
 import fi.aalto.cs.drumbeat.tests.test_categories.IntegrationTest;
-import fi.aalto.drumbeat.RDFOntology;
+import fi.aalto.drumbeat.ontology.Authorization;
+import fi.aalto.drumbeat.ontology.Contractor;
+import fi.aalto.drumbeat.ontology.Message;
 
 @Category(IntegrationTest.class)
 
@@ -76,8 +76,8 @@ public class OrganizationRESTAPI {
 
 			Resource query = model.createResource();
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
-			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -124,11 +124,11 @@ public class OrganizationRESTAPI {
 		if(reply==null)
 			return reply;
 		Model model = parseInput(reply);
-		ResIterator iter = model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(Message.hasTimeStamp);
 		Resource response = null;
 		if (iter.hasNext())
 			response = iter.next();
-		RDFNode webid_url = response.getProperty(RDFOntology.Message.hasWebID).getObject();
+		RDFNode webid_url = response.getProperty(Message.hasWebID).getObject();
 		return webid_url.toString();
 	}
 	
@@ -143,14 +143,14 @@ public class OrganizationRESTAPI {
 		try {
 
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
+			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
-			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
 			//query.addLiteral(RDFConstants.property_hasName, "Matti Meikäläinen");
 			//query.addLiteral(RDFConstants.property_hasPublicKey, "1234");
 
@@ -184,15 +184,15 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
+			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
-			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFOntology.Message.hasWebID, model.getResource(webid));
+			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Message.hasWebID, model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -229,15 +229,15 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = RDFOntology.Contractor.trusts;
+			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
-			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFOntology.Message.hasWebID, model.getResource(webid));
+			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Message.hasWebID, model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");

@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -32,7 +31,10 @@ import org.utils.Tuple;
 
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.RDFOntology;
+import fi.aalto.drumbeat.ontology.Authorization;
+import fi.aalto.drumbeat.ontology.Contractor;
+import fi.aalto.drumbeat.ontology.Message;
+import fi.aalto.drumbeat.ontology.Ontology;
 
 public class DrumbeatSecurityController {
 	final static private List<Tuple<String, String>> unseen_locals = new ArrayList<>();
@@ -141,12 +143,12 @@ public class DrumbeatSecurityController {
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(query_model,rulepath_lista);
 			
 			Resource query = query_model.createResource();
-			query.addProperty(RDFOntology.Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, RDFOntology.Message.SecurityQuery);
-			query.addLiteral(RDFOntology.Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(RDFOntology.Message.hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -163,15 +165,15 @@ public class DrumbeatSecurityController {
 			final Model response_model = ModelFactory.createDefaultModel();
 			response_model.read(new ByteArrayInputStream(response_txt.getBytes()), null, "JSON-LD");
 
-			ResIterator iter = response_model.listSubjectsWithProperty(RDFOntology.Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
 
 			@SuppressWarnings("unused")
-			RDFNode time_stamp = result.getProperty(RDFOntology.Message.hasTimeStamp).getObject();
+			RDFNode time_stamp = result.getProperty(Message.hasTimeStamp).getObject();
 			// TODO check the time_stamp
-			return result.getProperty(RDFOntology.Message.hasPermissionStatus).getObject().asResource() == RDFOntology.Message.accepted;
+			return result.getProperty(Message.hasPermissionStatus).getObject().asResource() == Message.accepted;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -185,8 +187,8 @@ public class DrumbeatSecurityController {
 
 	public Resource registerWebID(String webidURI, String public_key) {		
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(RDFOntology.Contractor.trusts, widr);
-		widr.addLiteral(RDFOntology.property_hasPublicKey, public_key);
+		root.addProperty(Contractor.trusts, widr);
+		widr.addLiteral(Ontology.property_hasPublicKey, public_key);
 		rdf_datastore.saveRDFData();
 		return widr;
 	}
