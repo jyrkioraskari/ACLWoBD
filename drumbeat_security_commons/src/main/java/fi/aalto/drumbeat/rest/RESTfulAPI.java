@@ -11,7 +11,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.ontology.Message;
+import fi.aalto.drumbeat.ontology.Ontology;
 
 
 public class RESTfulAPI {
@@ -29,7 +29,7 @@ public class RESTfulAPI {
 
 
 	protected Resource getQuery(Model model) {
-		ResIterator iter = model.listSubjectsWithProperty(Message.hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();

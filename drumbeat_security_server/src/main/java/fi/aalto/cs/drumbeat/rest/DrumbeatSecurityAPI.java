@@ -26,8 +26,6 @@ import org.glassfish.jersey.server.mvc.Viewable;
 
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Message;
 import fi.aalto.drumbeat.ontology.Ontology;
 import fi.aalto.drumbeat.rest.RESTfulAPI;
 
@@ -64,14 +62,14 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(Message.hasTimeStamp).getObject();
+		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, Message.SecurityResponse);
-		response.addLiteral(Message.hasTimeStamp, time_stamp.asLiteral().toString());
-		response.addLiteral(Message.hasMessage, "base was: " + getBase_url());
+		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
+		response.addLiteral(Ontology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(Ontology.Message.hasMessage, "base was: " + getBase_url());
 
-		response.addProperty(Message.hasPermissionStatus, Message.accepted);
+		response.addProperty(Ontology.Message.hasPermissionStatus, Ontology.Message.accepted);
 		return Response.status(200).entity(modelToString(output_model)).build();
 	}
 
@@ -100,9 +98,9 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(Message.hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(Message.hasWebID).getObject();
-		Resource path = query.getProperty(Authorization.hasRulePath).getObject().asResource();
+		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(Ontology.Message.hasWebID).getObject();
+		Resource path = query.getProperty(Ontology.Authorization.hasRulePath).getObject().asResource();
 		
 		LinkedList<Resource> rulepath = Dumbeat_JenaLibrary.parseRulePath(input_model,path);
 		List<String> rulepath_list = new ArrayList<>();
@@ -113,13 +111,13 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		boolean result = organization.get().validate(webid_url.toString(), rulepath_list);
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, Message.SecurityResponse);
-		response.addLiteral(Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
+		response.addLiteral(Ontology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
 		if(result)
-			response.addProperty(Message.hasPermissionStatus, Message.accepted);
+			response.addProperty(Ontology.Message.hasPermissionStatus, Ontology.Message.accepted);
 		else
-			response.addProperty(Message.hasPermissionStatus, Message.denied);
+			response.addProperty(Ontology.Message.hasPermissionStatus, Ontology.Message.denied);
 		return Response.status(200).entity(modelToString(output_model)).build();
 
 	}
@@ -143,19 +141,19 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 		Model output_model = ModelFactory.createDefaultModel();
 
-		RDFNode time_stamp = query.getProperty(Message.hasTimeStamp).getObject();
-		RDFNode webid_url = query.getProperty(Message.hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		RDFNode webid_url = query.getProperty(Ontology.Message.hasWebID).getObject();
 		Resource wp = organization.get().getWebIDProfile(webid_url.toString());
 		if (wp == null)
 			return Response.status(HttpServletResponse.SC_NOT_FOUND).entity("No user").build();
 		
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, Message.SecurityResponse);
+		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
 
 		RDFNode public_key=wp.getProperty(Ontology.property_hasPublicKey).getObject();
 		response.addLiteral(Ontology.property_hasPublicKey, public_key.asLiteral().toString());
 
-		response.addLiteral(Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addLiteral(Ontology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 		return Response.status(200).entity(modelToString(output_model)).build();
 
 	}
@@ -178,8 +176,8 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		}
 		Model output_model = ModelFactory.createDefaultModel();
-		RDFNode time_stamp = query.getProperty(Message.hasTimeStamp).getObject();
-		RDFNode webid = query.getProperty(Message.hasWebID).getObject();
+		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		RDFNode webid = query.getProperty(Ontology.Message.hasWebID).getObject();
 		
 		//TODO Exponent+modulus
 		RDFNode public_key = query.getProperty(Ontology.property_hasPublicKey).getObject();
@@ -188,10 +186,10 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 
 
 		Resource response = output_model.createResource();
-		response.addProperty(RDF.type, Message.SecurityResponse);
-		response.addLiteral(Message.hasTimeStamp, time_stamp.asLiteral().toString());
+		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
+		response.addLiteral(Ontology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
 
-		response.addProperty(Message.hasWebID, output_model.getResource(wc.toString()));
+		response.addProperty(Ontology.Message.hasWebID, output_model.getResource(wc.toString()));
 		return Response.status(200).entity(modelToString(output_model)).build();
 	}
 

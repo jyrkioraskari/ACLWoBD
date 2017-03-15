@@ -33,9 +33,6 @@ import org.junit.Test;
 import fi.aalto.cs.drumbeat.rest.DrumbeatSecurityAPI;
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Contractor;
-import fi.aalto.drumbeat.ontology.Message;
 import fi.aalto.drumbeat.ontology.Ontology;
 
 public class TestOrganizationRESTAPI extends JerseyTest {
@@ -62,7 +59,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	public void test_postHello() {
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			Individual query = model.createIndividual(null, Message.SecurityQuery);
+			Individual query = model.createIndividual(null, Ontology.Message.SecurityQuery);
 			RDFDataStore store=null;
 			try {
 				store = new RDFDataStore(new URI("https://test.org"), "datastore");
@@ -71,14 +68,14 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
-			lista.add(Contractor.trusts.toString());
+			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
 			
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -88,7 +85,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 					.post(Entity.entity(writer.toString(), "application/ld+json"));
 			String response_string = response.readEntity(String.class);
 			Model response_model = parseInput(response_string);
-			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 			Resource rest_response = null;
 			if (iter.hasNext())
 				rest_response = iter.next();
@@ -104,7 +101,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	private String call_registerWebID() {
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			Individual query = model.createIndividual(null, Message.SecurityQuery);
+			Individual query = model.createIndividual(null, Ontology.Message.SecurityQuery);
 			RDFDataStore store=null;
 			try {
 				store = new RDFDataStore(new URI("https://test.org"), "datastore");
@@ -113,15 +110,15 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
-			lista.add(Contractor.trusts.toString());
+			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-			Individual person = model.createIndividual("https:/joku#me", Contractor.Person);
-			query.addProperty(Message.hasWebID, person);
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+			Individual person = model.createIndividual("https:/joku#me", Ontology.Contractor.Person);
+			query.addProperty(Ontology.Message.hasWebID, person);
 			query.addLiteral(Ontology.property_hasPublicKey, "1234");
 
 			StringWriter writer = new StringWriter();
@@ -145,11 +142,11 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 	private String registerWebID() {
 		String reply = call_registerWebID();
 		Model model = parseInput(reply);
-		ResIterator iter = model.listSubjectsWithProperty(Message.hasTimeStamp);
+		ResIterator iter = model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 		Resource response = null;
 		if (iter.hasNext())
 			response = iter.next();
-		RDFNode webid_url = response.getProperty(Message.hasWebID).getObject();
+		RDFNode webid_url = response.getProperty(Ontology.Message.hasWebID).getObject();
 		return webid_url.toString();
 	}
 	
@@ -173,7 +170,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		String webid_url = registerWebID();
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		try {
-			Individual query = model.createIndividual(null, Message.SecurityQuery);
+			Individual query = model.createIndividual(null, Ontology.Message.SecurityQuery);
 			RDFDataStore store=null;
 			try {
 				store = new RDFDataStore(new URI("https://test.org"), "datastore");
@@ -182,14 +179,14 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
-			lista.add(Contractor.trusts.toString());
+			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(Message.hasWebID, model.getResource(webid_url));
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Ontology.Message.hasWebID, model.getResource(webid_url));
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -202,7 +199,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			//System.out.println("Vastaus haettu webid profiili oli: " + response_string);
 			
 			Model response_model=parseInput(response_string);
-			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 			Resource rest_response = null;
 			if (iter.hasNext())
 				rest_response = iter.next();
@@ -225,7 +222,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 
 		try {
-			Individual query = model.createIndividual(null, Message.SecurityQuery);
+			Individual query = model.createIndividual(null, Ontology.Message.SecurityQuery);
 			RDFDataStore store=null;
 			try {
 				store = new RDFDataStore(new URI("https://test.org"), "datastore");
@@ -234,14 +231,14 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			}
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
-			lista.add(Contractor.trusts.toString());
+			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(Message.hasWebID, model.getResource(webid_url));
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Ontology.Message.hasWebID, model.getResource(webid_url));
 
 			StringWriter writer = new StringWriter();
 			model.write(writer, "JSON-LD");
@@ -252,12 +249,12 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			String response_string = http_response.readEntity(String.class);
 			http_response.close();
 			Model response_model = parseInput(response_string);
-			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 			Resource response = null;
 			if (iter.hasNext())
 				response = iter.next();
 			
-			//boolean status = response.getProperty(RDFConstants.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Message.accepted;
+			//boolean status = response.getProperty(RDFConstants.Ontology.Message.hasPermissionStatus).getObject().asResource() == RDFConstants.Ontology.Message.accepted;
 			//assertEquals(true, status);
 
 		} catch (Exception e) {

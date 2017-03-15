@@ -31,9 +31,6 @@ import org.utils.Tuple;
 
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Contractor;
-import fi.aalto.drumbeat.ontology.Message;
 import fi.aalto.drumbeat.ontology.Ontology;
 
 public class DrumbeatSecurityController {
@@ -143,12 +140,12 @@ public class DrumbeatSecurityController {
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(query_model,rulepath_lista);
 			
 			Resource query = query_model.createResource();
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(Message.hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Ontology.Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -165,15 +162,15 @@ public class DrumbeatSecurityController {
 			final Model response_model = ModelFactory.createDefaultModel();
 			response_model.read(new ByteArrayInputStream(response_txt.getBytes()), null, "JSON-LD");
 
-			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);
+			ResIterator iter = response_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 			Resource result = null;
 			if (iter.hasNext())
 				result = iter.next();
 
 			@SuppressWarnings("unused")
-			RDFNode time_stamp = result.getProperty(Message.hasTimeStamp).getObject();
+			RDFNode time_stamp = result.getProperty(Ontology.Message.hasTimeStamp).getObject();
 			// TODO check the time_stamp
-			return result.getProperty(Message.hasPermissionStatus).getObject().asResource() == Message.accepted;
+			return result.getProperty(Ontology.Message.hasPermissionStatus).getObject().asResource() == Ontology.Message.accepted;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,7 +184,7 @@ public class DrumbeatSecurityController {
 
 	public Resource registerWebID(String webidURI, String public_key) {		
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(Contractor.trusts, widr);
+		root.addProperty(Ontology.Contractor.trusts, widr);
 		widr.addLiteral(Ontology.property_hasPublicKey, public_key);
 		rdf_datastore.saveRDFData();
 		return widr;

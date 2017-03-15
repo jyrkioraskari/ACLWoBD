@@ -13,14 +13,13 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Contractor;
-import fi.aalto.drumbeat.ontology.Club;
+import fi.aalto.drumbeat.ontology.Ontology;
+import fi.aalto.drumbeat.ontology.Ontology.Club;
+import fi.aalto.drumbeat.ontology.Ontology.Contractor;
 
 public class Dumbeat_JenaLibrary {
 
@@ -28,24 +27,24 @@ public class Dumbeat_JenaLibrary {
 	static public LinkedList<Resource> parseRulePath(Model model,Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
 		Resource current = node;
-		while (current != null && current.asResource().hasProperty(Authorization.rest)) {
-			if (current.hasProperty(Authorization.first))
-				ret.add(current.getPropertyResourceValue(Authorization.first));
-			current = current.getPropertyResourceValue(Authorization.rest);
+		while (current != null && current.asResource().hasProperty(Ontology.Authorization.rest)) {
+			if (current.hasProperty(Ontology.Authorization.first))
+				ret.add(current.getPropertyResourceValue(Ontology.Authorization.first));
+			current = current.getPropertyResourceValue(Ontology.Authorization.rest);
 		}
 		return ret;
 	}
 
 	static public Resource createRulePath(OntModel model,List<String> lista) {
-		Individual rule_path = model.createIndividual(null, Authorization.RulePath);
+		Individual rule_path = model.createIndividual(null, Ontology.Authorization.RulePath);
 
 		Individual current = rule_path;
 		for (String ps : lista) {
 			ObjectProperty p = model
 					.createObjectProperty(ps);
-			Individual node = model.createIndividual(null, Authorization.ListNode);
-			current.addProperty(Authorization.rest, node);
-			current.addProperty(Authorization.first, p);
+			Individual node = model.createIndividual(null, Ontology.Authorization.ListNode);
+			current.addProperty(Ontology.Authorization.rest, node);
+			current.addProperty(Ontology.Authorization.first, p);
 			current = node;
 		}
 
@@ -58,8 +57,8 @@ public class Dumbeat_JenaLibrary {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + Authorization.hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + Authorization.hasPermittedRole.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + Ontology.Authorization.hasAuthorizationRule.getURI() + "> ?x .");
+		sb.append(" ?x  <" + Ontology.Authorization.hasPermittedRole.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -78,7 +77,7 @@ public class Dumbeat_JenaLibrary {
 		System.out.println("etsitty: " + request_url);
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + Authorization.hasAuthorizationRule.getURI() + "> ?x");
+		sb.append(" ?path  <" + Ontology.Authorization.hasAuthorizationRule.getURI() + "> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -95,17 +94,17 @@ public class Dumbeat_JenaLibrary {
 
 	static public  void createDemoData(OntModel model,String rootURI) {
 		
-		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", Authorization.ProtectedResource);
-		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Authorization.AuthorizationRule);
-		musiikkitalo.addProperty(Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
+		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", Ontology.Authorization.ProtectedResource);
+		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Ontology.Authorization.AuthorizationRule);
+		musiikkitalo.addProperty(Ontology.Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
 		
 		List<String> lista=new ArrayList<>();
 		lista.add(Club.hasClub.toString());
 		lista.add(Contractor.hasMainContractor.toString());
 		lista.add(Contractor.trusts.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
-		musiikkitalo_authorizationRule.addProperty(Authorization.hasRulePath, rlista);
-		musiikkitalo_authorizationRule.addProperty(Authorization.hasPermittedRole, Authorization.read);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasRulePath, rlista);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermittedRole, Ontology.Authorization.read);
 		
 		Individual occupation1 = model.createIndividual(null, Club.Club);
 		// HTTP since local virtual hosts need a new configuration

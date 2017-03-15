@@ -29,9 +29,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import fi.aalto.cs.drumbeat.tests.test_categories.IntegrationTest;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Contractor;
-import fi.aalto.drumbeat.ontology.Message;
+import fi.aalto.drumbeat.ontology.Ontology;
+import fi.aalto.drumbeat.ontology.Ontology.Authorization;
+import fi.aalto.drumbeat.ontology.Ontology.Contractor;
+import fi.aalto.drumbeat.ontology.Ontology.Message;
 
 @Category(IntegrationTest.class)
 
@@ -76,7 +77,7 @@ public class OrganizationRESTAPI {
 
 			Resource query = model.createResource();
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
 			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
 
 			StringWriter writer = new StringWriter();

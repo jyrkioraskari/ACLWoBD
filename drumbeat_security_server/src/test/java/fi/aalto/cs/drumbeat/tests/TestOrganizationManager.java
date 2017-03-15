@@ -16,7 +16,7 @@ import org.junit.Test;
 import fi.aalto.cs.drumbeat.controllers.DrumbeatSecurityController;
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.ontology.Contractor;
+import fi.aalto.drumbeat.ontology.Ontology;
 import junit.framework.TestCase;
 
 public class TestOrganizationManager extends TestCase {
@@ -56,7 +56,7 @@ public class TestOrganizationManager extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.trusts.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
 		
 		//TODO tulisiko olla totta?

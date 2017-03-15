@@ -20,9 +20,7 @@ import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Contractor;
-import fi.aalto.drumbeat.ontology.Message;
+import fi.aalto.drumbeat.ontology.Ontology;
 import junit.framework.TestCase;
 
 public class JenaTests extends TestCase {
@@ -41,11 +39,11 @@ public class JenaTests extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.trusts.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
 		
-		Individual query_resource = this.model.createIndividual(null, Message.SecurityQuery);
-		query_resource.addProperty(Authorization.hasRulePath, rulepath);
+		Individual query_resource = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
+		query_resource.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
 
@@ -61,20 +59,20 @@ public class JenaTests extends TestCase {
 		Model output_model = ModelFactory.createDefaultModel();
 		input_model.write(System.out, "TTL");
 
-		ResIterator iter = input_model.listSubjectsWithProperty(Message.hasTimeStamp);
+		ResIterator iter = input_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);
 		Resource query = null;
 		if (iter.hasNext())
 			query = iter.next();
 		else
 			return;
-		System.out.println(query.hasProperty(Message.hasTimeStamp));
+		System.out.println(query.hasProperty(Ontology.Message.hasTimeStamp));
 
-		RDFNode ts = query.getProperty(Message.hasTimeStamp).getObject();
+		RDFNode ts = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
 		System.out.println(ts);
-		Individual response = this.model.createIndividual(null, Message.SecurityResponse);
+		Individual response = this.model.createIndividual(null, Ontology.Message.SecurityResponse);
 
-		response.addProperty(RDF.type, Message.SecurityResponse);
-		response.addLiteral(Message.hasTimeStamp, ts);
+		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
+		response.addLiteral(Ontology.Message.hasTimeStamp, ts);
 
 		System.out.println(writeModel(output_model));
 	}
@@ -92,16 +90,16 @@ public class JenaTests extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.trusts.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
 		
-		Individual query = this.model.createIndividual(null, Message.SecurityQuery);
-		query.addProperty(Authorization.hasRulePath, rulepath);
+		Individual query = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
+		query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
-		query.addProperty(RDF.type, Message.SecurityQuery);
-		query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-		query.addProperty(Message.hasWebID, model.getResource(webid));
+		query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+		query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+		query.addProperty(Ontology.Message.hasWebID, model.getResource(webid));
 
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");

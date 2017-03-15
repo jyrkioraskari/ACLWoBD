@@ -34,8 +34,7 @@ import org.utils.Tuple;
 
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
-import fi.aalto.drumbeat.ontology.Authorization;
-import fi.aalto.drumbeat.ontology.Message;
+import fi.aalto.drumbeat.ontology.Ontology;
 
 
 public class DataProtectionController {
@@ -103,9 +102,9 @@ public class DataProtectionController {
 				Resource current_node = x.getInferenceModel().getResource(r.toString());
 				
 				List<Resource> rulepath_list = null;
-				Resource authorizationRule=r.asResource().getPropertyResourceValue(Authorization.hasAuthorizationRule);
+				Resource authorizationRule=r.asResource().getPropertyResourceValue(Ontology.Authorization.hasAuthorizationRule);
 				if(authorizationRule!=null) {
-					Resource rule_path=authorizationRule.getPropertyResourceValue(Authorization.hasRulePath);
+					Resource rule_path=authorizationRule.getPropertyResourceValue(Ontology.Authorization.hasRulePath);
 					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getInferenceModel(),rule_path); 
 				}
 				else
@@ -211,14 +210,14 @@ public class DataProtectionController {
 			}
 			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(query_model,rulepath_lista);
 			
-			Individual query = query_model.createIndividual(null, Message.SecurityQuery);
+			Individual query = query_model.createIndividual(null, Ontology.Message.SecurityQuery);
 			
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
-			query.addProperty(RDF.type, Message.SecurityQuery);
-			query.addLiteral(Message.hasTimeStamp, time_inMilliseconds);
-			query.addProperty(Message.hasWebID, query_model.getResource(webid));
+			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
+			query.addLiteral(Ontology.Message.hasTimeStamp, time_inMilliseconds);
+			query.addProperty(Ontology.Message.hasWebID, query_model.getResource(webid));
 
 			StringWriter writer = new StringWriter();
 			query_model.write(writer, "JSON-LD");
@@ -244,12 +243,12 @@ public class DataProtectionController {
 			response_model.read(new ByteArrayInputStream( response_txt.getBytes()), null, "JSON-LD");
 			
 			Resource result = null;
-			ResIterator iter = response_model.listSubjectsWithProperty(Message.hasTimeStamp);			
+			ResIterator iter = response_model.listSubjectsWithProperty(Ontology.Message.hasTimeStamp);			
 			if (iter.hasNext())
 				result = iter.next();
 			
-			RDFNode time_stamp = result.getProperty(Message.hasTimeStamp).getObject();
-			return result.getPropertyResourceValue(Message.hasPermissionStatus).toString().equals(Message.accepted.toString());
+			RDFNode time_stamp = result.getProperty(Ontology.Message.hasTimeStamp).getObject();
+			return result.getPropertyResourceValue(Ontology.Message.hasPermissionStatus).toString().equals(Ontology.Message.accepted.toString());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
