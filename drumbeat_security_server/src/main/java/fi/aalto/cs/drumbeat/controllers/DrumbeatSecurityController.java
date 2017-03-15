@@ -27,6 +27,8 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.utils.Tuple;
 
 import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
@@ -34,6 +36,7 @@ import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.ontology.Ontology;
 
 public class DrumbeatSecurityController {
+	private static final Log log = LogFactory.getLog(DrumbeatSecurityController.class);
 	final static private List<Tuple<String, String>> unseen_locals = new ArrayList<>();
 	final static private List<Tuple<String, Long>> access_list = new ArrayList<>();
 
@@ -75,7 +78,8 @@ public class DrumbeatSecurityController {
 	}
 
 	public boolean validatePath(Resource start_node, String webid_uri, List<String> rulepath_strlist) {
-		
+		System.out.println("validatePath: node"+start_node+" path: "+rulepath_strlist);
+		log.info("validatePath: node"+start_node+" path: "+rulepath_strlist);
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>(
 						"validatePath: " + webid_uri + " path: " + rulepath_strlist.stream().collect(Collectors.joining("-")),

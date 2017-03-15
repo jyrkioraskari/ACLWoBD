@@ -37,23 +37,23 @@ import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.ontology.Ontology;
 
 
-public class DataProtectionController {
-	private static final Log log = LogFactory.getLog(DataProtectionController.class);
+public class AuthenticationController {
+	private static final Log log = LogFactory.getLog(AuthenticationController.class);
 
 	private Optional<URI> uri = Optional.empty();;
 	// at the time
 	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
 
-	private static Optional<DataProtectionController> singleton = Optional.empty();
+	private static Optional<AuthenticationController> singleton = Optional.empty();
 
-	public static DataProtectionController getDataServer(String uri_str) {
+	public static AuthenticationController getAuthenticationController(String uri_str) {
 		if (!singleton.isPresent()) {
 			URI uri;
 			try {
 				uri = new URI(uri_str);
 				URI service_root = new URIBuilder(uri).setScheme("https").setPath("/").build();
 				System.out.println("DataServer root: "+service_root.toString());
-				singleton = Optional.of(new DataProtectionController(service_root.toString()));
+				singleton = Optional.of(new AuthenticationController(service_root.toString()));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -61,7 +61,7 @@ public class DataProtectionController {
 		return singleton.get();
 	}
 
-	private DataProtectionController(String host_uri) {
+	private AuthenticationController(String host_uri) {
 		try {
 			uri = Optional.of(new URI(host_uri));
 
@@ -133,7 +133,15 @@ public class DataProtectionController {
 						}).collect(Collectors.toCollection(ArrayList::new));
 						ret.addAll(perms); 
 					}
+					else{
+						System.out.println("validation "+current_node.getURI()+" says NOT");
+						log.info("validation "+current_node.getURI()+" says NOT");
+					}
 				
+				} else
+				{
+					System.out.println("no base uri");
+					log.info("no base uri");
 				}
 				
 				
