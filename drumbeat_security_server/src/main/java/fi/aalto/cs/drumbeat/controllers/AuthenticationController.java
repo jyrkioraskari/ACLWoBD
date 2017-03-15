@@ -5,9 +5,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,7 +21,6 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
@@ -116,8 +113,8 @@ public class AuthenticationController {
 				
 				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral()).collect(Collectors.toList());
 				List<String> rulepath_list_str=new ArrayList<>(); 
-				for(Resource s:rulepath_list)
-					rulepath_list_str.toString();
+				for(Resource rs:rulepath_list)
+					rulepath_list_str.add(rs.toString());
 				if(uri.isPresent())
 				{
 					DrumbeatSecurityController dsc=DrumbeatSecurityController.getDrumbeatSecurityController(uri.get());
