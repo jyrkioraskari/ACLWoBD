@@ -98,7 +98,7 @@ public class RDFDataStore {
 	}
 	
 	public Model getInferenceModel() {
-		OntModel model = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF);
+		OntModel model = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM_RULE_INF);
 		model.add(Ontology.getSchema());
 		model.add(data_model);
 		return model;

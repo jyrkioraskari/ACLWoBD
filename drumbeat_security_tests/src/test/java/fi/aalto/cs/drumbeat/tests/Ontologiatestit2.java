@@ -19,12 +19,12 @@ public class Ontologiatestit2 {
 	public Ontologiatestit2() {
 		String NS= Constants.security_ontology_base;
 		//OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF);
-		OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM_RULE_INF);
+		OntModel schema = ModelFactory.createOntologyModel( OntModelSpec.OWL_DL_MEM);
 		schema.add(Ontology.getSchema());
 
 		
 		Individual project = schema.createIndividual( null, Ontology.Club.Project );
-		Individual maincontractor= schema.createIndividual( null, Ontology.Contractor.Contractor );
+		Individual maincontractor= schema.createIndividual( "http://somewhere.else", Ontology.Contractor.Contractor );
 		project.addProperty(Ontology.Contractor.hasMainContractor, maincontractor);	
 		StmtIterator iter=project.listProperties();
 		System.out.println("---");
