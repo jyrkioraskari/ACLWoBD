@@ -92,13 +92,17 @@ public class DrumbeatSecurityController {
 		while (iterator.hasNext()) {
 			String step = iterator.next();
 			stepper_inx++;
+			log.info("Finding property "+step+" from the inference model");
 			Property p = rdf_datastore.getInferenceModel().getProperty(step);
+			log.info("Got property "+p);
 			StmtIterator connected_triples = current_node.listProperties(p);
+			if(!connected_triples.hasNext())
+				log.info("No triples connected to the property");
 			while (connected_triples.hasNext()) {
 				Statement triple = connected_triples.next();
 				Resource node = triple.getObject().asResource();
 				if (node != null) {
-					System.out.println("from local store:" + node);
+					log.info("from local store:" + node);
 					current_node = node;
 					if (!iterator.hasNext()) {
 						if (current_node.toString().equals(webid_uri)) {
@@ -111,10 +115,10 @@ public class DrumbeatSecurityController {
 						return validatePath(current_node, webid_uri, new_path);
 					}
 				} else {
-					System.out.println("located somewhere else. current node was: " + current_node);
-
+					log.info("located somewhere else. current node was: " + current_node);
+					
 					List<String> new_path = rulepath_strlist.subList(stepper_inx, rulepath_strlist.size());
-					System.out.println("Path for the rest is:" + new_path);
+					log.info("Path for the rest is:" + new_path);
 					return checkPath_HTTP(current_node.toString(), webid_uri, new_path);
 				}
 			}
