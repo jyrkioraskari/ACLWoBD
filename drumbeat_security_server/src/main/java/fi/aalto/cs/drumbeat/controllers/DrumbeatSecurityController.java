@@ -173,7 +173,7 @@ public class DrumbeatSecurityController {
 			RDFNode time_stamp = result.getProperty(Ontology.Message.hasTimeStamp).getObject();
 			// TODO check the time_stamp
 			return result.getProperty(Ontology.Message.hasPermissionStatus).getObject()
-					.asResource() == Ontology.Message.accepted;
+					.asResource().toString().equals(Ontology.Message.accepted.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
