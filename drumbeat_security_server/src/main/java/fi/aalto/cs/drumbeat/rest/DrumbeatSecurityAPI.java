@@ -55,15 +55,20 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (!this.organization.isPresent())
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity("Initialization errors")
 					.build();
+		
 		Model input_model = parseInput(msg);
 		Resource query = getQuery(input_model);
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		if(checkRepetition(time_stamp,msg))
+		{
+			return Response.status(HttpServletResponse.SC_NOT_ACCEPTABLE).entity("No access").build();
+		}
 
+		Model output_model = ModelFactory.createDefaultModel();
 		Resource response = output_model.createResource();
 		response.addProperty(RDF.type, Ontology.Message.SecurityResponse);
 		response.addLiteral(Ontology.Message.hasTimeStamp, time_stamp.asLiteral().toString());
@@ -72,6 +77,8 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		response.addProperty(Ontology.Message.hasPermissionStatus, Ontology.Message.accepted);
 		return Response.status(200).entity(modelToString(output_model)).build();
 	}
+
+
 
 	@Path("/list")
 	@Produces({"text/html"})
@@ -96,9 +103,13 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
 
 		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		if(checkRepetition(time_stamp,msg))
+		{
+			return Response.status(HttpServletResponse.SC_NOT_ACCEPTABLE).entity("No access").build();
+		}
+		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode webid_url = query.getProperty(Ontology.Message.hasWebID).getObject();
 		Resource path = query.getProperty(Ontology.Authorization.hasRulePath).getObject().asResource();
 		
@@ -139,9 +150,14 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		if (query == null)
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 
-		Model output_model = ModelFactory.createDefaultModel();
-
+		
 		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		if(checkRepetition(time_stamp,msg))
+		{
+			return Response.status(HttpServletResponse.SC_NOT_ACCEPTABLE).entity("No access").build();
+		}
+		
+		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode webid_url = query.getProperty(Ontology.Message.hasWebID).getObject();
 		Resource wp = organization.get().getWebIDProfile(webid_url.toString());
 		if (wp == null)
@@ -175,8 +191,12 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		{
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity("No queries").build();
 		}
-		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode time_stamp = query.getProperty(Ontology.Message.hasTimeStamp).getObject();
+		if(checkRepetition(time_stamp,msg))
+		{
+			return Response.status(HttpServletResponse.SC_NOT_ACCEPTABLE).entity("No access").build();
+		}
+		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode webid = query.getProperty(Ontology.Message.hasWebID).getObject();
 		
 		//TODO Exponent+modulus
