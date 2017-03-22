@@ -28,111 +28,110 @@ import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
 import fi.aalto.cs.drumbeat.controllers.AuthenticationController;
 
-
 public class DrumbeatSecurityApplication extends ResourceConfig {
-	
-	
+
 	public static class DrumbeatAuthFilter implements ContainerRequestFilter {
 
 		private static final Log log = LogFactory.getLog(DrumbeatAuthFilter.class);
 
-        @Override
-        public void filter(ContainerRequestContext requestContext) throws IOException {
-            String authentication = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-            
-            
-            X509Certificate[] certChain = (X509Certificate[]) requestContext.getProperty("javax.servlet.request.X509Certificate");
-            X509Certificate certificate = certChain[0];
-            try {
-				for (Object altlist : certificate.getSubjectAlternativeNames().toArray()) {
-					for (Object alt : (Collection) altlist) {
-						if (String.class.isInstance(alt)) {
-							System.out.println("filter alt: "+alt);
-							
+		@Override
+		public void filter(ContainerRequestContext requestContext) throws IOException {
+			String authentication = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+
+			X509Certificate[] chain = (X509Certificate[]) requestContext
+					.getProperty("javax.servlet.request.X509Certificate");
+
+			if (chain != null && chain.length > 0) {
+				X509Certificate certificate = chain[0];
+				try {
+					for (Object altlist : certificate.getSubjectAlternativeNames().toArray()) {
+						for (Object alt : (Collection) altlist) {
+							if (String.class.isInstance(alt)) {
+								System.out.println("filter alt: " + alt);
+
+							}
 						}
 					}
+				} catch (CertificateParsingException e) {
+					e.printStackTrace();
 				}
-			} catch (CertificateParsingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-            
-            
+			else {
+				System.out.println("filter no certs");
+			}
 
-            SecurityContext sc=requestContext.getSecurityContext();
-            if(sc==null)
-            	return;
-            if(sc.getUserPrincipal()==null)
-            	return;
-            log.info("DrumbeatAuthFilter webid: "+sc.getUserPrincipal().getName());
-            UriInfo uriInfo = requestContext.getUriInfo();
-            URI requestUri = uriInfo.getRequestUri();
-            log.info("DrumbeatAuthFilter req url: "+requestUri.toString());
+			SecurityContext sc = requestContext.getSecurityContext();
+			if (sc == null)
+				return;
+			if (sc.getUserPrincipal() == null)
+				return;
+			log.info("DrumbeatAuthFilter webid: " + sc.getUserPrincipal().getName());
+			UriInfo uriInfo = requestContext.getUriInfo();
+			URI requestUri = uriInfo.getRequestUri();
+			log.info("DrumbeatAuthFilter req url: " + requestUri.toString());
 
-            AuthenticationController ds=AuthenticationController.getAuthenticationController(requestUri.toString());
-            final List<String> roles  = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
+			AuthenticationController ds = AuthenticationController.getAuthenticationController(requestUri.toString());
+			final List<String> roles = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
 			roles.add("default");
-			log.info("DrumbeatAuthFilter Tomcat ROLES are:"+roles.stream()
-				     .collect(Collectors.joining(",")));
-			
-            requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(),roles));
-        }
-    }
+			log.info("DrumbeatAuthFilter Tomcat ROLES are:" + roles.stream().collect(Collectors.joining(",")));
 
-    static class DrumbeatSecurityContext implements SecurityContext {
-    	private final String webid;
-    	final List<String> roles;
-        public DrumbeatSecurityContext(String webid,List<String> roles ) {
-            this.webid=webid;
-            this.roles=roles;
-        }
+			requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(), roles));
+		}
+	}
 
-        @Override
-        public Principal getUserPrincipal() {
-            return new Principal() {
-                @Override
-                public String getName() {
-                    return webid;
-                }
-            };
-        }
+	static class DrumbeatSecurityContext implements SecurityContext {
+		private final String webid;
+		final List<String> roles;
 
-        @Override
-        public boolean isUserInRole(String role) {
-            return roles.contains(role);  
-        }
+		public DrumbeatSecurityContext(String webid, List<String> roles) {
+			this.webid = webid;
+			this.roles = roles;
+		}
 
-        @Override
-        public boolean isSecure() { return true; }
+		@Override
+		public Principal getUserPrincipal() {
+			return new Principal() {
+				@Override
+				public String getName() {
+					return webid;
+				}
+			};
+		}
 
-        @Override
-        public String getAuthenticationScheme() {
-            return "DRUMBEAT_SECURITY";
-        }
+		@Override
+		public boolean isUserInRole(String role) {
+			return roles.contains(role);
+		}
 
-    }
+		@Override
+		public boolean isSecure() {
+			return true;
+		}
 
-    static class AuthenticationException extends WebApplicationException {
+		@Override
+		public String getAuthenticationScheme() {
+			return "DRUMBEAT_SECURITY";
+		}
 
-        public AuthenticationException(String message) {
-            super(Response
-                    .status(Status.UNAUTHORIZED)
-                    .header("Drumbeat Authenticate", "Basic realm=\"" + "Dummy Realm" + "\"")
-                    .type("text/plain")
-                    .entity(message)
-                    .build());
-        }
-    }
-	
+	}
+
+	static class AuthenticationException extends WebApplicationException {
+
+		public AuthenticationException(String message) {
+			super(Response.status(Status.UNAUTHORIZED)
+					.header("Drumbeat Authenticate", "Basic realm=\"" + "Dummy Realm" + "\"").type("text/plain")
+					.entity(message).build());
+		}
+	}
+
 	public DrumbeatSecurityApplication() {
 		packages("fi.aalto.cs.drumbeat");
 		register(LoggingFeature.class);
-        register(JspMvcFeature.class);
-        property("jersey.config.server.mvc.templateBasePath", "/WEB-INF/jsp");
-        register(DrumbeatAuthFilter.class);
-        register(RolesAllowedDynamicFeature.class);
-        register(MvcFeature.class);
+		register(JspMvcFeature.class);
+		property("jersey.config.server.mvc.templateBasePath", "/WEB-INF/jsp");
+		register(DrumbeatAuthFilter.class);
+		register(RolesAllowedDynamicFeature.class);
+		register(MvcFeature.class);
 	}
 
-	
 }
