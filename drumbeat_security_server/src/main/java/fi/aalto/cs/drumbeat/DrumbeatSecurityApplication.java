@@ -3,6 +3,9 @@ package fi.aalto.cs.drumbeat;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,26 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
         @Override
         public void filter(ContainerRequestContext requestContext) throws IOException {
             String authentication = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+            
+            
+            X509Certificate[] certChain = (X509Certificate[]) requestContext.getProperty("javax.servlet.request.X509Certificate");
+            X509Certificate certificate = certChain[0];
+            try {
+				for (Object altlist : certificate.getSubjectAlternativeNames().toArray()) {
+					for (Object alt : (Collection) altlist) {
+						if (String.class.isInstance(alt)) {
+							System.out.println("filter alt: "+alt);
+							
+						}
+					}
+				}
+			} catch (CertificateParsingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+            
+
             SecurityContext sc=requestContext.getSecurityContext();
             if(sc==null)
             	return;
