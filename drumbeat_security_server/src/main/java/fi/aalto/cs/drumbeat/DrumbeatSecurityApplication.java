@@ -48,6 +48,28 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 						for (Object alt : (Collection) altlist) {
 							if (String.class.isInstance(alt)) {
 								System.out.println("filter alt: " + alt);
+								
+								SecurityContext sc = requestContext.getSecurityContext();
+								/*if (sc == null)
+								{
+									//TODO Test the PK
+									return;
+								}
+								if (sc.getUserPrincipal() == null)
+									return;
+								log.info("DrumbeatAuthFilter webid: " + sc.getUserPrincipal().getName());*/
+								UriInfo uriInfo = requestContext.getUriInfo();
+								URI requestUri = uriInfo.getRequestUri();
+								log.info("DrumbeatAuthFilter req url: " + requestUri.toString());
+
+								AuthenticationController ds = AuthenticationController.getAuthenticationController(requestUri.toString());
+								//final List<String> roles = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
+								final List<String> roles = ds.autenticate(alt.toString(), requestUri.toString());
+								roles.add("default");
+								log.info("DrumbeatAuthFilter Tomcat ROLES are:" + roles.stream().collect(Collectors.joining(",")));
+
+								//requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(), roles));
+								requestContext.setSecurityContext(new DrumbeatSecurityContext(alt.toString(), roles));
 
 							}
 						}
@@ -60,22 +82,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 				System.out.println("filter no certs");
 			}
 
-			SecurityContext sc = requestContext.getSecurityContext();
-			if (sc == null)
-				return;
-			if (sc.getUserPrincipal() == null)
-				return;
-			log.info("DrumbeatAuthFilter webid: " + sc.getUserPrincipal().getName());
-			UriInfo uriInfo = requestContext.getUriInfo();
-			URI requestUri = uriInfo.getRequestUri();
-			log.info("DrumbeatAuthFilter req url: " + requestUri.toString());
-
-			AuthenticationController ds = AuthenticationController.getAuthenticationController(requestUri.toString());
-			final List<String> roles = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
-			roles.add("default");
-			log.info("DrumbeatAuthFilter Tomcat ROLES are:" + roles.stream().collect(Collectors.joining(",")));
-
-			requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(), roles));
+	
 		}
 	}
 
