@@ -1,6 +1,7 @@
 package fi.aalto.drumbeat;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,12 +40,16 @@ public class Dumbeat_JenaLibrary {
 		Individual rule_path = model.createIndividual(null, Ontology.Authorization.RulePath);
 
 		Individual current = rule_path;
-		for (String ps : lista) {
+		Iterator<String> iterator=lista.iterator();
+		while (iterator.hasNext()) {
+			String ps=iterator.next();
 			ObjectProperty p = model
 					.createObjectProperty(ps);
 			Individual node = model.createIndividual(null, Ontology.Authorization.ListNode);
-			current.addProperty(Ontology.Authorization.rest, node);
+			
 			current.addProperty(Ontology.Authorization.first, p);
+			if(iterator.hasNext())
+				current.addProperty(Ontology.Authorization.rest, node);
 			current = node;
 		}
 
@@ -57,8 +62,8 @@ public class Dumbeat_JenaLibrary {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + Ontology.Authorization.hasAuthorizationRule.getURI() + "> ?x .");
-		sb.append(" ?x  <" + Ontology.Authorization.hasPermittedRole.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + Ontology.Authorization.authorization.getURI() + "> ?x .");
+		sb.append(" ?x  <" + Ontology.Authorization.permittedRole.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -73,11 +78,20 @@ public class Dumbeat_JenaLibrary {
 
 	}
 
+	static public void matchSTR() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT ?path WHERE {");
+		sb.append(" ?path  <" + Ontology.Authorization.authorization.getURI() + "> ?x");
+		sb.append("}");
+		System.out.println(sb.toString());
+	}
+
+
 	static public void match(Model model,List<RDFNode> ret, String request_url) {
 		System.out.println("etsitty: " + request_url);
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + Ontology.Authorization.hasAuthorizationRule.getURI() + "> ?x");
+		sb.append(" ?path  <" + Ontology.Authorization.authorization.getURI() + "> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -96,15 +110,15 @@ public class Dumbeat_JenaLibrary {
 		
 		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", Ontology.Authorization.ProtectedResource);
 		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Ontology.Authorization.AuthorizationRule);
-		musiikkitalo.addProperty(Ontology.Authorization.hasAuthorizationRule, musiikkitalo_authorizationRule);
+		musiikkitalo.addProperty(Ontology.Authorization.authorization, musiikkitalo_authorizationRule);
 		
 		List<String> lista=new ArrayList<>();
 		lista.add(Club.hasClub.toString());
 		lista.add(Contractor.hasContractor.toString());
 		lista.add(Contractor.trusts.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasRulePath, rlista);
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermittedRole, Ontology.Authorization.read);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rulePath, rlista);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.permittedRole, Ontology.Authorization.read);
 		
 		Individual project = model.createIndividual(null, Club.Project);
 		// HTTP since local virtual hosts need a new configuration
@@ -119,5 +133,8 @@ public class Dumbeat_JenaLibrary {
 		company.addProperty(Contractor.trusts, test_person);
 		
 		
+	}
+	public static void main(String[] args) {
+		Dumbeat_JenaLibrary.matchSTR();
 	}
 }

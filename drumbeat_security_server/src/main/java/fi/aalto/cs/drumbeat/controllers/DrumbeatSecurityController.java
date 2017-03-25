@@ -142,7 +142,7 @@ public class DrumbeatSecurityController {
 			Resource rulepath = Dumbeat_JenaLibrary.createRulePath(query_model, rulepath_lista);
 
 			Resource query = query_model.createResource();
-			query.addProperty(Ontology.Authorization.hasRulePath, rulepath);
+			query.addProperty(Ontology.Authorization.rulePath, rulepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);

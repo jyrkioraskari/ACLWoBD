@@ -5,7 +5,7 @@ git clone https://github.com/jyrkio/SecuredLinkedData.git
 cd drumbeat_security  
 mvn clean install  
 
-## Example Tomcat 9 Server.xml connector setting
+## Example Tomcat 9 server.xml connector setting
 
 - The certificateVerification="optional" is for the client certificate  
   

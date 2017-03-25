@@ -147,7 +147,7 @@ public class OrganizationRESTAPI {
 			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.rulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Message.SecurityQuery);
@@ -188,7 +188,7 @@ public class OrganizationRESTAPI {
 			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.rulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Message.SecurityQuery);
@@ -233,7 +233,7 @@ public class OrganizationRESTAPI {
 			rulepath_list[0] = Contractor.trusts;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
-			query.addProperty(Authorization.hasRulePath, rulepath);
+			query.addProperty(Authorization.rulePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Message.SecurityQuery);

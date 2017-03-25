@@ -111,7 +111,7 @@ public class DrumbeatSecurityAPI extends RESTfulAPI {
 		}
 		Model output_model = ModelFactory.createDefaultModel();
 		RDFNode webid_url = query.getProperty(Ontology.Message.hasWebID).getObject();
-		Resource path = query.getProperty(Ontology.Authorization.hasRulePath).getObject().asResource();
+		Resource path = query.getProperty(Ontology.Authorization.rulePath).getObject().asResource();
 		
 		LinkedList<Resource> rulepath = Dumbeat_JenaLibrary.parseRulePath(input_model,path);
 		List<String> rulepath_list = new ArrayList<>();

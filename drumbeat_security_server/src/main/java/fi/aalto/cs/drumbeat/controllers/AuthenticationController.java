@@ -85,9 +85,9 @@ public class AuthenticationController {
 
 				List<Resource> rulepath_list = null;
 				Resource authorizationRule = r.asResource()
-						.getPropertyResourceValue(Ontology.Authorization.hasAuthorizationRule);
+						.getPropertyResourceValue(Ontology.Authorization.authorization);
 				if (authorizationRule != null) {
-					Resource rule_path = authorizationRule.getPropertyResourceValue(Ontology.Authorization.hasRulePath);
+					Resource rule_path = authorizationRule.getPropertyResourceValue(Ontology.Authorization.rulePath);
 					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getInferenceModel(), rule_path);
 				} else
 					continue;
