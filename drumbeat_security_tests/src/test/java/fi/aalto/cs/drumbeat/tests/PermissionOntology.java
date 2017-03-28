@@ -3,6 +3,7 @@ package fi.aalto.cs.drumbeat.tests;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.jena.ontology.EnumeratedClass;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntClass;
@@ -33,33 +34,26 @@ public class PermissionOntology {
 		Individual read = schema.createIndividual(Constants.security_ontology_base + "#READ", PermissionRole);
 		Individual update = schema.createIndividual(Constants.security_ontology_base + "#UPDATE", PermissionRole);
 		Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE", PermissionRole);
-		RDFList enums = schema.createList();
-		enums = enums.cons(create);
-		enums = enums.cons(read);
-		enums = enums.cons(update);
-		enums = enums.cons(delete);
 
-		OntClass PermittedRole = schema.createEnumeratedClass(Constants.security_ontology_base + "#PermittedRole",
-				enums);
+		EnumeratedClass  PermittedRole = schema.createEnumeratedClass(Constants.security_ontology_base + "#PermittedRole",
+				null);
+		PermittedRole.addOneOf(create);
+		PermittedRole.addOneOf(read);
+		PermittedRole.addOneOf(update);
+		PermittedRole.addOneOf(delete);
 		
-		ProtectedResource.addSubClass(LBD.Collection);
-		LBD.Collection.addSuperClass(ProtectedResource);
-		ProtectedResource.addSubClass(LBD.DataSource);
-		LBD.DataSource.addSuperClass(ProtectedResource);
-		ProtectedResource.addSubClass(LBD.DataSet);
-		LBD.DataSet.addSuperClass(ProtectedResource);
 
 		ObjectProperty hasAuthorizationRule = schema
-				.createObjectProperty(Constants.security_ontology_base + "#authorization");
+				.createObjectProperty(Constants.security_ontology_base + "#hasAuthorization");
 		hasAuthorizationRule.addDomain(ProtectedResource);
 		hasAuthorizationRule.addRange(AuthorizationRule);
 
 		ObjectProperty hasPermittedRole = schema
-				.createObjectProperty(Constants.security_ontology_base + "#permittedRole");
+				.createObjectProperty(Constants.security_ontology_base + "#hasPermittedRole");
 		hasPermittedRole.addDomain(AuthorizationRule);
 		hasPermittedRole.addRange(PermittedRole);
 
-		ObjectProperty hasRulePath = schema.createObjectProperty(Constants.security_ontology_base + "#rulePath");
+		ObjectProperty hasRulePath = schema.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
 
 		hasRulePath.addDomain(AuthorizationRule);
 		hasRulePath.addRange(RulePath);

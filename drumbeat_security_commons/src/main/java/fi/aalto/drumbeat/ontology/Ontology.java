@@ -162,7 +162,7 @@ public class Ontology {
 		}
 
 		static public ObjectProperty authorization = schema
-				.createObjectProperty(Constants.security_ontology_base + "#authorization");
+				.createObjectProperty(Constants.security_ontology_base + "#hasAuthorization");
 		static {
 			authorization.addDomain(ProtectedResource);
 			authorization.addRange(AuthorizationRule);
@@ -175,7 +175,7 @@ public class Ontology {
 		}
 
 		static public ObjectProperty permittedRole = schema
-				.createObjectProperty(Constants.security_ontology_base + "#permittedRole");
+				.createObjectProperty(Constants.security_ontology_base + "#hasPermittedRole");
 		static {
 			permittedRole.addDomain(AuthorizationRule);
 			permittedRole.addRange(PermittedRole);
@@ -184,7 +184,7 @@ public class Ontology {
 		}
 
 		static public ObjectProperty rulePath = schema
-				.createObjectProperty(Constants.security_ontology_base + "#rulePath");
+				.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
 		static {
 			rulePath.addDomain(AuthorizationRule);
 			rulePath.addRange(RulePath);
