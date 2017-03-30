@@ -129,9 +129,9 @@ public class Ontology {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		static public OntClass ProtectedResource = schema
 				.createClass(Constants.security_ontology_base + "#ProtectedResource");
-		static public OntClass AuthorizationRule = schema
-				.createClass(Constants.security_ontology_base + "#AuthorizationRule");
-		static public OntClass RulePath = schema.createClass(Constants.security_ontology_base + "#RulePath");
+		static public OntClass ACL = schema
+				.createClass(Constants.security_ontology_base + "#ACL");
+		static public OntClass RolePath = schema.createClass(Constants.security_ontology_base + "#RolePath");
 
 		static public OntClass PermissionRole = schema.createClass(Constants.security_ontology_base + "#PermissionRole");
 		static public Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE",
@@ -148,8 +148,8 @@ public class Ontology {
 			enums = enums.cons(update);
 			enums = enums.cons(delete);
 		}
-		static public OntClass PermittedRole = schema
-				.createEnumeratedClass(Constants.security_ontology_base + "#PermittedRole", enums);
+		static public OntClass Permission = schema
+				.createEnumeratedClass(Constants.security_ontology_base + "#Permission", enums);
 
 		static {
 			ProtectedResource.addSubClass(LBD.Collection);
@@ -161,11 +161,11 @@ public class Ontology {
 
 		}
 
-		static public ObjectProperty authorization = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasAuthorization");
+		static public ObjectProperty hasACL = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasACLn");
 		static {
-			authorization.addDomain(ProtectedResource);
-			authorization.addRange(AuthorizationRule);
+			hasACL.addDomain(ProtectedResource);
+			hasACL.addRange(ACL);
 		}
 
 		static {
@@ -174,11 +174,11 @@ public class Ontology {
 			ProtectedResource.addSubClass(schema.createMinCardinalityRestriction(null, hasAuthorizationRule, 0));*/
 		}
 
-		static public ObjectProperty permittedRole = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasPermittedRole");
+		static public ObjectProperty hasPermission = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		static {
-			permittedRole.addDomain(AuthorizationRule);
-			permittedRole.addRange(PermittedRole);
+			hasPermission.addDomain(ACL);
+			hasPermission.addRange(Permission);
 			//AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasPermittedRole, 1));
 			//AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
 		}
@@ -186,8 +186,8 @@ public class Ontology {
 		static public ObjectProperty rulePath = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
 		static {
-			rulePath.addDomain(AuthorizationRule);
-			rulePath.addRange(RulePath);
+			rulePath.addDomain(ACL);
+			rulePath.addRange(RolePath);
 
 			//AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasRulePath, 1));
 			//AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasRulePath, RulePath));
@@ -206,7 +206,7 @@ public class Ontology {
 
 		static public ObjectProperty rest = schema.createObjectProperty(Constants.security_ontology_base + "#rest");
 		static {
-			rest.addDomain(RulePath);
+			rest.addDomain(RolePath);
 			rest.addDomain(ListNode);
 			rest.addRange(ListNode);
 

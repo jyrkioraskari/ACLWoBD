@@ -1,11 +1,11 @@
-
+log4j:WARN No appenders could be found for logger (Jena).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ds:    <https://drumbeat.cs.hut.fi/owl/security.ttl#> .
-
-ds:AuthorizationRule  a  owl:Class .
 
 ds:first  a          owl:ObjectProperty ;
         rdfs:domain  ds:ListNode ;
@@ -15,12 +15,14 @@ ds:ProtectedResource  a  owl:Class .
 
 ds:READ  a      ds:PermissionRole .
 
-ds:RulePath  a  owl:Class .
+ds:hasRolePath  a    owl:ObjectProperty ;
+        rdfs:domain  ds:ACL ;
+        rdfs:range   ds:RolePath .
 
 ds:UPDATE  a    ds:PermissionRole .
 
 ds:rest  a           owl:ObjectProperty ;
-        rdfs:domain  ds:ListNode , ds:RulePath ;
+        rdfs:domain  ds:ListNode , ds:RolePath ;
         rdfs:range   ds:ListNode .
 
 ds:DELETE  a    ds:PermissionRole .
@@ -45,17 +47,17 @@ ds:CREATE  a    ds:PermissionRole .
 
 ds:Club  a      owl:Class .
 
-ds:hasAuthorization  a  owl:ObjectProperty ;
+ds:hasACL  a         owl:ObjectProperty ;
         rdfs:domain  ds:ProtectedResource ;
-        rdfs:range   ds:AuthorizationRule .
+        rdfs:range   ds:ACL .
 
 ds:hasPermittedRole  a  owl:ObjectProperty ;
-        rdfs:domain  ds:AuthorizationRule ;
+        rdfs:domain  ds:ACL ;
         rdfs:range   ds:PermittedRole .
 
-ds:hasRulePath  a    owl:ObjectProperty ;
-        rdfs:domain  ds:AuthorizationRule ;
-        rdfs:range   ds:RulePath .
+ds:ACL  a       owl:Class .
 
 ds:PermittedRole  a  owl:Class ;
         owl:oneOf  ( ds:CREATE ds:READ ds:UPDATE ds:DELETE ) .
+
+ds:RolePath  a  owl:Class .

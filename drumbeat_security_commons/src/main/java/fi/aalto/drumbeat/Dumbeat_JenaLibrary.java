@@ -37,7 +37,7 @@ public class Dumbeat_JenaLibrary {
 	}
 
 	static public Resource createRulePath(OntModel model,List<String> lista) {
-		Individual rule_path = model.createIndividual(null, Ontology.Authorization.RulePath);
+		Individual rule_path = model.createIndividual(null, Ontology.Authorization.RolePath);
 
 		Individual current = rule_path;
 		Iterator<String> iterator=lista.iterator();
@@ -62,8 +62,8 @@ public class Dumbeat_JenaLibrary {
 		List<RDFNode> ret = new ArrayList<RDFNode>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
-		sb.append(" <" + uri + ">  <" + Ontology.Authorization.authorization.getURI() + "> ?x .");
-		sb.append(" ?x  <" + Ontology.Authorization.permittedRole.getURI() + "> ?p .");
+		sb.append(" <" + uri + ">  <" + Ontology.Authorization.hasACL.getURI() + "> ?x .");
+		sb.append(" ?x  <" + Ontology.Authorization.hasPermission.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -81,7 +81,7 @@ public class Dumbeat_JenaLibrary {
 	static public void matchSTR() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + Ontology.Authorization.authorization.getURI() + "> ?x");
+		sb.append(" ?path  <" + Ontology.Authorization.hasACL.getURI() + "> ?x");
 		sb.append("}");
 		System.out.println(sb.toString());
 	}
@@ -91,7 +91,7 @@ public class Dumbeat_JenaLibrary {
 		System.out.println("etsitty: " + request_url);
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?path WHERE {");
-		sb.append(" ?path  <" + Ontology.Authorization.authorization.getURI() + "> ?x");
+		sb.append(" ?path  <" + Ontology.Authorization.hasACL.getURI() + "> ?x");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -109,8 +109,8 @@ public class Dumbeat_JenaLibrary {
 	static public  void createDemoData(OntModel model,String rootURI) {
 		
 		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", Ontology.Authorization.ProtectedResource);
-		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Ontology.Authorization.AuthorizationRule);
-		musiikkitalo.addProperty(Ontology.Authorization.authorization, musiikkitalo_authorizationRule);
+		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Ontology.Authorization.ACL);
+		musiikkitalo.addProperty(Ontology.Authorization.hasACL, musiikkitalo_authorizationRule);
 		
 		List<String> lista=new ArrayList<>();
 		lista.add(Club.hasClub.toString());
@@ -118,7 +118,7 @@ public class Dumbeat_JenaLibrary {
 		lista.add(Contractor.trusts.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rulePath, rlista);
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.permittedRole, Ontology.Authorization.read);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermission, Ontology.Authorization.read);
 		
 		Individual project = model.createIndividual(null, Club.Project);
 		// HTTP since local virtual hosts need a new configuration

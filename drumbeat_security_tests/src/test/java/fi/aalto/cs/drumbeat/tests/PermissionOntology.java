@@ -26,8 +26,8 @@ public class PermissionOntology {
 		schema.setNsPrefix("ds", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
 
 		OntClass ProtectedResource = schema.createClass(Constants.security_ontology_base + "#ProtectedResource");
-		OntClass AuthorizationRule = schema.createClass(Constants.security_ontology_base + "#AuthorizationRule");
-		OntClass RulePath = schema.createClass(Constants.security_ontology_base + "#RulePath");
+		OntClass ACL = schema.createClass(Constants.security_ontology_base + "#ACL");
+		OntClass RolePath = schema.createClass(Constants.security_ontology_base + "#RolePath");
 
 		OntClass PermissionRole = schema.createClass(Constants.security_ontology_base + "#PermissionRole");
 		Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE", PermissionRole);
@@ -35,28 +35,28 @@ public class PermissionOntology {
 		Individual update = schema.createIndividual(Constants.security_ontology_base + "#UPDATE", PermissionRole);
 		Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE", PermissionRole);
 
-		EnumeratedClass  PermittedRole = schema.createEnumeratedClass(Constants.security_ontology_base + "#PermittedRole",
+		EnumeratedClass  Permission = schema.createEnumeratedClass(Constants.security_ontology_base + "#Permission",
 				null);
-		PermittedRole.addOneOf(create);
-		PermittedRole.addOneOf(read);
-		PermittedRole.addOneOf(update);
-		PermittedRole.addOneOf(delete);
+		Permission.addOneOf(create);
+		Permission.addOneOf(read);
+		Permission.addOneOf(update);
+		Permission.addOneOf(delete);
 		
 
-		ObjectProperty hasAuthorizationRule = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasAuthorization");
-		hasAuthorizationRule.addDomain(ProtectedResource);
-		hasAuthorizationRule.addRange(AuthorizationRule);
+		ObjectProperty hasACL = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasACL");
+		hasACL.addDomain(ProtectedResource);
+		hasACL.addRange(ACL);
 
-		ObjectProperty hasPermittedRole = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasPermittedRole");
-		hasPermittedRole.addDomain(AuthorizationRule);
-		hasPermittedRole.addRange(PermittedRole);
+		ObjectProperty hasPermission = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
+		hasPermission.addDomain(ACL);
+		hasPermission.addRange(Permission);
 
-		ObjectProperty hasRulePath = schema.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
+		ObjectProperty hasRolePath = schema.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
 
-		hasRulePath.addDomain(AuthorizationRule);
-		hasRulePath.addRange(RulePath);
+		hasRolePath.addDomain(ACL);
+		hasRolePath.addRange(RolePath);
 
 		OntClass ListNode = schema.createClass(Constants.security_ontology_base + "#ListNode");
 		ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
@@ -66,7 +66,7 @@ public class PermissionOntology {
 
 		ObjectProperty rest = schema.createObjectProperty(Constants.security_ontology_base + "#rest");
 
-		rest.addDomain(RulePath);
+		rest.addDomain(RolePath);
 		rest.addDomain(ListNode);
 		rest.addRange(ListNode);
 
