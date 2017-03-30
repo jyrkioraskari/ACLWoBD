@@ -62,7 +62,8 @@ public class PermissionOntology {
 		ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
 
 		first.addDomain(ListNode);
-		first.addRange(RDF.Property);
+		//first.addRange(RDF.Property);
+		schema.createAllValuesFromRestriction(null, first, RDF.Property);
 
 		ObjectProperty rest = schema.createObjectProperty(Constants.security_ontology_base + "#rest");
 

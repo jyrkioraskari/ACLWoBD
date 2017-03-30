@@ -179,8 +179,7 @@ public class Ontology {
 		static {
 			hasPermission.addDomain(ACL);
 			hasPermission.addRange(Permission);
-			//AuthorizationRule.addSubClass(schema.createMinCardinalityRestriction(null, hasPermittedRole, 1));
-			//AuthorizationRule.addSubClass(schema.createAllValuesFromRestriction(null, hasPermittedRole, PermittedRole));
+			
 		}
 
 		static public ObjectProperty rulePath = schema
@@ -198,9 +197,9 @@ public class Ontology {
 		static public ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
 		static {
 			first.addDomain(ListNode);
-			first.addRange(RDF.Property);
-			/*ListNode.addSubClass(schema.createAllValuesFromRestriction(null, first, RDF.Property));
-			ListNode.addSubClass(schema.createCardinalityRestriction(null, first, 1));*/
+			//first.addRange(RDF.Property);
+			schema.createAllValuesFromRestriction(null, first, RDF.Property);
+			//ListNode.addSubClass(schema.createCardinalityRestriction(null, first, 1));
 
 		}
 
