@@ -63,7 +63,7 @@ public class Dumbeat_JenaLibrary {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT ?p WHERE {");
 		sb.append(" <" + uri + ">  <" + Ontology.Authorization.hasACL.getURI() + "> ?x .");
-		sb.append(" ?x  <" + Ontology.Authorization.hasPermission.getURI() + "> ?p .");
+		sb.append(" ?x  <" + Ontology.Authorization.hasACLMode.getURI() + "> ?p .");
 		sb.append("}");
 		Query query = QueryFactory.create(sb.toString());
 		try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
@@ -119,7 +119,7 @@ public class Dumbeat_JenaLibrary {
 		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rulePath, rlista);
 		
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermission, Ontology.Authorization.read);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasACLMode, Ontology.Authorization.read);
 		
 		Individual project = model.createIndividual(null, Club.Project);
 		// HTTP since local virtual hosts need a new configuration

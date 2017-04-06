@@ -37,11 +37,11 @@ public class PermissionOntology {
 		hasACL.addDomain(ProtectedResource);
 		hasACL.addRange(ACL);
 
-		ObjectProperty hasPermission = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
-		hasPermission.addDomain(ACL);
+		ObjectProperty hasACLMode = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasACLMode");
+		hasACLMode.addDomain(ACL);
 		Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
-		hasPermission.addRange(access);
+		hasACLMode.addRange(access);
 
 		ObjectProperty hasRolePath = schema.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
 

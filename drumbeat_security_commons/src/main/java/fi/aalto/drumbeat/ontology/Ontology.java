@@ -153,14 +153,14 @@ public class Ontology {
 		static {
 		}
 
-		static public ObjectProperty hasPermission = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
+		static public ObjectProperty hasACLMode = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasACLMode");
 		static {
 			schema.read("c://jo/ontology/acl.rdf");
 			schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
-			hasPermission.addDomain(ACL);
+			hasACLMode.addDomain(ACL);
 			Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
-			hasPermission.addRange(access);
+			hasACLMode.addRange(access);
 			//hasPermission.addRange(Permission);
 			
 		}

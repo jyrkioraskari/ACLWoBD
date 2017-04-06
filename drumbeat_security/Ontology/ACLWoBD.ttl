@@ -12,18 +12,19 @@ ds:first  a          owl:ObjectProperty ;
 
 ds:ProtectedResource  a  owl:Class .
 
-ds:hasRolePath  a    owl:ObjectProperty ;
-        rdfs:domain  ds:ACL ;
-        rdfs:range   ds:ListNode .
-
-ds:rest  a           owl:ObjectProperty ;
-        rdfs:domain  ds:ListNode ;
-        rdfs:range   ds:ListNode .
-
 [ a                  owl:Restriction ;
   owl:allValuesFrom  rdf:Property ;
   owl:onProperty     ds:first
 ] .
+
+ds:hasRolePath  a    owl:ObjectProperty ;
+        rdfs:domain  ds:ACL ;
+        rdfs:range   ds:ListNode .
+
+
+ds:rest  a           owl:ObjectProperty ;
+        rdfs:domain  ds:ListNode ;
+        rdfs:range   ds:ListNode .
 
 ds:ListNode  a  owl:Class .
 
@@ -45,14 +46,15 @@ ds:Project  a            owl:Class ;
 ds:Club  a      owl:Class .
 
 
+ds:hasACLMode  a     owl:ObjectProperty ;
+        rdfs:domain  ds:ACL ;
+        rdfs:range   acl:Access .
+
 ds:hasACL  a         owl:ObjectProperty ;
         rdfs:domain  ds:ProtectedResource ;
         rdfs:range   ds:ACL .
 
-ds:hasPermission  a  owl:ObjectProperty ;
-        rdfs:domain  ds:ACL ;
-        rdfs:range   acl:Access .
-
-
 
 ds:ACL  a       owl:Class .
+
+
