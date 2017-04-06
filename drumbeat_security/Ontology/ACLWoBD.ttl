@@ -1,5 +1,4 @@
-log4j:WARN No appenders could be found for logger (Jena).
-l@prefix :      <http://www.w3.org/ns/auth/acl#> .
+@prefix :      <http://www.w3.org/ns/auth/acl#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
