@@ -37,7 +37,7 @@ public class Dumbeat_JenaLibrary {
 	}
 
 	static public Resource createRulePath(OntModel model,List<String> lista) {
-		Individual rule_path = model.createIndividual(null, Ontology.Authorization.RolePath);
+		Individual rule_path = model.createIndividual(null, Ontology.Authorization.ListNode);
 
 		Individual current = rule_path;
 		Iterator<String> iterator=lista.iterator();
@@ -118,6 +118,7 @@ public class Dumbeat_JenaLibrary {
 		lista.add(Contractor.trusts.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rulePath, rlista);
+		
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermission, Ontology.Authorization.read);
 		
 		Individual project = model.createIndividual(null, Club.Project);

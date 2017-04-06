@@ -1,5 +1,6 @@
 package fi.aalto.cs.drumbeat.tests;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFList;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
 import fi.aalto.drumbeat.Constants;
@@ -24,24 +26,11 @@ public class PermissionOntology {
 
 		OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		schema.setNsPrefix("ds", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
+		schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
+		schema.read("c://jo/ontology/acl.rdf");
 
 		OntClass ProtectedResource = schema.createClass(Constants.security_ontology_base + "#ProtectedResource");
 		OntClass ACL = schema.createClass(Constants.security_ontology_base + "#ACL");
-		OntClass RolePath = schema.createClass(Constants.security_ontology_base + "#RolePath");
-
-		OntClass PermissionRole = schema.createClass(Constants.security_ontology_base + "#PermissionRole");
-		Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE", PermissionRole);
-		Individual read = schema.createIndividual(Constants.security_ontology_base + "#READ", PermissionRole);
-		Individual update = schema.createIndividual(Constants.security_ontology_base + "#UPDATE", PermissionRole);
-		Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE", PermissionRole);
-
-		EnumeratedClass  Permission = schema.createEnumeratedClass(Constants.security_ontology_base + "#Permission",
-				null);
-		Permission.addOneOf(create);
-		Permission.addOneOf(read);
-		Permission.addOneOf(update);
-		Permission.addOneOf(delete);
-		
 
 		ObjectProperty hasACL = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasACL");
@@ -51,14 +40,15 @@ public class PermissionOntology {
 		ObjectProperty hasPermission = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		hasPermission.addDomain(ACL);
-		hasPermission.addRange(Permission);
+		Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
+		hasPermission.addRange(access);
 
 		ObjectProperty hasRolePath = schema.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
 
 		hasRolePath.addDomain(ACL);
-		hasRolePath.addRange(RolePath);
-
 		OntClass ListNode = schema.createClass(Constants.security_ontology_base + "#ListNode");
+		hasRolePath.addRange(ListNode);
+
 		ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
 
 		first.addDomain(ListNode);
@@ -67,7 +57,6 @@ public class PermissionOntology {
 
 		ObjectProperty rest = schema.createObjectProperty(Constants.security_ontology_base + "#rest");
 
-		rest.addDomain(RolePath);
 		rest.addDomain(ListNode);
 		rest.addRange(ListNode);
 
