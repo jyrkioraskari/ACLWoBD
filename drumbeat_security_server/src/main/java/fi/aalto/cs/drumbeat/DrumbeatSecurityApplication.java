@@ -70,7 +70,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 
 								//requestContext.setSecurityContext(new DrumbeatSecurityContext(sc.getUserPrincipal().getName(), roles));
 								requestContext.setSecurityContext(new DrumbeatSecurityContext(alt.toString(), roles));
-
+								return;
 							}
 						}
 					}
@@ -81,7 +81,13 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 			else {
 				System.out.println("filter no certs");
 			}
-
+			
+ 
+            requestContext.abortWith(Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("User cannot access the resource.")
+                    .build());
+        
 	
 		}
 	}
