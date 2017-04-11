@@ -83,27 +83,27 @@ public class AuthenticationController {
 			{
 				Resource current_node = x.getInferenceModel().getResource(r.toString());
 
-				List<Resource> rulepath_list = null;
+				List<Resource> rolepath_list = null;
 				Resource authorizationRule = r.asResource()
 						.getPropertyResourceValue(Ontology.Authorization.hasACL);
 				if (authorizationRule != null) {
-					Resource rule_path = authorizationRule.getPropertyResourceValue(Ontology.Authorization.rulePath);
-					rulepath_list = Dumbeat_JenaLibrary.parseRulePath(x.getInferenceModel(), rule_path);
+					Resource rule_path = authorizationRule.getPropertyResourceValue(Ontology.Authorization.rolePath);
+					rolepath_list = Dumbeat_JenaLibrary.parseRolePath(x.getInferenceModel(), rule_path);
 				} else
 					continue;
 				if (longest_matching_url_length < r.toString().length()) {
 					ret.clear(); // Only longest wins
 				}
 
-				rulepath_list = rulepath_list.stream().filter(rule -> !((Resource) rule).isLiteral())
+				rolepath_list = rolepath_list.stream().filter(rule -> !((Resource) rule).isLiteral())
 						.collect(Collectors.toList());
-				List<String> rulepath_list_str = new ArrayList<>();
-				for (Resource rs : rulepath_list)
-					rulepath_list_str.add(rs.toString());
+				List<String> rolepath_list_str = new ArrayList<>();
+				for (Resource rs : rolepath_list)
+					rolepath_list_str.add(rs.toString());
 				if (uri.isPresent()) {
 					DrumbeatSecurityController dsc = DrumbeatSecurityController
 							.getDrumbeatSecurityController(uri.get());
-					if (dsc.validatePath(current_node, webid, rulepath_list_str)) {
+					if (dsc.validatePath(current_node, webid, rolepath_list_str)) {
 						System.out.println("validation " + current_node.getURI() + " says OK");
 						log.info("validation " + current_node.getURI() + " says OK");
 						List<String> perms = Dumbeat_JenaLibrary.getPermissions(x.getInferenceModel(), r.toString())

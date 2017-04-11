@@ -165,10 +165,10 @@ public class Ontology {
 			
 		}
 
-		static public ObjectProperty rulePath = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasRulePath");
+		static public ObjectProperty rolePath = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
 		static {
-			rulePath.addDomain(ACL);
+			rolePath.addDomain(ACL);
 
 		}
 
@@ -177,7 +177,7 @@ public class Ontology {
 		static {
 			first.addDomain(ListNode);
 			schema.createAllValuesFromRestriction(null, first, RDF.Property);
-			rulePath.addRange(ListNode);
+			rolePath.addRange(ListNode);
 
 		}
 
@@ -231,7 +231,7 @@ public class Ontology {
 		}
 		
 		static {
-			Authorization.rulePath.addDomain( SecurityQuery );
+			Authorization.rolePath.addDomain( SecurityQuery );
 
 		}
 		

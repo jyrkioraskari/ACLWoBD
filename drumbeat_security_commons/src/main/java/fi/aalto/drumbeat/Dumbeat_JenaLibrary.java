@@ -25,7 +25,7 @@ import fi.aalto.drumbeat.ontology.Ontology.Contractor;
 public class Dumbeat_JenaLibrary {
 
 
-	static public LinkedList<Resource> parseRulePath(Model model,Resource node) {
+	static public LinkedList<Resource> parseRolePath(Model model,Resource node) {
 		LinkedList<Resource> ret = new LinkedList<Resource>();
 		Resource current = node;
 		while (current != null && current.asResource().hasProperty(Ontology.Authorization.rest)) {
@@ -36,7 +36,7 @@ public class Dumbeat_JenaLibrary {
 		return ret;
 	}
 
-	static public Resource createRulePath(OntModel model,List<String> lista) {
+	static public Resource createRolePath(OntModel model,List<String> lista) {
 		Individual rule_path = model.createIndividual(null, Ontology.Authorization.ListNode);
 
 		Individual current = rule_path;
@@ -116,8 +116,8 @@ public class Dumbeat_JenaLibrary {
 		lista.add(Club.hasClub.toString());
 		lista.add(Contractor.hasContractor.toString());
 		lista.add(Contractor.trusts.toString());
-		Resource rlista=Dumbeat_JenaLibrary.createRulePath(model,lista);
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rulePath, rlista);
+		Resource rlista=Dumbeat_JenaLibrary.createRolePath(model,lista);
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rolePath, rlista);
 		
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasACLMode, Ontology.Authorization.read);
 		

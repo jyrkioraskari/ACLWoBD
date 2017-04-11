@@ -69,9 +69,9 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
-			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
+			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
 			
-			query.addProperty(Ontology.Authorization.rulePath, rulepath);
+			query.addProperty(Ontology.Authorization.rolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -111,8 +111,8 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
-			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Ontology.Authorization.rulePath, rulepath);
+			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
+			query.addProperty(Ontology.Authorization.rolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -180,8 +180,8 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
-			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Ontology.Authorization.rulePath, rulepath);
+			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
+			query.addProperty(Ontology.Authorization.rolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -232,8 +232,8 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			assertNotNull("RDFDataStore store should not be null", store);
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
-			Resource rulepath=Dumbeat_JenaLibrary.createRulePath(model,lista);
-			query.addProperty(Ontology.Authorization.rulePath, rulepath);
+			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
+			query.addProperty(Ontology.Authorization.rolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);

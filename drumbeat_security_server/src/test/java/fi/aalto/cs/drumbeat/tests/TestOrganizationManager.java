@@ -57,10 +57,10 @@ public class TestOrganizationManager extends TestCase {
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
 		lista.add(Ontology.Contractor.trusts.toString());
-		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
+		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		//TODO tulisiko olla totta?
-		LinkedList<Resource> rulepath_list = Dumbeat_JenaLibrary.parseRulePath(store.getModel(),rulepath);
+		LinkedList<Resource> rulepath_list = Dumbeat_JenaLibrary.parseRolePath(store.getModel(),rulepath);
 		List<String> rulepath_strlist = new ArrayList<>();
 		
 		for (Resource r : rulepath_list)

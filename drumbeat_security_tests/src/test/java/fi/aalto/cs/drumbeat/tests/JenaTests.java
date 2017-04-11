@@ -40,10 +40,10 @@ public class JenaTests extends TestCase {
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
 		lista.add(Ontology.Contractor.trusts.toString());
-		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
+		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		Individual query_resource = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
-		query_resource.addProperty(Ontology.Authorization.rulePath, rulepath);
+		query_resource.addProperty(Ontology.Authorization.rolePath, rulepath);
 		StringWriter writer = new StringWriter();
 		model.write(writer, "JSON-LD");
 
@@ -91,10 +91,10 @@ public class JenaTests extends TestCase {
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
 		lista.add(Ontology.Contractor.trusts.toString());
-		Resource rulepath=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
+		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		Individual query = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
-		query.addProperty(Ontology.Authorization.rulePath, rulepath);
+		query.addProperty(Ontology.Authorization.rolePath, rulepath);
 
 		Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 		query.addProperty(RDF.type, Ontology.Message.SecurityQuery);

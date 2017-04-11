@@ -18,7 +18,7 @@ import fi.aalto.drumbeat.ontology.Ontology;
 
 public class TestLibraryFunctions {
 
-	// RulePath creation and parse
+	// RolePath creation and parse
 	@Test
 	public void test() {
 		try {
@@ -27,8 +27,8 @@ public class TestLibraryFunctions {
 			lista.add(Ontology.Club.hasClub.toString());
 			lista.add(Ontology.Contractor.hasMainContractor.toString());
 			lista.add(Ontology.Contractor.trusts.toString());
-			Resource rlista=Dumbeat_JenaLibrary.createRulePath(store.getModel(),lista);
-			LinkedList<Resource> uusi_lista=Dumbeat_JenaLibrary.parseRulePath(store.getModel(),rlista);
+			Resource rlista=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
+			LinkedList<Resource> uusi_lista=Dumbeat_JenaLibrary.parseRolePath(store.getModel(),rlista);
 			int i=0;
 			for(Resource p:uusi_lista) {
 				assertEquals(lista.get(i++), p.toString());

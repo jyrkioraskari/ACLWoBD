@@ -77,17 +77,17 @@ public class DrumbeatSecurityController {
 		return validatePath(null, webid_uri, rulepath_list);
 	}
 
-	public boolean validatePath(Resource start_node, String webid_uri, List<String> rulepath_strlist) {
-		log.info("validatePath: node " + start_node + " path: " + rulepath_strlist);
+	public boolean validatePath(Resource start_node, String webid_uri, List<String> rolepath_strlist) {
+		log.info("validatePath: node " + start_node + " path: " + rolepath_strlist);
 		DrumbeatSecurityController.getAccessList()
 				.add(new Tuple<String, Long>(
 						"validatePath: " + webid_uri + " path: "
-								+ rulepath_strlist.stream().collect(Collectors.joining("-")),
+								+ rolepath_strlist.stream().collect(Collectors.joining("-")),
 						System.currentTimeMillis()));
 		Resource current_node = root;
 		if (start_node != null)
 			current_node = start_node;
-		ListIterator<String> iterator = rulepath_strlist.listIterator();
+		ListIterator<String> iterator = rolepath_strlist.listIterator();
 		if (iterator.hasNext()) {
 			String first_step = iterator.next();
 			log.info("Finding property " + first_step + " from the inference model");
@@ -96,8 +96,8 @@ public class DrumbeatSecurityController {
 			if (!connected_triples.hasNext()) {
 				log.info("No triples connected to the property");
 				log.info("located here?:" + current_node);
-				log.info("Path for the rest is:" + rulepath_strlist);
-				return checkPath_HTTP(current_node.toString(), webid_uri, rulepath_strlist);
+				log.info("Path for the rest is:" + rolepath_strlist);
+				return checkPath_HTTP(current_node.toString(), webid_uri, rolepath_strlist);
 			}
 			while (connected_triples.hasNext()) {
 				Statement triple = connected_triples.next();
@@ -111,14 +111,14 @@ public class DrumbeatSecurityController {
 						return true;
 					}
 				} else {
-					List<String> new_path = rulepath_strlist.subList(1, rulepath_strlist.size());
+					List<String> new_path = rolepath_strlist.subList(1, rolepath_strlist.size());
 					return validatePath(current_node, webid_uri, new_path);
 				}
 
 			}
 		}
 
-		saveUnsucceeLocal(webid_uri, rulepath_strlist.toString());
+		saveUnsucceeLocal(webid_uri, rolepath_strlist.toString());
 		return false;
 	}
 
@@ -135,14 +135,14 @@ public class DrumbeatSecurityController {
 		final OntModel query_model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		System.out.println("Next step URL is: " + nextStepURL);
 		try {
-			List<String> rulepath_lista = new ArrayList<>();
+			List<String> rolepath_list = new ArrayList<>();
 			for (int i = 0; i < new_path.size(); i++) {
-				rulepath_lista.add(new_path.get(i));
+				rolepath_list.add(new_path.get(i));
 			}
-			Resource rulepath = Dumbeat_JenaLibrary.createRulePath(query_model, rulepath_lista);
+			Resource rolepath = Dumbeat_JenaLibrary.createRolePath(query_model, rolepath_list);
 
 			Resource query = query_model.createResource();
-			query.addProperty(Ontology.Authorization.rulePath, rulepath);
+			query.addProperty(Ontology.Authorization.rolePath, rolepath);
 
 			Literal time_inMilliseconds = query_model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
