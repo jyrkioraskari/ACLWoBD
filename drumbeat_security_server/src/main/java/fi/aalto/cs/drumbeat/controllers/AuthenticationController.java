@@ -85,7 +85,7 @@ public class AuthenticationController {
 
 				List<Resource> rolepath_list = null;
 				Resource authorizationRule = r.asResource()
-						.getPropertyResourceValue(Ontology.Authorization.hasACL);
+						.getPropertyResourceValue(Ontology.Authorization.hasAccessControlRule);
 				if (authorizationRule != null) {
 					Resource rule_path = authorizationRule.getPropertyResourceValue(Ontology.Authorization.rolePath);
 					rolepath_list = Dumbeat_JenaLibrary.parseRolePath(x.getInferenceModel(), rule_path);

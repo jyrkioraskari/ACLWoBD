@@ -119,8 +119,8 @@ public class Ontology {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		static public OntClass ProtectedResource = schema
 				.createClass(Constants.security_ontology_base + "#ProtectedResource");
-		static public OntClass ACL = schema
-				.createClass(Constants.security_ontology_base + "#ACL");
+		static public OntClass AccessControlRule = schema
+				.createClass(Constants.security_ontology_base + "#AccessControlRule");
 
 		/*static public OntClass Permission = schema.createClass(Constants.security_ontology_base + "#PermissionRole");
 		static public Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE",
@@ -131,7 +131,7 @@ public class Ontology {
 		static public Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE",
 				Permission);*/
 		
-		static public Resource  read = schema.createResource("http://www.w3.org/ns/auth/acl#Access");
+		static public Resource  read = schema.createResource("http://www.w3.org/ns/auth/acl#Read");
 
 		static {
 			ProtectedResource.addSubClass(LBD.Collection);
@@ -143,24 +143,24 @@ public class Ontology {
 
 		}
 
-		static public ObjectProperty hasACL = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasACLn");
+		static public ObjectProperty hasAccessControlRule = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasAccessControlRule");
 		static {
-			hasACL.addDomain(ProtectedResource);
-			hasACL.addRange(ACL);
+			hasAccessControlRule.addDomain(ProtectedResource);
+			hasAccessControlRule.addRange(AccessControlRule);
 		}
 
 		static {
 		}
 
-		static public ObjectProperty hasACLMode = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasACLMode");
+		static public ObjectProperty hasPermission = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		static {
 			schema.read("c://jo/ontology/acl.rdf");
 			schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
-			hasACLMode.addDomain(ACL);
+			hasPermission.addDomain(AccessControlRule);
 			Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
-			hasACLMode.addRange(access);
+			hasPermission.addRange(access);
 			//hasPermission.addRange(Permission);
 			
 		}
@@ -168,7 +168,7 @@ public class Ontology {
 		static public ObjectProperty rolePath = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
 		static {
-			rolePath.addDomain(ACL);
+			rolePath.addDomain(AccessControlRule);
 
 		}
 
