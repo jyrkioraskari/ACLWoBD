@@ -139,6 +139,14 @@ ds:SecurityMessage  a  owl:Class .
 ds:AccessControlRule  a  owl:Class .
 
 
+ds:hasLabel  a       owl:DatatypeProperty ;
+        rdfs:domain  ds:AccessControlRule ;
+        rdfs:range   xsd:string .
+
+ds:hasDescription  a  owl:DatatypeProperty ;
+        rdfs:domain  ds:AccessControlRule ;
+        rdfs:range   xsd:string .
+
 ds:PermissionStatus  a  owl:Class ;
         owl:oneOf  ( ds:DENIED ds:ACCEPTED ) .
 

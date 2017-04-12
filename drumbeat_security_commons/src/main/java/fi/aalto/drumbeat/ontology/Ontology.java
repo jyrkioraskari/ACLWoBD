@@ -153,6 +153,21 @@ public class Ontology {
 		static {
 		}
 
+		
+		static public DatatypeProperty hasLabel = schema
+				.createDatatypeProperty(Constants.security_ontology_base + "#hasLabel");
+		static{
+		hasLabel.addDomain(AccessControlRule);
+		hasLabel.addRange( XSD.xstring );
+		}
+		static public DatatypeProperty hasDescription = schema
+				.createDatatypeProperty(Constants.security_ontology_base + "#hasDescription");
+		
+		static{
+			hasDescription.addDomain(AccessControlRule);
+			hasDescription.addRange( XSD.xstring );
+			}
+		
 		static public ObjectProperty hasPermission = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		static {
