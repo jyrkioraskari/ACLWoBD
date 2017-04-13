@@ -12,6 +12,7 @@ import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.XSD;
 
 import fi.aalto.drumbeat.Constants;
@@ -61,14 +62,14 @@ public class Ontology {
 		static public ObjectProperty hasClub = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasClub");
 		static {
-			hasClub.addDomain(Authorization.ProtectedResource);
+			hasClub.addDomain(RDFS.Resource);
 			hasClub.addRange(Club);
 		}
 
 		static public ObjectProperty hasProject = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasProject");
 		static {
-			hasProject.addDomain(Authorization.ProtectedResource);
+			hasProject.addDomain(RDFS.Resource);
 			hasProject.addRange(Project);
 
 			hasProject.addSuperProperty(hasClub);
@@ -117,82 +118,91 @@ public class Ontology {
 
 	static public class Authorization {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		static public OntClass ProtectedResource = schema
-				.createClass(Constants.security_ontology_base + "#ProtectedResource");
+		/*static public OntClass ProtectedResource = schema
+				.createClass(Constants.security_ontology_base + "#ProtectedResource");*/
 		static public OntClass AccessControlRule = schema
 				.createClass(Constants.security_ontology_base + "#AccessControlRule");
 
-		/*static public OntClass Permission = schema.createClass(Constants.security_ontology_base + "#PermissionRole");
-		static public Individual create = schema.createIndividual(Constants.security_ontology_base + "#CREATE",
+		static public OntClass Permission = schema.createClass(Constants.security_ontology_base + "#Permission");
+		static public Individual write = schema.createIndividual(Constants.security_ontology_base + "#Write",
 				Permission);
-		static public Individual read = schema.createIndividual(Constants.security_ontology_base + "#READ", Permission);
-		static public Individual update = schema.createIndividual(Constants.security_ontology_base + "#UPDATE",
+		static public Individual read = schema.createIndividual(Constants.security_ontology_base + "#Read", Permission);
+		static public Individual append = schema.createIndividual(Constants.security_ontology_base + "#Append",
 				Permission);
-		static public Individual delete = schema.createIndividual(Constants.security_ontology_base + "#DELETE",
-				Permission);*/
+		static public Individual delete = schema.createIndividual(Constants.security_ontology_base + "#Delete",
+				Permission);
 		
-		static public Resource  read = schema.createResource("http://www.w3.org/ns/auth/acl#Read");
+		
 
 		static {
-			ProtectedResource.addSubClass(LBD.Collection);
+			/*ProtectedResource.addSubClass(LBD.Collection);
 			LBD.Collection.addSuperClass(ProtectedResource);
 			ProtectedResource.addSubClass(LBD.DataSource);
 			LBD.DataSource.addSuperClass(ProtectedResource);
 			ProtectedResource.addSubClass(LBD.DataSet);
-			LBD.DataSet.addSuperClass(ProtectedResource);
+			LBD.DataSet.addSuperClass(ProtectedResource);*/
 
 		}
 
 		static public ObjectProperty hasAccessControlRule = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasAccessControlRule");
 		static {
-			hasAccessControlRule.addDomain(ProtectedResource);
+			hasAccessControlRule.addDomain(RDFS.Resource);
 			hasAccessControlRule.addRange(AccessControlRule);
 		}
 
-		static {
-		}
-
 		
-		static public DatatypeProperty hasLabel = schema
-				.createDatatypeProperty(Constants.security_ontology_base + "#hasLabel");
-		static{
-		hasLabel.addDomain(AccessControlRule);
-		hasLabel.addRange( XSD.xstring );
-		}
-		static public DatatypeProperty hasDescription = schema
+		/*static public DatatypeProperty hasDescription = schema
 				.createDatatypeProperty(Constants.security_ontology_base + "#hasDescription");
 		
 		static{
 			hasDescription.addDomain(AccessControlRule);
 			hasDescription.addRange( XSD.xstring );
-			}
+			}*/
 		
 		static public ObjectProperty hasPermission = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		static {
-			schema.read("c://jo/ontology/acl.rdf");
-			schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
+			//schema.read("c://jo/ontology/acl.rdf");
+			//schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
 			hasPermission.addDomain(AccessControlRule);
 			Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
-			hasPermission.addRange(access);
-			//hasPermission.addRange(Permission);
+			//hasPermission.addRange(access);
+			hasPermission.addRange(Permission);
 			
 		}
+		static public OntClass Role = schema.createClass(Constants.security_ontology_base + "#Role");
+		
 
-		static public ObjectProperty rolePath = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
+		static public DatatypeProperty hasName = schema
+				.createDatatypeProperty(Constants.security_ontology_base + "#hasName");
+		static{
+		hasName.addDomain(Role);
+		hasName.addRange( XSD.xstring );
+		}
+		
+		static public ObjectProperty hasRole = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasRole");
 		static {
-			rolePath.addDomain(AccessControlRule);
+			hasRole.addDomain(AccessControlRule);
+			hasRole.addRange(Role);
 
 		}
+
+		static public ObjectProperty hasRolePath = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasRolePath");
+		static {
+			hasRolePath.addDomain(Role);
+		}
+		
+		
 
 		static public OntClass ListNode = schema.createClass(Constants.security_ontology_base + "#ListNode");
 		static public ObjectProperty first = schema.createObjectProperty(Constants.security_ontology_base + "#first");
 		static {
 			first.addDomain(ListNode);
 			schema.createAllValuesFromRestriction(null, first, RDF.Property);
-			rolePath.addRange(ListNode);
+			hasRolePath.addRange(ListNode);
 
 		}
 
@@ -246,7 +256,7 @@ public class Ontology {
 		}
 		
 		static {
-			Authorization.rolePath.addDomain( SecurityQuery );
+			Authorization.hasRolePath.addDomain( SecurityQuery );
 
 		}
 		

@@ -23,7 +23,7 @@ public class Demoaineisto {
 	Demoaineisto() {
 
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		model.setNsPrefix("ds", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
+		model.setNsPrefix("", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
 		Dumbeat_JenaLibrary.createDemoData(model, "http://architect.demo.org/");
 		// @formatter:off
 

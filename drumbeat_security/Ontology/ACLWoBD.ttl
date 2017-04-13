@@ -4,16 +4,21 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix acl:   <http://www.w3.org/ns/auth/acl#> .
 @prefix drumbeat: <http://drumbeat.cs.hut.fi/owl/lbdho.ttl#> .
-@prefix dc:    <http://purl.org/dc/elements/1.1/> .
 @prefix ds:    <https://drumbeat.cs.hut.fi/owl/security.ttl#> .
 
 ds:hasClub  a        owl:ObjectProperty ;
-        rdfs:domain  ds:ProtectedResource ;
+        rdfs:domain  rdfs:Resource ;
         rdfs:range   ds:Club .
 
 ds:hasSubcontractor  a  owl:ObjectProperty ;
         rdfs:domain  ds:Contractor ;
         rdfs:range   ds:Contractor .
+
+ds:Write  a     ds:Permission .
+
+ds:hasRole  a        owl:ObjectProperty ;
+        rdfs:domain  ds:AccessControlRule ;
+        rdfs:range   ds:Role .
 
 ds:Project  a            owl:Class ;
         rdfs:subClassOf  ds:Club .
@@ -23,28 +28,27 @@ ds:hasPermissionStatus
         rdfs:domain  ds:SecurityResponse ;
         rdfs:range   ds:PermissionStatus .
 
-
+drumbeat:DataSource  a  owl:Class .
 
 ds:hasTimeStamp  a   owl:DatatypeProperty ;
         rdfs:domain  ds:SecurityMessage ;
         rdfs:range   xsd:dateTime .
 
-[ a                  owl:Restriction ;
-  owl:allValuesFrom  rdf:Property ;
-  owl:onProperty     ds:first
-] .
-
+ds:Permission  a  owl:Class .
 
 ds:Status  a    owl:Class .
 
 ds:Contractor  a  owl:Class .
 
+ds:hasName  a        owl:DatatypeProperty ;
+        rdfs:domain  ds:Role ;
+        rdfs:range   xsd:string .
+
 ds:hasPermission  a  owl:ObjectProperty ;
         rdfs:domain  ds:AccessControlRule ;
-        rdfs:range   acl:Access .
+        rdfs:range   ds:Permission .
 
 ds:DENIED  a    ds:Status .
-
 
 ds:trusts  a         owl:ObjectProperty ;
         rdfs:domain  ds:Contractor ;
@@ -54,13 +58,16 @@ ds:hasContractor  a  owl:ObjectProperty ;
         rdfs:domain  ds:Club ;
         rdfs:range   ds:Contractor .
 
-
 ds:Club  a      owl:Class .
 
 ds:first  a          owl:ObjectProperty ;
         rdfs:domain  ds:ListNode .
 
+ds:Delete  a    ds:Permission .
 
+ds:Role  a      owl:Class .
+
+drumbeat:DataSet  a  owl:Class .
 
 ds:ListNode  a  owl:Class .
 
@@ -72,13 +79,12 @@ ds:SecurityResponse  a   owl:Class ;
         rdfs:subClassOf  ds:SecurityMessage .
 
 ds:hasRolePath  a    owl:ObjectProperty ;
-        rdfs:domain  ds:AccessControlRule ;
+        rdfs:domain  ds:Role ;
         rdfs:range   ds:ListNode .
 
 ds:hasDataSource  a  owl:ObjectProperty ;
         rdfs:domain  drumbeat:Collection ;
         rdfs:range   drumbeat:DataSource .
-
 
 ds:hasCollection  a  owl:ObjectProperty ;
         rdfs:domain  ds:DataSpaceNode ;
@@ -87,16 +93,16 @@ ds:hasCollection  a  owl:ObjectProperty ;
 ds:SecurityQuery  a      owl:Class ;
         rdfs:subClassOf  ds:SecurityMessage .
 
+ds:Append  a    ds:Permission .
+
+ds:hasProject  a            owl:ObjectProperty ;
+        rdfs:domain         rdfs:Resource ;
+        rdfs:range          ds:Project ;
+        rdfs:subPropertyOf  ds:hasClub .
+
 ds:hasDataSet  a     owl:ObjectProperty ;
         rdfs:domain  drumbeat:DataSource ;
         rdfs:range   drumbeat:DataSet .
-
-ds:ProtectedResource  a  owl:Class .
-
-ds:hasProject  a            owl:ObjectProperty ;
-        rdfs:domain         ds:ProtectedResource ;
-        rdfs:range          ds:Project ;
-        rdfs:subPropertyOf  ds:hasClub .
 
 ds:ACCEPTED  a  ds:Status .
 
@@ -104,22 +110,18 @@ ds:rest  a           owl:ObjectProperty ;
         rdfs:domain  ds:ListNode ;
         rdfs:range   ds:ListNode .
 
-
-acl:Read  a              rdfs:Class ;
-        rdfs:comment     "The class of read operations" ;
-        rdfs:label       "read"@en ;
-        rdfs:subClassOf  acl:Access .
-
-acl:delegates  a      rdf:Property ;
-        rdfs:comment  "Delegates a person or another agent to act on behalf of the agent.\n    For example, Alice delegates Bob to act on behalf of Alice for ACL purposes." ;
-        rdfs:label    "delegates"@en ;
-        rdfs:range    <http://xmlns.com/foaf/0.1/Agent> .
+[ a                  owl:Restriction ;
+  owl:allValuesFrom  rdf:Property ;
+  owl:onProperty     ds:first
+] .
 
 ds:hasMainContractor  a     owl:ObjectProperty ;
         rdfs:domain         ds:Club ;
         rdfs:range          ds:Contractor ;
         rdfs:subPropertyOf  ds:hasContractor .
 
+<http://xmlns.com/foaf/0.1/Person>
+        a       owl:Class .
 
 ds:hasMessage  a     owl:DatatypeProperty ;
         rdfs:domain  ds:SecurityResponse ;
@@ -127,26 +129,18 @@ ds:hasMessage  a     owl:DatatypeProperty ;
 
 ds:DataSpaceNode  a  owl:Class .
 
+drumbeat:Collection  a  owl:Class .
 
 ds:hasAccessControlRule
         a            owl:ObjectProperty ;
-        rdfs:domain  ds:ProtectedResource ;
+        rdfs:domain  rdfs:Resource ;
         rdfs:range   ds:AccessControlRule .
 
 ds:SecurityMessage  a  owl:Class .
 
-
 ds:AccessControlRule  a  owl:Class .
-
-
-ds:hasLabel  a       owl:DatatypeProperty ;
-        rdfs:domain  ds:AccessControlRule ;
-        rdfs:range   xsd:string .
-
-ds:hasDescription  a  owl:DatatypeProperty ;
-        rdfs:domain  ds:AccessControlRule ;
-        rdfs:range   xsd:string .
 
 ds:PermissionStatus  a  owl:Class ;
         owl:oneOf  ( ds:DENIED ds:ACCEPTED ) .
 
+ds:Read  a      ds:Permission .

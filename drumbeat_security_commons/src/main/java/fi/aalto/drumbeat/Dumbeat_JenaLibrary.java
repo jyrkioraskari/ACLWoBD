@@ -17,6 +17,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDFS;
 
 import fi.aalto.drumbeat.ontology.Ontology;
 import fi.aalto.drumbeat.ontology.Ontology.Club;
@@ -108,8 +109,10 @@ public class Dumbeat_JenaLibrary {
 
 	static public  void createDemoData(OntModel model,String rootURI) {
 		
-		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", Ontology.Authorization.ProtectedResource);
+		Individual musiikkitalo = model.createIndividual(rootURI.toString()+"musiikkitalo", RDFS.Resource);
 		Individual musiikkitalo_authorizationRule = model.createIndividual(null, Ontology.Authorization.AccessControlRule);
+		Individual musiikkitalo_Role = model.createIndividual(null, Ontology.Authorization.Role);
+		musiikkitalo_Role.addLiteral(Ontology.Authorization.hasName, "Fabricator");
 		musiikkitalo.addProperty(Ontology.Authorization.hasAccessControlRule, musiikkitalo_authorizationRule);
 		
 		List<String> lista=new ArrayList<>();
@@ -117,7 +120,11 @@ public class Dumbeat_JenaLibrary {
 		lista.add(Contractor.hasContractor.toString());
 		lista.add(Contractor.trusts.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRolePath(model,lista);
-		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.rolePath, rlista);
+		
+		
+		
+		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasRole, musiikkitalo_Role);
+		musiikkitalo_Role.addProperty(Ontology.Authorization.hasRolePath, rlista);
 		
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermission, Ontology.Authorization.read);
 		

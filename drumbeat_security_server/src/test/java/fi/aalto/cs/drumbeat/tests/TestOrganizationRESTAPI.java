@@ -71,7 +71,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
 			
-			query.addProperty(Ontology.Authorization.rolePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -112,7 +112,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
-			query.addProperty(Ontology.Authorization.rolePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -181,7 +181,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
-			query.addProperty(Ontology.Authorization.rolePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);
@@ -233,7 +233,7 @@ public class TestOrganizationRESTAPI extends JerseyTest {
 			List<String> lista=new ArrayList<>();
 			lista.add(Ontology.Contractor.trusts.toString());
 			Resource rulepath=Dumbeat_JenaLibrary.createRolePath(model,lista);
-			query.addProperty(Ontology.Authorization.rolePath, rulepath);
+			query.addProperty(Ontology.Authorization.hasRolePath, rulepath);
 
 			Literal time_inMilliseconds = model.createTypedLiteral(new Long(System.currentTimeMillis()));
 			query.addProperty(RDF.type, Ontology.Message.SecurityQuery);

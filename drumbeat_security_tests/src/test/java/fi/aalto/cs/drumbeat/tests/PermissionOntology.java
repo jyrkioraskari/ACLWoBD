@@ -26,11 +26,11 @@ public class PermissionOntology {
 	PermissionOntology() {
 
 		OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		schema.setNsPrefix("ds", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
+		schema.setNsPrefix("", "https://drumbeat.cs.hut.fi/owl/security.ttl#");
 		schema.setNsPrefix("drumbeat", "http://drumbeat.cs.hut.fi/owl/lbdho.ttl#");
 		schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
 		
-		schema.read("c://jo/ontology/acl.rdf");
+		//schema.read("c://jo/ontology/acl.rdf");
 
 		schema.add(Ontology.getSchema());
 
