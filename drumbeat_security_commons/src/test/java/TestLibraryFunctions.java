@@ -24,9 +24,9 @@ public class TestLibraryFunctions {
 		try {
 			RDFDataStore store=new RDFDataStore(new URI("https://test.org"), "datastore");
 			List<String> lista=new ArrayList<>();
-			lista.add(Ontology.Club.hasClub.toString());
+			lista.add(Ontology.AccessContext.hasAccessContex.toString());
 			lista.add(Ontology.Contractor.hasMainContractor.toString());
-			lista.add(Ontology.Contractor.trusts.toString());
+			lista.add(Ontology.Contractor.hasEmployee.toString());
 			Resource rlista=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 			LinkedList<Resource> uusi_lista=Dumbeat_JenaLibrary.parseRolePath(store.getModel(),rlista);
 			int i=0;

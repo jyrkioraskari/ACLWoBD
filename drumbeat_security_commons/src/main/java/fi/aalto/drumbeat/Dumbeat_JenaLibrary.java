@@ -20,7 +20,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDFS;
 
 import fi.aalto.drumbeat.ontology.Ontology;
-import fi.aalto.drumbeat.ontology.Ontology.Club;
+import fi.aalto.drumbeat.ontology.Ontology.AccessContext;
 import fi.aalto.drumbeat.ontology.Ontology.Contractor;
 
 public class Dumbeat_JenaLibrary {
@@ -116,9 +116,9 @@ public class Dumbeat_JenaLibrary {
 		musiikkitalo.addProperty(Ontology.Authorization.hasAccessControlRule, musiikkitalo_authorizationRule);
 		
 		List<String> lista=new ArrayList<>();
-		lista.add(Club.hasClub.toString());
+		lista.add(AccessContext.hasProject.toString());
 		lista.add(Contractor.hasContractor.toString());
-		lista.add(Contractor.trusts.toString());
+		lista.add(Contractor.hasEmployee.toString());
 		Resource rlista=Dumbeat_JenaLibrary.createRolePath(model,lista);
 		
 		
@@ -128,17 +128,17 @@ public class Dumbeat_JenaLibrary {
 		
 		musiikkitalo_authorizationRule.addProperty(Ontology.Authorization.hasPermission, Ontology.Authorization.read);
 		
-		Individual project = model.createIndividual(null, Club.Project);
+		Individual project = model.createIndividual(null, AccessContext.ConstructionProject);
 		// HTTP since local virtual hosts need a new configuration
 		Individual main_contractor = model.createIndividual("http://fabricator.local.org/", Contractor.Contractor);
-		musiikkitalo.addProperty(Club.hasProject, project);
-		project.addProperty(Contractor.hasMainContractor, main_contractor);
+		musiikkitalo.addProperty(AccessContext.hasProject, project);
+		project.addProperty(Contractor.hasContractor, main_contractor);
 		//this.model.write(System.out,"TURTLE");
 
 		//Me
 		Individual company=model.createIndividual(rootURI, Contractor.Contractor);
 		Individual test_person = model.createIndividual("https://jyrkio2.databox.me/profile/card#me", Contractor.Person);
-		company.addProperty(Contractor.trusts, test_person);
+		company.addProperty(Contractor.hasEmployee, test_person);
 		
 		
 	}

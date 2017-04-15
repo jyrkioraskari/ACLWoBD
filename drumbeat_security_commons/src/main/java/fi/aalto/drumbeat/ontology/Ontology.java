@@ -50,62 +50,98 @@ public class Ontology {
 		}
 	}
 
-	static public class Club {
+	static public class AccessContext {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		static public OntClass Club = schema.createClass(Constants.security_ontology_base + "#Club");
-		static public OntClass Project = schema.createClass(Constants.security_ontology_base + "#Project");
+		static public OntClass AccessContex = schema.createClass(Constants.security_ontology_base + "#AccessContex");
+		static public OntClass ConstructionProject = schema.createClass(Constants.security_ontology_base + "#ConstructionProject");
 
 		static {
-			Club.addSubClass(Project);
-			Project.addSuperClass(Club);
+			AccessContex.addSubClass(ConstructionProject);
+			ConstructionProject.addSuperClass(AccessContex);
 		}
-		static public ObjectProperty hasClub = schema
-				.createObjectProperty(Constants.security_ontology_base + "#hasClub");
+		static public ObjectProperty hasAccessContex = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasAccessContex");
 		static {
-			hasClub.addDomain(RDFS.Resource);
-			hasClub.addRange(Club);
+			hasAccessContex.addDomain(RDFS.Resource);
+			hasAccessContex.addRange(AccessContex);
 		}
 
 		static public ObjectProperty hasProject = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasProject");
 		static {
 			hasProject.addDomain(RDFS.Resource);
-			hasProject.addRange(Project);
+			hasProject.addRange(ConstructionProject);
 
-			hasProject.addSuperProperty(hasClub);
-			hasClub.addSubProperty(hasProject);
+			hasProject.addSuperProperty(hasAccessContex);
+			hasAccessContex.addSubProperty(hasProject);
 		}
 
 	}
 	
 	static public class Contractor {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		static public OntClass Company = schema.createClass(Constants.security_ontology_base + "#Company");
+		static public OntClass Architect = schema.createClass(Constants.security_ontology_base + "#Architect");
+		
 		static public OntClass Contractor = schema.createClass(Constants.security_ontology_base + "#Contractor");
+		static public OntClass MainContractor = schema.createClass(Constants.security_ontology_base + "#MainContractor");
+		
 		static public OntClass Person = schema.createClass("http://xmlns.com/foaf/0.1/Person");
 
 
-		static public ObjectProperty trusts = schema.createObjectProperty(Constants.security_ontology_base + "#trusts");
-		static {
-			trusts.addDomain(Contractor);
-			trusts.addRange(Person);
-		}
+		static public ObjectProperty hasEmployee = schema.createObjectProperty(Constants.security_ontology_base + "#hasEmployee");
+		static public ObjectProperty hasManager = schema.createObjectProperty(Constants.security_ontology_base + "#hasManager");
 
+		static {
+			Company.addSubClass(Architect);
+			Company.addSubClass(Contractor);
+			Contractor.addSubClass(MainContractor);
+			
+			MainContractor.addSuperClass(Contractor);
+			Contractor.addSuperClass(Company);
+			Architect.addSuperClass(Company);
+			
+			
+			hasEmployee.addDomain(Company);
+			hasEmployee.addRange(Person);
+			hasEmployee.addSubProperty(hasManager);
+		
+			
+			hasManager.addDomain(Company);
+			hasManager.addRange(Person);
+			hasManager.addSuperProperty(hasEmployee);
+			
+			
+
+		}
+		
+		
+		static public ObjectProperty hasHeadDesigner = schema
+				.createObjectProperty(Constants.security_ontology_base + "#hasHeadDesigner");
+		static {
+			hasHeadDesigner.addDomain(AccessContext.ConstructionProject);
+			hasHeadDesigner.addRange(Architect);
+		}
+		
+		
 		static public ObjectProperty hasContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasContractor");
 		static {
-			hasContractor.addDomain(Club.Club);
+			hasContractor.addDomain(AccessContext.ConstructionProject);
 			hasContractor.addRange(Contractor);
 		}
 
 		static public ObjectProperty hasMainContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasMainContractor");
 		static {
-			hasMainContractor.addDomain(Club.Club);
-			hasMainContractor.addRange(Contractor);
+			hasMainContractor.addDomain(AccessContext.ConstructionProject);
+			hasMainContractor.addRange(MainContractor);
+			
 			hasContractor.addSubProperty(hasMainContractor);
 			hasMainContractor.addSuperProperty(hasContractor);
 		}
 
+		
 		static public ObjectProperty hasSubContractor = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasSubcontractor");
 		static {
@@ -118,8 +154,6 @@ public class Ontology {
 
 	static public class Authorization {
 		static public OntModel schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		/*static public OntClass ProtectedResource = schema
-				.createClass(Constants.security_ontology_base + "#ProtectedResource");*/
 		static public OntClass AccessControlRule = schema
 				.createClass(Constants.security_ontology_base + "#AccessControlRule");
 
@@ -133,17 +167,7 @@ public class Ontology {
 				Permission);
 		
 		
-
-		static {
-			/*ProtectedResource.addSubClass(LBD.Collection);
-			LBD.Collection.addSuperClass(ProtectedResource);
-			ProtectedResource.addSubClass(LBD.DataSource);
-			LBD.DataSource.addSuperClass(ProtectedResource);
-			ProtectedResource.addSubClass(LBD.DataSet);
-			LBD.DataSet.addSuperClass(ProtectedResource);*/
-
-		}
-
+		
 		static public ObjectProperty hasAccessControlRule = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasAccessControlRule");
 		static {
@@ -152,22 +176,12 @@ public class Ontology {
 		}
 
 		
-		/*static public DatatypeProperty hasDescription = schema
-				.createDatatypeProperty(Constants.security_ontology_base + "#hasDescription");
-		
-		static{
-			hasDescription.addDomain(AccessControlRule);
-			hasDescription.addRange( XSD.xstring );
-			}*/
 		
 		static public ObjectProperty hasPermission = schema
 				.createObjectProperty(Constants.security_ontology_base + "#hasPermission");
 		static {
-			//schema.read("c://jo/ontology/acl.rdf");
-			//schema.setNsPrefix("acl", "http://www.w3.org/ns/auth/acl#");
 			hasPermission.addDomain(AccessControlRule);
 			Resource access=schema.createResource("http://www.w3.org/ns/auth/acl#Access");
-			//hasPermission.addRange(access);
 			hasPermission.addRange(Permission);
 			
 		}
@@ -295,7 +309,7 @@ public class Ontology {
 		if (schema == null) {
 			schema = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 			schema.add(LBD.schema); 		
-			schema.add(Club.schema);
+			schema.add(AccessContext.schema);
 			schema.add(Contractor.schema);
 			schema.add(Authorization.schema);
 			schema.add(Message.schema);

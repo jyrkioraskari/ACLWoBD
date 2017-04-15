@@ -56,7 +56,7 @@ public class TestOrganizationManager extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Ontology.Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.hasEmployee.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		//TODO tulisiko olla totta?

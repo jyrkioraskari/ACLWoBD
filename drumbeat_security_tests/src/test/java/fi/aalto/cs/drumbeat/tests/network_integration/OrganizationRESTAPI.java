@@ -144,7 +144,7 @@ public class OrganizationRESTAPI {
 		try {
 
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = Contractor.trusts;
+			rulepath_list[0] = Contractor.hasEmployee;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(Authorization.hasRolePath, rulepath);
@@ -185,7 +185,7 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = Contractor.trusts;
+			rulepath_list[0] = Contractor.hasEmployee;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(Authorization.hasRolePath, rulepath);
@@ -230,7 +230,7 @@ public class OrganizationRESTAPI {
 
 		try {
 			RDFNode[] rulepath_list = new RDFNode[1];
-			rulepath_list[0] = Contractor.trusts;
+			rulepath_list[0] = Contractor.hasEmployee;
 			RDFList rulepath = model.createList(rulepath_list);
 			Resource query = model.createResource();
 			query.addProperty(Authorization.hasRolePath, rulepath);

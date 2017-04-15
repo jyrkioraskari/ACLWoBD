@@ -187,7 +187,7 @@ public class DrumbeatSecurityController {
 
 	public Resource registerWebID(String webidURI, String public_key) {
 		Resource widr = datamodel.getResource(webidURI);
-		root.addProperty(Ontology.Contractor.trusts, widr);
+		root.addProperty(Ontology.Contractor.hasEmployee, widr);
 		widr.addLiteral(Ontology.property_hasPublicKey, public_key);
 		rdf_datastore.saveRDFData();
 		return widr;

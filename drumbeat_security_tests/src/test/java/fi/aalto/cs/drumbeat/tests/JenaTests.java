@@ -39,7 +39,7 @@ public class JenaTests extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Ontology.Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.hasEmployee.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		Individual query_resource = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
@@ -90,7 +90,7 @@ public class JenaTests extends TestCase {
 		}
 		assertNotNull("RDFDataStore store should not be null", store);
 		List<String> lista=new ArrayList<>();
-		lista.add(Ontology.Contractor.trusts.toString());
+		lista.add(Ontology.Contractor.hasEmployee.toString());
 		Resource rulepath=Dumbeat_JenaLibrary.createRolePath(store.getModel(),lista);
 		
 		Individual query = this.model.createIndividual(null, Ontology.Message.SecurityQuery);
