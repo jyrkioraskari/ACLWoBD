@@ -28,7 +28,7 @@ import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
 import fi.aalto.cs.drumbeat.controllers.AccessController;
 
-public class DrumbeatSecurityApplication extends ResourceConfig {
+public class DrumbeatSecureApplication extends ResourceConfig {
 
 	public static class DrumbeatAuthFilter implements ContainerRequestFilter {
 
@@ -50,6 +50,8 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 								System.out.println("filter alt: " + alt);
 								
 								SecurityContext sc = requestContext.getSecurityContext();
+								
+								
 								/*if (sc == null)
 								{
 									//TODO Test the PK
@@ -137,7 +139,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 		}
 	}
 
-	public DrumbeatSecurityApplication() {
+	public DrumbeatSecureApplication() {
 		packages("fi.aalto.cs.drumbeat");
 		register(LoggingFeature.class);
 		register(JspMvcFeature.class);

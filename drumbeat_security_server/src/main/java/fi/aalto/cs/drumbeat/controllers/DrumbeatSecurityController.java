@@ -193,21 +193,5 @@ public class DrumbeatSecurityController {
 		return widr;
 	}
 
-	/*
-	public Model getWebID(String webid) {
-		//http://stackoverflow.com/questions/1820908/how-to-turn-off-the-eclipse-code-formatter-for-certain-sections-of-java-code
-		// @formatter:off
-		String queryString =	 "CONSTRUCT { \n" +
-								"	?webid ?p ?o \n" + 
-								"} WHERE { \n" + 
-								"     ?webid ?p ?o . \n" + 
-								"} \n";
-		// @formatter:on
-		ParameterizedSparqlString ps = new ParameterizedSparqlString(queryString);
-		
-		ps.setIri("webid", webid);
-		Query query=ps.asQuery();
-		Model result = QueryExecutionFactory.create(query, datamodel).execConstruct();
-		return result;
-	}*/
+
 }
