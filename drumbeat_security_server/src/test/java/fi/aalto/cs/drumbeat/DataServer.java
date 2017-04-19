@@ -13,7 +13,7 @@ public class DataServer {
 	@Test
 	public void test() {
 		AccessController ds=AccessController.getAuthenticationController("https://architect.local.org/protected/musiikkitalo");
-		String roles = ds.autenticate("https://jyrkio2.databox.me/profile/card#me", "https://architect.local.org/protected/musiikkitalo").stream()
+		String roles = ds.grantPermissions("https://jyrkio2.databox.me/profile/card#me", "https://architect.local.org/protected/musiikkitalo").stream()
 			     .collect(Collectors.joining(","));
 		System.out.println("Roles:"+roles);
 		// Only after the first installation

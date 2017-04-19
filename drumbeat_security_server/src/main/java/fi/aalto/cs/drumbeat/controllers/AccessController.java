@@ -58,7 +58,7 @@ public class AccessController {
 
 	}
 
-	public List<String> autenticate(String webid, String request_uri) {
+	public List<String> grantPermissions(String webid, String request_uri) {
 		DrumbeatSecurityController.getAccessList().add(new Tuple<String, Long>(
 				"autenticate: " + webid + " req uri: " + request_uri, System.currentTimeMillis()));
 		List<String> ret = new ArrayList<String>();

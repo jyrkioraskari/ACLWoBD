@@ -64,7 +64,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 
 								AccessController ds = AccessController.getAuthenticationController(requestUri.toString());
 								//final List<String> roles = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
-								final List<String> roles = ds.autenticate(alt.toString(), requestUri.toString());
+								final List<String> roles = ds.grantPermissions(alt.toString(), requestUri.toString());
 								roles.add("default");
 								log.info("DrumbeatAuthFilter Tomcat ROLES are:" + roles.stream().collect(Collectors.joining(",")));
 
