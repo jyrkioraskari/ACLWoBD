@@ -1,4 +1,4 @@
-# Secured Linked Data
+# Access Control for Linked Building Data based on Decentralized Role Paths
 ## The project can be complied using the following command:
 
 git clone https://github.com/jyrkio/SecuredLinkedData.git  
