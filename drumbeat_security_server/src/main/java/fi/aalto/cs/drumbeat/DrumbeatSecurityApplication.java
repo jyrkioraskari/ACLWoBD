@@ -26,7 +26,7 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-import fi.aalto.cs.drumbeat.controllers.AuthenticationController;
+import fi.aalto.cs.drumbeat.controllers.AccessController;
 
 public class DrumbeatSecurityApplication extends ResourceConfig {
 
@@ -62,7 +62,7 @@ public class DrumbeatSecurityApplication extends ResourceConfig {
 								URI requestUri = uriInfo.getRequestUri();
 								log.info("DrumbeatAuthFilter req url: " + requestUri.toString());
 
-								AuthenticationController ds = AuthenticationController.getAuthenticationController(requestUri.toString());
+								AccessController ds = AccessController.getAuthenticationController(requestUri.toString());
 								//final List<String> roles = ds.autenticate(sc.getUserPrincipal().getName(), requestUri.toString());
 								final List<String> roles = ds.autenticate(alt.toString(), requestUri.toString());
 								roles.add("default");

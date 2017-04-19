@@ -18,23 +18,23 @@ import fi.aalto.drumbeat.Dumbeat_JenaLibrary;
 import fi.aalto.drumbeat.RDFDataStore;
 import fi.aalto.drumbeat.ontology.Ontology;
 
-public class AuthenticationController {
-	private static final Log log = LogFactory.getLog(AuthenticationController.class);
+public class AccessController {
+	private static final Log log = LogFactory.getLog(AccessController.class);
 
 	private Optional<URI> uri = Optional.empty();;
 	// at the time
 	private Optional<RDFDataStore> rdf_datastore = Optional.empty();
 
-	private static Optional<AuthenticationController> singleton = Optional.empty();
+	private static Optional<AccessController> singleton = Optional.empty();
 
-	public static AuthenticationController getAuthenticationController(String uri_str) {
+	public static AccessController getAuthenticationController(String uri_str) {
 		if (!singleton.isPresent()) {
 			URI uri;
 			try {
 				uri = new URI(uri_str);
 				URI service_root = new URIBuilder(uri).setScheme("https").setPath("/").build();
 				System.out.println("DataServer root: " + service_root.toString());
-				singleton = Optional.of(new AuthenticationController(service_root.toString()));
+				singleton = Optional.of(new AccessController(service_root.toString()));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -42,7 +42,7 @@ public class AuthenticationController {
 		return singleton.get();
 	}
 
-	private AuthenticationController(String host_uri) {
+	private AccessController(String host_uri) {
 		try {
 			uri = Optional.of(new URI(host_uri));
 
